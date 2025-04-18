@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <div
-          className='text-black px-20 py-4 w-[100vw] bg-[#F5F5F5]'
+          className='text-[#282828] px-20 py-4 w-[100vw] bg-[#F5F5F5]'
           style={{fontFamily: 'Neue Haas Grotesk'}}
       >
           <div className='flex flex-row justify-end'>
