@@ -6,12 +6,22 @@ function App() {
 
   return (
     <>
-      <div className='text-black font-haas'>
-          <div className='flex flex-row gap-x-4 text-4xl'>
-          {sections.map(section=>{
-              return <div style={{fontFamily: 'Neue Haas Grotesk'}}>{section}</div>
-          })}
+      <div
+          className='text-black px-20 py-4 w-[100vw] bg-[#F5F5F5]'
+          style={{fontFamily: 'Neue Haas Grotesk'}}
+      >
+          <div className='flex flex-row justify-end'>
+              <div className='flex flex-row gap-x-4 text-2xl'>
+                  {sections.map(section=>{
+                      return <div>{section}</div>
+                  })}
+              </div>
           </div>
+          <div className='text-6xl mt-44'>
+              Pablo Paliza
+          </div>
+          <div className='text-xl'>Full stack developer + problem solver</div>
+          <div className='text-4xl'>Projects</div>
       </div>
     </>
   )
