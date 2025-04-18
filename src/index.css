@@ -69,3 +69,12 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+@font-face {
+  font-family: 'Neue Haas Grotesk';
+  src: url('./assets/nhg/NeueHaasDisplayRoman.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+

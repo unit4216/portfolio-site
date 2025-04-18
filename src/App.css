@@ -26,3 +26,11 @@
   padding: 2em;
 }
 
+@font-face {
+  font-family: 'Neue Haas Grotesk';
+  src: url('./assets/nhg/NeueHaasDisplayRoman.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
