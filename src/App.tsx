@@ -1,4 +1,32 @@
 import './App.css'
+import { Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+
+function ProjectCarousel() {
+
+    const tempImageUrl = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTndJ4Jo28CzEptSe8QOfo6UaEs5E1Hs84izu8hQTkpdjtj0E0G6f6u9CYeH_p47yZRCmnixLp2gIAGBY9r6SYpxA"
+
+    return (
+        <div className="w-full max-w-xl mx-auto">
+            <Swiper
+                modules={[Navigation, Pagination]}
+                spaceBetween={20}
+                slidesPerView={3}
+                navigation
+                pagination={{ clickable: true }}
+            >
+                <SwiperSlide><img src={tempImageUrl} alt="Slide 1" /></SwiperSlide>
+                <SwiperSlide><img src={tempImageUrl} alt="Slide 2" /></SwiperSlide>
+                <SwiperSlide><img src={tempImageUrl} alt="Slide 3" /></SwiperSlide>
+                <SwiperSlide><img src={tempImageUrl} alt="Slide 4" /></SwiperSlide>
+            </Swiper>
+        </div>
+    );
+}
 
 function App() {
 
@@ -23,6 +51,7 @@ function App() {
           <div className='text-[25px]'>Full stack developer + problem solver</div>
           <div className='text-[45px] mt-44'>Projects</div>
           <hr />
+          <ProjectCarousel />
       </div>
     </>
   )
