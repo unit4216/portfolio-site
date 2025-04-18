@@ -11,17 +11,18 @@ function App() {
           style={{fontFamily: 'Neue Haas Grotesk'}}
       >
           <div className='flex flex-row justify-end'>
-              <div className='flex flex-row gap-x-4 text-2xl'>
+              <div className='flex flex-row gap-x-4 text-[25px]'>
                   {sections.map(section=>{
                       return <div>{section}</div>
                   })}
               </div>
           </div>
-          <div className='text-6xl mt-44'>
+          <div className='text-[69px] mt-44'>
               Pablo Paliza
           </div>
-          <div className='text-xl'>Full stack developer + problem solver</div>
-          <div className='text-4xl'>Projects</div>
+          <div className='text-[25px]'>Full stack developer + problem solver</div>
+          <div className='text-[45px] mt-44'>Projects</div>
+          <hr />
       </div>
     </>
   )
