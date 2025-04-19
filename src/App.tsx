@@ -9,6 +9,7 @@ import {ArrowBackIos, ArrowForwardIos, Circle, KeyboardArrowDown} from '@mui/ico
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import {TextField} from "@mui/material";
 
 
 
@@ -108,6 +109,40 @@ const CustomHR = () => {
     return <hr className='mb-32 border-t-[1px] text-[#282828] border-[#282828]'/>
 }
 
+const StyledTextField = ({rows=1}: {rows?: number}) =>{
+    return (
+        <TextField
+            rows={rows}
+            multiline
+            placeholder={"Placeholder"}
+            sx={{
+            '& .MuiOutlinedInput-root': {
+                borderRadius: 0,
+                '& fieldset': {
+                    borderWidth: '2px',
+                    borderColor: '#000',
+                },
+                '&:hover fieldset': {
+                    borderColor: '#000',
+                },
+                '&.Mui-focused fieldset': {
+                    borderColor: '#000',
+                },
+            },
+        }}/>
+    )
+}
+
+export const ContactForm = () => {
+    return (
+        <div className='flex flex-col gap-y-2'>
+            <StyledTextField />
+            <StyledTextField />
+            <StyledTextField rows={5}/>
+        </div>
+    )
+}
+
 function App() {
 
     const sections = ["Work", 'About', 'Contact']
@@ -159,6 +194,12 @@ function App() {
           </div>
           <div className='text-[45px] mt-44'>Contact</div>
           <CustomHR />
+          <div className="flex flex-row">
+              <div className='w-1/2 text-[30px]'>If you're interested in hiring me, please reach out.</div>
+              <div className='w-1/2'>
+                  <ContactForm />
+              </div>
+          </div>
       </div>
     </>
   )
