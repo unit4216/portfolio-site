@@ -23,7 +23,7 @@ function ProjectCarousel() {
 
 
     return (
-        <div className="w-full flex flex-row items-center gap-x-4 mx-auto">
+        <div className="w-4/5 mx-auto flex flex-row items-center gap-x-4">
             {/* Left Arrow */}
             <div
                 style={{visibility: !atStart ? 'visible' : 'hidden'}}
@@ -32,7 +32,7 @@ function ProjectCarousel() {
             </div>
             <Swiper
                 modules={[Navigation, Pagination]}
-                spaceBetween={10}
+                spaceBetween={20}
                 slidesPerView={3}
                 navigation={{
                     prevEl: '.swiper-button-prev-custom',
@@ -49,10 +49,12 @@ function ProjectCarousel() {
                 }}
             >
                 {SLIDES.map(slide=>{
-                    return (<SwiperSlide>
-                        {slide.title}
-                        <img src={slide.imgUrl} alt={slide.title} className='w-[370px] h-[560px]'/>
-                    </SwiperSlide>)
+                    return (
+                        <SwiperSlide >
+                        <div className="text-[30px]">{slide.title}</div>
+                        <img src={slide.imgUrl} alt={slide.title} className='w-[370px] h-[560px] rounded-md' />
+                    </SwiperSlide>
+                    )
                 })}
 
             </Swiper>
