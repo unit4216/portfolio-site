@@ -17,12 +17,12 @@ function ProjectCarousel() {
                 spaceBetween={20}
                 slidesPerView={3}
                 navigation
-                pagination={{ clickable: true }}
+                // pagination={{ clickable: true }}
             >
-                <SwiperSlide><img src={tempImageUrl} alt="Slide 1" /></SwiperSlide>
-                <SwiperSlide><img src={tempImageUrl} alt="Slide 2" /></SwiperSlide>
-                <SwiperSlide><img src={tempImageUrl} alt="Slide 3" /></SwiperSlide>
-                <SwiperSlide><img src={tempImageUrl} alt="Slide 4" /></SwiperSlide>
+                <SwiperSlide>Project 1<img src={tempImageUrl} alt="Slide 1" /></SwiperSlide>
+                <SwiperSlide>Project 2<img src={tempImageUrl} alt="Slide 2" /></SwiperSlide>
+                <SwiperSlide>Project 3<img src={tempImageUrl} alt="Slide 3" /></SwiperSlide>
+                <SwiperSlide>Project 4<img src={tempImageUrl} alt="Slide 4" /></SwiperSlide>
             </Swiper>
         </div>
     );
@@ -50,7 +50,7 @@ function App() {
           </div>
           <div className='text-[25px]'>Full stack developer + problem solver</div>
           <div className='text-[45px] mt-44'>Projects</div>
-          <hr />
+          <hr className='mb-32'/>
           <ProjectCarousel />
       </div>
     </>
