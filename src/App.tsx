@@ -163,7 +163,7 @@ function App() {
     const SKILLS = ['TypeScript', 'React', 'Tailwind', 'Google Cloud']
 
   return (
-    <>
+
       <div
           className='text-[#282828] px-20 py-4 w-[100vw] bg-[#F5F5F5]'
           style={{fontFamily: 'Neue Haas Grotesk'}}
@@ -252,7 +252,7 @@ function App() {
               </div>
           </div>
       </div>
-    </>
+
   )
 }
 
