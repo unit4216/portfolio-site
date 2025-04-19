@@ -5,7 +5,12 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {useState} from "react";
-import {ArrowBackIos, ArrowForwardIos} from '@mui/icons-material';
+import {ArrowBackIos, ArrowForwardIos, KeyboardArrowDown} from '@mui/icons-material';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+
+
 
 const tempImageUrl = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTndJ4Jo28CzEptSe8QOfo6UaEs5E1Hs84izu8hQTkpdjtj0E0G6f6u9CYeH_p47yZRCmnixLp2gIAGBY9r6SYpxA"
 
@@ -68,6 +73,38 @@ function ProjectCarousel() {
     );
 }
 
+const ResumeAccordion = () => {
+
+    const EXPERIENCES = [
+        {title: 'Westland', description: 'Worked at Westland.'},
+        {title: 'Paliza Consulting', description: 'Worked at Paliza Consulting.'},
+        {title: 'Synergy', description: 'Worked at Synergy IT.'}
+    ]
+
+
+    return (
+        <div>
+            {EXPERIENCES.map(experience => (
+                <Accordion
+                    className="!bg-transparent !shadow-none border-b-[1px] border-[#282828] !rounded-none"
+                    sx={{ '&::before': { display: 'none' } }}
+
+                >
+                <AccordionSummary
+                    expandIcon={<KeyboardArrowDown className='text-[#282828]'/>}
+                >
+                    <div className='text-[30px]'>{experience.title}</div>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <div className='text-[20px]'>
+                        {experience.description}
+                    </div>
+                </AccordionDetails>
+            </Accordion>))}
+        </div>
+    )
+}
+
 function App() {
 
     const sections = ["Work", 'About', 'Contact']
@@ -92,6 +129,19 @@ function App() {
           <div className='text-[45px] mt-44'>Projects</div>
           <hr className='mb-32'/>
           <ProjectCarousel />
+          <div className='text-[45px] mt-44'>About Me</div>
+          <hr className='mb-32'/>
+          <div className='flex flex-row'>
+              <div className='w-1/2 text-[30px]'>
+                  I'm a full-stack software developer with five years of experience designing solutions for
+                  problems.
+              </div>
+              <div className='w-1/2'>
+                  <ResumeAccordion />
+              </div>
+          </div>
+          <div className='text-[45px] mt-44'>Contact</div>
+          <hr className='mb-32'/>
       </div>
     </>
   )
