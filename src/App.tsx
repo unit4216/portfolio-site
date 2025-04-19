@@ -88,7 +88,6 @@ const ResumeAccordion = () => {
                 <Accordion
                     className="!bg-transparent !shadow-none border-b-[1px] border-[#282828] !rounded-none"
                     sx={{ '&::before': { display: 'none' } }}
-
                 >
                 <AccordionSummary
                     expandIcon={<KeyboardArrowDown className='text-[#282828]'/>}
@@ -103,6 +102,10 @@ const ResumeAccordion = () => {
             </Accordion>))}
         </div>
     )
+}
+
+const CustomHR = () => {
+    return <hr className='mb-32 border-t-[1px] text-[#282828] border-[#282828]'/>
 }
 
 function App() {
@@ -127,10 +130,10 @@ function App() {
           </div>
           <div className='text-[25px]'>Full stack software developer</div>
           <div className='text-[45px] mt-44'>Projects</div>
-          <hr className='mb-32'/>
+          <CustomHR />
           <ProjectCarousel />
           <div className='text-[45px] mt-44'>About Me</div>
-          <hr className='mb-32'/>
+          <CustomHR />
           <div className='flex flex-row'>
               <div className='w-1/2 text-[30px]'>
                   I'm a full-stack software developer with five years of experience designing solutions for
@@ -141,7 +144,7 @@ function App() {
               </div>
           </div>
           <div className='text-[45px] mt-44'>Contact</div>
-          <hr className='mb-32'/>
+          <CustomHR />
       </div>
     </>
   )
