@@ -5,7 +5,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {useState} from "react";
-import {ArrowBackIos, ArrowForwardIos, KeyboardArrowDown} from '@mui/icons-material';
+import {ArrowBackIos, ArrowForwardIos, Circle, KeyboardArrowDown} from '@mui/icons-material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -112,6 +112,8 @@ function App() {
 
     const sections = ["Work", 'About', 'Contact']
 
+    const SKILLS = ['TypeScript', 'React', 'Tailwind', 'Google Cloud']
+
   return (
     <>
       <div
@@ -142,6 +144,18 @@ function App() {
               <div className='w-1/2'>
                   <ResumeAccordion />
               </div>
+          </div>
+          <div className='flex flex-row mt-44 justify-center gap-x-4 items-center'>
+              {SKILLS.map((skill, index)=>{
+                  return (
+                      <>
+                      <div className='text-[24px]'>{skill}</div>
+                  {index < SKILLS.length - 1 && <Circle className="text-[#282828]" sx={{fontSize: '6px'}} />
+                  }
+                      </>
+              )
+
+              })}
           </div>
           <div className='text-[45px] mt-44'>Contact</div>
           <CustomHR />
