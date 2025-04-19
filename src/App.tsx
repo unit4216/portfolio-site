@@ -114,6 +114,7 @@ const StyledTextField = ({rows=1, placeholder}: {rows?: number, placeholder: str
         <TextField
             rows={rows}
             multiline
+            fullWidth
             placeholder={placeholder}
             sx={{
             '& .MuiOutlinedInput-root': {
@@ -135,7 +136,7 @@ const StyledTextField = ({rows=1, placeholder}: {rows?: number, placeholder: str
 
 export const ContactForm = () => {
     return (
-        <div className='flex flex-col gap-y-2'>
+        <div className='flex flex-col gap-y-4'>
             <div className="flex flex-row gap-x-4">
                 <StyledTextField placeholder={"First Name"}/>
                 <StyledTextField placeholder={"Last Name"}/>
