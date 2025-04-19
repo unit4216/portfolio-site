@@ -160,8 +160,8 @@ function App() {
           className='text-[#282828] px-20 py-4 w-[100vw] bg-[#F5F5F5]'
           style={{fontFamily: 'Neue Haas Grotesk'}}
       >
-          <div className='flex flex-row justify-end'>
-              <div className='flex flex-row gap-x-4 text-[25px]'>
+          <div className="fixed top-0 left-0 w-full z-50 bg-[#F5F5F5] px-20 py-4">
+              <div className="flex flex-row justify-end gap-x-4 text-[25px]">
                   {sections.map(section=>{
                       return <div>{section}</div>
                   })}
