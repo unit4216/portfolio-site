@@ -11,12 +11,24 @@ function ProjectCarousel() {
     const tempImageUrl = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTndJ4Jo28CzEptSe8QOfo6UaEs5E1Hs84izu8hQTkpdjtj0E0G6f6u9CYeH_p47yZRCmnixLp2gIAGBY9r6SYpxA"
 
     return (
-        <div className="w-full max-w-xl mx-auto">
+        <div className="w-full flex flex-row items-center gap-x-4 max-w-xl mx-auto">
+            {/* Left Arrow */}
+            <div className="swiper-button-prev-custom cursor-pointer text-2xl">
+                {"<"}
+            </div>
             <Swiper
                 modules={[Navigation, Pagination]}
                 spaceBetween={20}
                 slidesPerView={3}
-                navigation
+                navigation={{
+                    prevEl: '.swiper-button-prev-custom',
+                    nextEl: '.swiper-button-next-custom',
+                }}
+                breakpoints={{
+                    640: { slidesPerView: 1 },
+                    768: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 },
+                }}
                 // pagination={{ clickable: true }}
             >
                 <SwiperSlide>Project 1<img src={tempImageUrl} alt="Slide 1" /></SwiperSlide>
@@ -24,6 +36,10 @@ function ProjectCarousel() {
                 <SwiperSlide>Project 3<img src={tempImageUrl} alt="Slide 3" /></SwiperSlide>
                 <SwiperSlide>Project 4<img src={tempImageUrl} alt="Slide 4" /></SwiperSlide>
             </Swiper>
+            {/* Right Arrow */}
+            <div className="swiper-button-next-custom cursor-pointer text-2xl">
+                {">"}
+            </div>
         </div>
     );
 }
