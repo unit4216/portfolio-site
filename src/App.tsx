@@ -109,12 +109,12 @@ const CustomHR = () => {
     return <hr className='mb-32 border-t-[1px] text-[#282828] border-[#282828]'/>
 }
 
-const StyledTextField = ({rows=1}: {rows?: number}) =>{
+const StyledTextField = ({rows=1, placeholder}: {rows?: number, placeholder: string}) =>{
     return (
         <TextField
             rows={rows}
             multiline
-            placeholder={"Placeholder"}
+            placeholder={placeholder}
             sx={{
             '& .MuiOutlinedInput-root': {
                 borderRadius: 0,
@@ -136,9 +136,12 @@ const StyledTextField = ({rows=1}: {rows?: number}) =>{
 export const ContactForm = () => {
     return (
         <div className='flex flex-col gap-y-2'>
-            <StyledTextField />
-            <StyledTextField />
-            <StyledTextField rows={5}/>
+            <div className="flex flex-row gap-x-4">
+                <StyledTextField placeholder={"First Name"}/>
+                <StyledTextField placeholder={"Last Name"}/>
+            </div>
+            <StyledTextField placeholder={"Email"}/>
+            <StyledTextField placeholder={"Enter message"} rows={5}/>
             <button className='rounded-none border-[2px] border-[#282828] w-22 h-9'>Send</button>
         </div>
     )
