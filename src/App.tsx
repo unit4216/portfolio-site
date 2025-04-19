@@ -205,8 +205,20 @@ function App() {
           <div className='flex flex-row justify-between'>
               <div className={'text-[#6B7280] text-[14px]'}>&copy; 2025 Pablo Paliza.  All rights reserved.</div>
               <div className='flex flex-row gap-x-2'>
-                  <div>INSERT LINKEDIN ICON BUTTON</div>
-                  <div>GITHUB ICON BUTTON</div>
+                  <a
+                      href="https://www.linkedin.com/in/pablo-paliza-carre-029676134/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                  >
+                      <img src={"./src/assets/linkedin-icon.png"} className='h-6'/>
+                  </a>
+                  <a
+                      href="https://www.github.com/unit4216"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                  >
+                      <img src={"./src/assets/github-icon.png"} className='h-6'/>
+                  </a>
               </div>
           </div>
       </div>
