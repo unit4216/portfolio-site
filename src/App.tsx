@@ -5,6 +5,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {useState} from "react";
+import {ArrowBackIos, ArrowForwardIos} from '@mui/icons-material';
 
 const tempImageUrl = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTndJ4Jo28CzEptSe8QOfo6UaEs5E1Hs84izu8hQTkpdjtj0E0G6f6u9CYeH_p47yZRCmnixLp2gIAGBY9r6SYpxA"
 
@@ -27,7 +28,7 @@ function ProjectCarousel() {
             <div
                 style={{visibility: !atStart ? 'visible' : 'hidden'}}
                 className="swiper-button-prev-custom cursor-pointer text-2xl">
-                {"<"}
+                <ArrowBackIos />
             </div>
             <Swiper
                 modules={[Navigation, Pagination]}
@@ -59,7 +60,7 @@ function ProjectCarousel() {
             <div
                 style={{visibility: !atEnd ? 'visible' : 'hidden'}}
                  className="swiper-button-next-custom cursor-pointer text-2xl">
-                {">"}
+                <ArrowForwardIos />
             </div>
         </div>
     );
