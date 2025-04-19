@@ -170,7 +170,7 @@ function App() {
           <div className='text-[69px] mt-44'>
               Pablo Paliza
           </div>
-          <div className='text-[25px]'>Full stack software developer</div>
+          <div className='text-[25px]'>Full stack software engineer</div>
           <div className='text-[45px] mt-44'>Projects</div>
           <CustomHR />
           <ProjectCarousel />
