@@ -194,10 +194,18 @@ function App() {
           </div>
           <div className='text-[45px] mt-44'>Contact</div>
           <CustomHR />
-          <div className="flex flex-row">
+          <div className="flex flex-row mb-32">
               <div className='w-1/2 text-[30px]'>If you're interested in hiring me, please reach out.</div>
               <div className='w-1/2'>
                   <ContactForm />
+              </div>
+          </div>
+          <CustomHR />
+          <div className='flex flex-row justify-between'>
+              <div className={'text-[#6B7280] text-[14px]'}>&copy; 2025 Pablo Paliza.  All rights reserved.</div>
+              <div className='flex flex-row gap-x-2'>
+                  <div>INSERT LINKEDIN ICON BUTTON</div>
+                  <div>GITHUB ICON BUTTON</div>
               </div>
           </div>
       </div>
