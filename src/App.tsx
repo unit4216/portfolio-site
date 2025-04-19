@@ -9,7 +9,7 @@ import {ArrowBackIos, ArrowForwardIos, Circle, KeyboardArrowDown} from '@mui/ico
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import {TextField} from "@mui/material";
+import {Button, TextField} from "@mui/material";
 
 
 
@@ -120,13 +120,13 @@ const StyledTextField = ({rows=1}: {rows?: number}) =>{
                 borderRadius: 0,
                 '& fieldset': {
                     borderWidth: '2px',
-                    borderColor: '#000',
+                    borderColor: '#282828',
                 },
                 '&:hover fieldset': {
-                    borderColor: '#000',
+                    borderColor: '#282828',
                 },
                 '&.Mui-focused fieldset': {
-                    borderColor: '#000',
+                    borderColor: '#282828',
                 },
             },
         }}/>
@@ -139,6 +139,7 @@ export const ContactForm = () => {
             <StyledTextField />
             <StyledTextField />
             <StyledTextField rows={5}/>
+            <button className='rounded-none border-[2px] border-[#282828] w-22 h-9'>Send</button>
         </div>
     )
 }
