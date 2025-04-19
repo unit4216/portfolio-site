@@ -202,9 +202,9 @@ function App() {
               </div>
           </div>
           <CustomHR />
-          <div className='flex flex-row justify-between'>
+          <div className='flex flex-row items-center justify-between'>
               <div className={'text-[#6B7280] text-[14px]'}>&copy; 2025 Pablo Paliza.  All rights reserved.</div>
-              <div className='flex flex-row gap-x-2'>
+              <div className='flex flex-row items-center gap-x-2'>
                   <a
                       href="https://www.linkedin.com/in/pablo-paliza-carre-029676134/"
                       target="_blank"
