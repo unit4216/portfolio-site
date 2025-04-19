@@ -165,11 +165,11 @@ function App() {
   return (
 
       <div
-          className='text-[#282828] px-20 py-4 w-[100vw] bg-[#F5F5F5]'
+          className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
           style={{fontFamily: 'Neue Haas Grotesk'}}
       >
-          <div className="fixed top-0 left-0 w-full bg-[#F5F5F5] px-20 py-4">
-              <div className="flex flex-row justify-end gap-x-4 text-[25px]">
+          <div className="fixed z-50 top-0 left-0 w-full bg-[#F5F5F5] px-40 py-4">
+              <div className="flex flex-row justify-end gap-x-10 text-[25px]">
                   {sections.map(section=>{
                       return (
                           <button
