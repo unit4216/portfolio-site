@@ -106,7 +106,7 @@ const ResumeAccordion = () => {
 }
 
 const CustomHR = () => {
-    return <hr className='mb-32 border-t-[1px] text-[#282828] border-[#282828]'/>
+    return <hr className='border-t-[1px] text-[#282828] border-[#282828]'/>
 }
 
 const StyledTextField = ({rows=1, placeholder}: {rows?: number, placeholder: string}) =>{
@@ -148,6 +148,14 @@ export const ContactForm = () => {
     )
 }
 
+const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        console.log('test')
+    }
+};
+
 function App() {
 
     const sections = ["Work", 'About', 'Contact']
@@ -160,52 +168,70 @@ function App() {
           className='text-[#282828] px-20 py-4 w-[100vw] bg-[#F5F5F5]'
           style={{fontFamily: 'Neue Haas Grotesk'}}
       >
-          <div className="fixed top-0 left-0 w-full z-50 bg-[#F5F5F5] px-20 py-4">
+          <div className="fixed top-0 left-0 w-full bg-[#F5F5F5] px-20 py-4">
               <div className="flex flex-row justify-end gap-x-4 text-[25px]">
                   {sections.map(section=>{
-                      return <div>{section}</div>
+                      return (
+                          <button
+                              onClick={() => scrollTo(section)}
+                          >
+                          {section}
+                      </button>)
                   })}
               </div>
           </div>
-          <div className='text-[69px] mt-44'>
-              Pablo Paliza
-          </div>
-          <div className='text-[25px]'>Full stack software engineer</div>
-          <div className='text-[45px] mt-44'>Projects</div>
-          <CustomHR />
-          <ProjectCarousel />
-          <div className='text-[45px] mt-44'>About Me</div>
-          <CustomHR />
-          <div className='flex flex-row'>
-              <div className='w-1/2 text-[30px]'>
-                  I'm a full-stack software developer with five years of experience designing solutions for
-                  problems.
+          <section className='h-screen'>
+              <div className='text-[69px] mt-44'>
+                  Pablo Paliza
               </div>
-              <div className='w-1/2'>
-                  <ResumeAccordion />
+              <div className='text-[25px]'>Full stack software engineer</div>
+          </section>
+          <section className='h-screen scroll-mt-16' id={'Work'}>
+              <div className='text-[45px] mt-44'>Projects</div>
+              <CustomHR />
+              <div className='mt-10'>
+                <ProjectCarousel />
               </div>
-          </div>
-          <div className='flex flex-row mt-44 justify-center gap-x-4 items-center'>
-              {SKILLS.map((skill, index)=>{
-                  return (
-                      <>
-                      <div className='text-[24px]'>{skill}</div>
-                  {index < SKILLS.length - 1 && <Circle className="text-[#282828]" sx={{fontSize: '6px'}} />
-                  }
-                      </>
-              )
+          </section>
+          <section className='h-screen scroll-mt-16' id={'About'}>
+              <div className='text-[45px] mt-44'>About Me</div>
+              <CustomHR />
+              <div className='mt-24'/>
+              <div className='flex flex-row'>
+                  <div className='w-1/2 text-[30px]'>
+                      I'm a full-stack software developer with five years of experience designing solutions for
+                      problems.
+                  </div>
+                  <div className='w-1/2'>
+                      <ResumeAccordion />
+                  </div>
+              </div>
+              <div className='flex flex-row mt-44 justify-center gap-x-4 items-center'>
+                  {SKILLS.map((skill, index)=>{
+                      return (
+                          <>
+                          <div className='text-[24px]'>{skill}</div>
+                      {index < SKILLS.length - 1 && <Circle className="text-[#282828]" sx={{fontSize: '6px'}} />
+                      }
+                          </>
+                  )
 
-              })}
-          </div>
-          <div className='text-[45px] mt-44'>Contact</div>
-          <CustomHR />
-          <div className="flex flex-row mb-32">
-              <div className='w-1/2 text-[30px]'>If you're interested in hiring me, please reach out.</div>
-              <div className='w-1/2'>
-                  <ContactForm />
+                  })}
               </div>
-          </div>
+          </section>
+          <section className='h-screen scroll-mt-16' id={'Contact'}>
+              <div className='text-[45px] mt-44'>Contact</div>
+              <CustomHR />
+              <div className='mt-24'/>
+              <div className="flex flex-row mb-32">
+                  <div className='w-1/2 text-[30px]'>If you're interested in hiring me, please reach out.</div>
+                  <div className='w-1/2'>
+                      <ContactForm />
+                  </div>
+              </div>
+            </section>
           <CustomHR />
+          <div className='mt-10'/>
           <div className='flex flex-row items-center justify-between'>
               <div className={'text-[#6B7280] text-[14px]'}>&copy; 2025 Pablo Paliza.  All rights reserved.</div>
               <div className='flex flex-row items-center gap-x-2'>
