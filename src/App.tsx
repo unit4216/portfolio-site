@@ -14,25 +14,39 @@ import { motion } from 'framer-motion';
 
 export function MasonryGrid() {
     const items = [
-        { id: 1, text: 'project1', height: 'h-32' },
-        { id: 2, text: 'project2', height: 'h-96' },
-        { id: 3, text: 'project3', height: 'h-80' },
-        { id: 4, text: 'project4', height: 'h-48' },
+        { id: 1, text: 'project1', height: 'h-32', img: null },
+        { id: 2, text: 'project2', height: 'h-96', img: null },
+        { id: 3, text: 'project3', height: 'h-80', img: null },
+        { id: 4,
+            text: 'Cancer Detection',
+            height: 'h-48',
+            img: './src/assets/cancer-detection.png',
+            url: 'https://github.com/unit4216/cancer-cnn/blob/main/cnn-cancer-detection.ipynb'
+        },
     ];
 
     return (
         <div className="columns-2 gap-4 space-y-4 p-4">
             {items.map(item => (
-                <motion.div
-                    key={item.id}
-                    className={`break-inside-avoid rounded-lg bg-white p-4 shadow-md border-none ${item.height}`}
-                    whileHover={{ scale: 1.03 }}
-                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                <a href={item.url}  target="_blank"
                 >
-                    <div className='flex flex-col justify-end h-full'>
-                    {item.text}
-                    </div>
-                </motion.div>
+                    <motion.div
+                        key={item.id}
+                        className={`break-inside-avoid rounded-lg bg-white p-4 shadow-md border-none ${item.height}`}
+                        whileHover={{ scale: 1.03 }}
+                        transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        style={{
+                            backgroundImage: item.img ? `url(${item.img})` : undefined,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat',
+                        }}
+                    >
+                        <div className='flex flex-col justify-end h-full'>
+                        {item.text}
+                        </div>
+                    </motion.div>
+                </a>
             ))}
         </div>
     );
