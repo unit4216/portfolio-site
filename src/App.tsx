@@ -18,7 +18,7 @@ export function MasonryGrid() {
         { id: 2, text: 'project2', height: 'h-96', img: null },
         { id: 3, text: 'project3', height: 'h-80', img: null },
         { id: 4,
-            text: 'Cancer Detection',
+            text: 'Cancer Detection Using Neural Networks',
             height: 'h-48',
             img: './src/assets/cancer-detection.png',
             url: 'https://github.com/unit4216/cancer-cnn/blob/main/cnn-cancer-detection.ipynb'
