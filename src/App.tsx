@@ -26,9 +26,9 @@ export function MasonryGrid() {
     ];
 
     return (
-        <div className="columns-2 gap-4 space-y-4 p-4">
+        <div className="columns-2 gap-4 p-4">
             {items.map(item => (
-                <a href={item.url}  target="_blank"
+                <a href={item.url}  target="_blank" className="block mb-4"
                 >
                     <motion.div
                         key={item.id}
