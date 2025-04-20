@@ -32,7 +32,9 @@ export function MasonryGrid() {
                     whileHover={{ scale: 1.03 }}
                     transition={{ duration: 0.2, ease: 'easeInOut' }}
                 >
+                    <div className='flex flex-col justify-end h-full'>
                     {item.text}
+                    </div>
                 </motion.div>
             ))}
         </div>
