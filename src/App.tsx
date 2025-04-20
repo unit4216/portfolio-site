@@ -14,12 +14,12 @@ import { motion } from 'framer-motion';
 
 export function MasonryGrid() {
     const items = [
-        { id: 1, text: 'project1', height: 'h-32', img: null },
+        { id: 1, text: 'project1', height: 'h-48', img: null },
         { id: 2, text: 'project2', height: 'h-96', img: null },
         { id: 3, text: 'project3', height: 'h-80', img: null },
         { id: 4,
             text: 'Cancer Detection Using Neural Networks',
-            height: 'h-48',
+            height: 'h-64',
             img: './src/assets/cancer-pixel.png',
             url: 'https://github.com/unit4216/cancer-cnn/blob/main/cnn-cancer-detection.ipynb'
         },
