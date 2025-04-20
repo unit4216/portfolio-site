@@ -31,21 +31,21 @@ export function MasonryGrid() {
                 <a href={item.url}  target="_blank" className="block mb-4"
                 >
                     <motion.div
-                        key={item.id}
-                        className={`break-inside-avoid rounded-lg bg-white p-4 shadow-md border-none ${item.height}`}
+                        className={`relative group break-inside-avoid rounded-lg overflow-hidden shadow-md border-none ${item.height}`}
                         whileHover={{ scale: 1.03 }}
                         transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        style={{
-                            backgroundImage: item.img ? `url(${item.img})` : undefined,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                        }}
                     >
-                        <div className='flex flex-col justify-end h-full'>
-                            <div className='bg-[#282828] text-[#F5F5F5] px-2 w-fit text-2xl rounded-lg'>
+                        <motion.div
+                            className="absolute inset-0 bg-cover bg-center z-0 group-hover:brightness-50 transition-brightness duration-300"
+                            style={{ backgroundImage: item.img ? `url(${item.img})` : undefined }}
+                        />
+                        <div className="relative z-10 flex flex-col justify-center items-center h-full">
+                            <motion.div
+                                className="opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                                 text-[#F5F5F5] text-center  px-4 py-2 rounded text-2xl"
+                            >
                                 {item.text}
-                            </div>
+                            </motion.div>
                         </div>
                     </motion.div>
                 </a>
