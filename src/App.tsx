@@ -10,6 +10,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { TextField} from "@mui/material";
+import { motion } from 'framer-motion';
 
 
 
@@ -25,12 +26,14 @@ export function MasonryGrid() {
     return (
         <div className="columns-2 gap-4 space-y-4 p-4">
             {items.map(item => (
-                <div
+                <motion.div
                     key={item.id}
                     className={`break-inside-avoid rounded-lg bg-white p-4 shadow-md border ${item.height}`}
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ duration: 0.2, ease: 'easeInOut' }}
                 >
                     {item.text}
-                </div>
+                </motion.div>
             ))}
         </div>
     );
