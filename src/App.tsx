@@ -9,67 +9,29 @@ import {ArrowBackIos, ArrowForwardIos, Circle, KeyboardArrowDown} from '@mui/ico
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import {Button, TextField} from "@mui/material";
+import { TextField} from "@mui/material";
 
 
 
-const tempImageUrl = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTndJ4Jo28CzEptSe8QOfo6UaEs5E1Hs84izu8hQTkpdjtj0E0G6f6u9CYeH_p47yZRCmnixLp2gIAGBY9r6SYpxA"
 
-const SLIDES = [
-    {title: 'Project 1', imgUrl: tempImageUrl },
-    {title: 'Project 2', imgUrl: tempImageUrl },
-    {title: 'Project 3', imgUrl: tempImageUrl },
-    {title: 'Project 4', imgUrl: tempImageUrl }
-]
-
-
-function ProjectCarousel() {
-    const [atStart, setAtStart] = useState<boolean>(true)
-    const [atEnd, setAtEnd] = useState<boolean>(false)
-
+export function MasonryGrid() {
+    const items = [
+        { id: 1, text: 'project1', height: 'h-32' },
+        { id: 2, text: 'project2', height: 'h-96' },
+        { id: 3, text: 'project3', height: 'h-78' },
+        { id: 4, text: 'project4', height: 'h-48' },
+    ];
 
     return (
-        <div className="w-4/5 mx-auto flex flex-row items-center gap-x-4">
-            {/* Left Arrow */}
-            <div
-                style={{visibility: !atStart ? 'visible' : 'hidden'}}
-                className="swiper-button-prev-custom cursor-pointer text-2xl">
-                <ArrowBackIos />
-            </div>
-            <Swiper
-                modules={[Navigation, Pagination]}
-                spaceBetween={20}
-                slidesPerView={3}
-                navigation={{
-                    prevEl: '.swiper-button-prev-custom',
-                    nextEl: '.swiper-button-next-custom',
-                }}
-                onSlideChange={(swiper) => {
-                    setAtStart(swiper.isBeginning);
-                    setAtEnd(swiper.isEnd);
-                }}
-                breakpoints={{
-                    640: { slidesPerView: 1 },
-                    768: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
-                }}
-            >
-                {SLIDES.map(slide=>{
-                    return (
-                        <SwiperSlide >
-                        <div className="text-[30px]">{slide.title}</div>
-                        <img src={slide.imgUrl} alt={slide.title} className='w-[370px] h-[560px] rounded-md' />
-                    </SwiperSlide>
-                    )
-                })}
-
-            </Swiper>
-            {/* Right Arrow */}
-            <div
-                style={{visibility: !atEnd ? 'visible' : 'hidden'}}
-                 className="swiper-button-next-custom cursor-pointer text-2xl">
-                <ArrowForwardIos />
-            </div>
+        <div className="columns-2 gap-4 space-y-4 p-4">
+            {items.map(item => (
+                <div
+                    key={item.id}
+                    className={`break-inside-avoid rounded-lg bg-white p-4 shadow-md border ${item.height}`}
+                >
+                    {item.text}
+                </div>
+            ))}
         </div>
     );
 }
@@ -197,7 +159,7 @@ function App() {
               <div className='text-[45px] mt-44'>Projects</div>
               <CustomHR />
               <div className='mt-10'>
-                <ProjectCarousel />
+                <MasonryGrid />
               </div>
           </section>
           <section className='h-screen scroll-mt-16' id={'About'}>
