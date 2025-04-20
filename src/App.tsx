@@ -181,15 +181,16 @@ function App() {
               </div>
           </div>
           <section className='h-screen'>
-              <div className='text-[200px]'>
+              <div className='text-[200px] w-1/3'>
                   pablo
               </div>
-              <div className='text-[200px] ml-96'>
+              <div className='text-[200px] w-2/3 text-right'>
                   paliza
               </div>
-              <div className='text-[25px]'>*Full stack software engineer</div>
-              <div className='text-[200px] ml-[50rem]'>
-                  carre
+              <div className='text-[200px] w-full flex flex-row justify-between items-center'>
+                  <div className='text-[25px]'>*Full stack software engineer</div>
+
+                  <div>carre</div>
               </div>
           </section>
           <section className='h-screen scroll-mt-16' id={'Work'}>
