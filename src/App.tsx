@@ -19,7 +19,7 @@ export function MasonryGrid() {
     const items = [
         { id: 1, text: 'project1', height: 'h-32' },
         { id: 2, text: 'project2', height: 'h-96' },
-        { id: 3, text: 'project3', height: 'h-78' },
+        { id: 3, text: 'project3', height: 'h-80' },
         { id: 4, text: 'project4', height: 'h-48' },
     ];
 
