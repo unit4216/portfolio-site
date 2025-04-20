@@ -43,7 +43,7 @@ export function MasonryGrid() {
                         }}
                     >
                         <div className='flex flex-col justify-end h-full'>
-                            <div className='bg-black text-white w-fit text-2xl'>
+                            <div className='bg-[#282828] text-[#F5F5F5] px-2 w-fit text-2xl'>
                                 {item.text}
                             </div>
                         </div>
