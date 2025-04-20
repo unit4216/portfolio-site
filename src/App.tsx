@@ -2,7 +2,7 @@ import './App.css'
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import {  Circle, KeyboardArrowDown} from '@mui/icons-material';
+import {Circle, KeyboardArrowDown, OpenInNew} from '@mui/icons-material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -42,9 +42,9 @@ export function MasonryGrid() {
                         <div className="relative z-10 flex flex-col justify-center items-center h-full">
                             <motion.div
                                 className="opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                                 text-[#F5F5F5] text-center  px-4 py-2 rounded text-2xl"
+                                 text-[#F5F5F5] text-center  px-4 py-2 rounded text-2xl flex flex-row items-center gap-x-2"
                             >
-                                {item.text}
+                                {item.text} <OpenInNew fontSize={'small'}/>
                             </motion.div>
                         </div>
                     </motion.div>
