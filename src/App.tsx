@@ -43,7 +43,9 @@ export function MasonryGrid() {
                         }}
                     >
                         <div className='flex flex-col justify-end h-full'>
-                        {item.text}
+                            <div className='bg-black text-white w-fit text-2xl'>
+                                {item.text}
+                            </div>
                         </div>
                     </motion.div>
                 </a>
