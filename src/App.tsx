@@ -181,10 +181,16 @@ function App() {
               </div>
           </div>
           <section className='h-screen'>
-              <div className='text-[69px] mt-44'>
-                  Pablo Paliza
+              <div className='text-[200px]'>
+                  pablo
               </div>
-              <div className='text-[25px]'>Full stack software engineer</div>
+              <div className='text-[200px] ml-96'>
+                  paliza
+              </div>
+              <div className='text-[25px]'>*Full stack software engineer</div>
+              <div className='text-[200px] ml-[50rem]'>
+                  carre
+              </div>
           </section>
           <section className='h-screen scroll-mt-16' id={'Work'}>
               <div className='text-[45px] mt-44'>Projects</div>
