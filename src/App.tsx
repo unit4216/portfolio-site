@@ -155,14 +155,14 @@ function App() {
                   <div>carre</div>
               </div>
           </section>
-          <section className='h-screen scroll-mt-16' id={'Work'}>
+          <section className=' scroll-mt-16' id={'Work'}>
               <div className='text-[45px] mt-44'>Projects</div>
               <CustomHR />
               <div className='mt-10'>
                 <MasonryGrid />
               </div>
           </section>
-          <section className='h-screen scroll-mt-16' id={'About'}>
+          <section className='scroll-mt-16' id={'About'}>
               <div className='text-[45px] mt-44'>About Me</div>
               <CustomHR />
               <div className='mt-24'/>
@@ -188,7 +188,7 @@ function App() {
                   })}
               </div>
           </section>
-          <section className='h-screen scroll-mt-16' id={'Contact'}>
+          <section className='scroll-mt-16' id={'Contact'}>
               <div className='text-[45px] mt-44'>Contact</div>
               <CustomHR />
               <div className='mt-24'/>
