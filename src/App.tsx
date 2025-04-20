@@ -25,7 +25,7 @@ export function MasonryGrid() {
             {items.map(item => (
                 <motion.div
                     key={item.id}
-                    className={`break-inside-avoid rounded-lg bg-white p-4 shadow-md border ${item.height}`}
+                    className={`break-inside-avoid rounded-lg bg-white p-4 shadow-md border-none ${item.height}`}
                     whileHover={{ scale: 1.03 }}
                     transition={{ duration: 0.2, ease: 'easeInOut' }}
                 >
