@@ -1,11 +1,8 @@
 import './App.css'
-import { Navigation, Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import {useState} from "react";
-import {ArrowBackIos, ArrowForwardIos, Circle, KeyboardArrowDown} from '@mui/icons-material';
+import {  Circle, KeyboardArrowDown} from '@mui/icons-material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -157,7 +154,7 @@ function App() {
               <div className='text-[200px] w-full flex flex-row justify-between items-center'>
                   <div className='text-[25px]'>*Full stack software engineer</div>
 
-                  <div>carre</div>
+                  <div>carre*</div>
               </div>
           </section>
           <section className=' scroll-mt-16' id={'Work'}>
