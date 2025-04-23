@@ -1,5 +1,5 @@
 import {Backspace, Clear, Shuffle} from "@mui/icons-material";
-import { useState} from "react";
+import {useEffect, useState} from "react";
 import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
 
 function getRandomLetters(count = 9): string[] {
@@ -41,10 +41,11 @@ const getAnswerList = (letters: string[]) => {
 
 
 
-export const WordGamePage = function () {
+export const GauntletPage = function () {
 
     const [letters, setLetters] = useState<string[]>(getRandomLetters())
     const [sequence, setSequence] = useState<string>('')
+    const [answerList, setAnswerList] = useState<string[]>([])
 
 
     function shuffleSequence() {
@@ -56,7 +57,11 @@ export const WordGamePage = function () {
         setLetters(lettersRef)
     }
 
-    console.log(getAnswerList(letters))
+    useEffect(()=>{
+        setAnswerList(getAnswerList(letters))
+    },[letters])
+
+    console.log(answerList)
 
     return (
         <div
