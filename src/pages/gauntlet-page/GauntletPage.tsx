@@ -3,8 +3,8 @@ import {useEffect, useState} from "react";
 import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
 
 function getRandomLetters(count = 9): string[] {
-    const consonants = 'BCDFGHJKLMNPQRSTVWXYZ';
-    const vowels = 'AEIOU'
+    const consonants = 'bcdfghjklmnpqrstvwxyz';
+    const vowels = 'aeiou'
     const result: string[] = [];
 
     const numVowels = Math.round(count * 0.4);
@@ -29,7 +29,7 @@ const getAnswerList = (letters: string[]) => {
 
     const validAnswers = validWords.filter(word=>{
 
-        return word.split('').every(letterInWord=>letters.includes(letterInWord.toUpperCase()))
+        return word.split('').every(letterInWord=>letters.includes(letterInWord))
 
     })
 
@@ -46,6 +46,7 @@ export const GauntletPage = function () {
     const [letters, setLetters] = useState<string[]>(getRandomLetters())
     const [sequence, setSequence] = useState<string>('')
     const [answerList, setAnswerList] = useState<string[]>([])
+    const [round, setRound] = useState<number>(1)
 
 
     function shuffleSequence() {
@@ -63,6 +64,15 @@ export const GauntletPage = function () {
 
     console.log(answerList)
 
+    const submitAnswer = () => {
+        const answerIsValid = answerList.includes(sequence)
+        if (answerIsValid) {
+            setRound(round + 1)
+            setLetters(getRandomLetters())
+            setSequence('')
+        }
+    }
+
     return (
         <div
             className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
@@ -70,6 +80,7 @@ export const GauntletPage = function () {
         >
             <div className='flex flex-row justify-center'>
                 <div className='flex flex-col gap-y-4'>
+                    <div>Round {round}</div>
                     <div className='flex flex-row justify-between'>
                         <button
                             className='rounded-full'
@@ -96,6 +107,7 @@ export const GauntletPage = function () {
                         )
                     })}
                     </div>
+                    <button onClick={submitAnswer}>Submit</button>
                 </div>
             </div>
         </div>
