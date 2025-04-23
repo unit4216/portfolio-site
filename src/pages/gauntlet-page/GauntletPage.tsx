@@ -71,6 +71,9 @@ export const GauntletPage = function () {
             setLetters(getRandomLetters())
             setSequence('')
         }
+        else {
+            setSequence('')
+        }
     }
 
     return (
