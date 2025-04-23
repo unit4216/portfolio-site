@@ -80,6 +80,7 @@ export const GauntletPage = function () {
         >
             <div className='flex flex-row justify-center'>
                 <div className='flex flex-col gap-y-4'>
+                    <div>GAUNTLET</div>
                     <div>Round {round}</div>
                     <div className='flex flex-row justify-between'>
                         <button
