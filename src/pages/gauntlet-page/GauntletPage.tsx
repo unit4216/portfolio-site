@@ -67,9 +67,14 @@ export const GauntletPage = function () {
     const submitAnswer = () => {
         const answerIsValid = answerList.includes(sequence)
         if (answerIsValid) {
-            setRound(round + 1)
-            setLetters(getRandomLetters())
-            setSequence('')
+            if (round == 5) {
+                // todo handle winning scenario
+            }
+            else {
+                setRound(round + 1)
+                setLetters(getRandomLetters())
+                setSequence('')
+            }
         }
         else {
             setSequence('')
