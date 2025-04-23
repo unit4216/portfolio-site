@@ -1,3 +1,4 @@
+import {Backspace, Clear} from "@mui/icons-material";
 import { useState} from "react";
 
 function getRandomLetters(count = 9): string[] {
@@ -40,20 +41,27 @@ export const WordGamePage = function () {
         >
             <div className='flex flex-row justify-center'>
                 <div className='flex flex-col gap-y-4'>
-                <div className='text-4xl'>{sequence}</div>
-                <div className='grid grid-cols-3 gap-4'>
-                {letters.map(letter=>{
-
-                    return (
+                    <div className='flex flex-row gap-x-4'>
                         <button
-                            className='bg-amber-200 hover:bg-amber-300 rounded-lg p-10 text-4xl'
-                            onClick={() => setSequence(sequence + letter)}
-                        >
-                            {letter}
+                            className='rounded-full'
+                            onClick={() => setSequence(sequence.slice(0,-1))}>
+                            <Backspace />
                         </button>
-                    )
-                })}
-                </div>
+                        <div className='text-4xl'>{sequence}</div>
+                    </div>
+                    <div className='grid grid-cols-3 gap-4'>
+                    {letters.map(letter=>{
+
+                        return (
+                            <button
+                                className='bg-amber-200 hover:bg-amber-300 rounded-lg p-10 text-4xl'
+                                onClick={() => setSequence(sequence + letter)}
+                            >
+                                {letter}
+                            </button>
+                        )
+                    })}
+                    </div>
                 </div>
             </div>
         </div>
