@@ -1,5 +1,6 @@
 import {Backspace, Clear, Shuffle} from "@mui/icons-material";
 import { useState} from "react";
+import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
 
 function getRandomLetters(count = 9): string[] {
     const consonants = 'BCDFGHJKLMNPQRSTVWXYZ';
@@ -22,6 +23,12 @@ function getRandomLetters(count = 9): string[] {
     return result;
 }
 
+const getAnswerList = () => {
+    const wordList: string[] = dictionary.replaceAll('\r','').split('\n')
+    const validWords = wordList.filter(word=>word.length > 2)
+    return validWords
+}
+
 
 
 
@@ -41,6 +48,7 @@ export const WordGamePage = function () {
         setLetters(lettersRef)
     }
 
+    console.log(getAnswerList())
 
     return (
         <div
