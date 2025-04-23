@@ -47,6 +47,7 @@ export const GauntletPage = function () {
     const [sequence, setSequence] = useState<string>('')
     const [answerList, setAnswerList] = useState<string[]>([])
     const [round, setRound] = useState<number>(1)
+    const [won, setWon] = useState<boolean>(false)
 
 
     function shuffleSequence() {
@@ -68,7 +69,7 @@ export const GauntletPage = function () {
         const answerIsValid = answerList.includes(sequence)
         if (answerIsValid) {
             if (round == 5) {
-                // todo handle winning scenario
+                setWon(true)
             }
             else {
                 setRound(round + 1)
@@ -89,34 +90,40 @@ export const GauntletPage = function () {
             <div className='flex flex-row justify-center'>
                 <div className='flex flex-col gap-y-4'>
                     <div>GAUNTLET</div>
-                    <div>Round {round}</div>
-                    <div className='flex flex-row justify-between'>
-                        <button
-                            className='rounded-full'
-                            onClick={() => setSequence(sequence.slice(0,-1))}>
-                            <Backspace />
-                        </button>
-                        <div className='text-4xl'>{sequence}</div>
-                        <button
-                            className='rounded-full'
-                            onClick={shuffleSequence}>
-                            <Shuffle />
-                        </button>
-                    </div>
-                    <div className='grid grid-cols-3 gap-4'>
-                    {letters.map(letter=>{
-
-                        return (
-                            <button
-                                className='bg-amber-200 hover:bg-amber-300 rounded-lg p-10 text-4xl'
-                                onClick={() => setSequence(sequence + letter)}
-                            >
-                                {letter}
-                            </button>
-                        )
-                    })}
-                    </div>
-                    <button onClick={submitAnswer}>Submit</button>
+                    {won && (
+                        <div>You won!</div>
+                    )}
+                    {!won && (
+                        <>
+                            <div>Round {round}</div>
+                            <div className='flex flex-row justify-between'>
+                                <button
+                                    className='rounded-full'
+                                    onClick={() => setSequence(sequence.slice(0,-1))}>
+                                    <Backspace />
+                                </button>
+                                <div className='text-4xl'>{sequence}</div>
+                                <button
+                                    className='rounded-full'
+                                    onClick={shuffleSequence}>
+                                    <Shuffle />
+                                </button>
+                            </div>
+                            <div className='grid grid-cols-3 gap-4'>
+                                {letters.map(letter=>{
+                                    return (
+                                        <button
+                                            className='bg-amber-200 hover:bg-amber-300 rounded-lg p-10 text-4xl'
+                                            onClick={() => setSequence(sequence + letter)}
+                                        >
+                                            {letter}
+                                        </button>
+                                    )
+                                })}
+                            </div>
+                            <button onClick={submitAnswer}>Submit</button>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
