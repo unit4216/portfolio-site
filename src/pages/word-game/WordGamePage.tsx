@@ -23,10 +23,18 @@ function getRandomLetters(count = 9): string[] {
     return result;
 }
 
-const getAnswerList = () => {
+const getAnswerList = (letters: string[]) => {
     const wordList: string[] = dictionary.replaceAll('\r','').split('\n')
     const validWords = wordList.filter(word=>word.length > 2)
-    return validWords
+
+    const validAnswers = validWords.filter(word=>{
+
+        return word.split('').every(letterInWord=>letters.includes(letterInWord.toUpperCase()))
+
+    })
+
+
+    return validAnswers
 }
 
 
@@ -48,7 +56,7 @@ export const WordGamePage = function () {
         setLetters(lettersRef)
     }
 
-    console.log(getAnswerList())
+    console.log(getAnswerList(letters))
 
     return (
         <div
