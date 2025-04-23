@@ -27,6 +27,7 @@ const getAnswerList = (letters: string[]) => {
     const wordList: string[] = dictionary.replaceAll('\r','').split('\n')
     const validWords = wordList.filter(word=>word.length > 2)
 
+    // todo introduce difficulty based on round
     const validAnswers = validWords.filter(word=>{
 
         return word.split('').every(letterInWord=>letters.includes(letterInWord))
@@ -63,7 +64,6 @@ export const GauntletPage = function () {
         setAnswerList(getAnswerList(letters))
     },[letters])
 
-    console.log(answerList)
 
     const submitAnswer = () => {
         const answerIsValid = answerList.includes(sequence)
