@@ -193,10 +193,13 @@ export const GauntletPage = function () {
                                 {letters.map(letter=>{
                                     return (
                                         <button
-                                            className='bg-amber-200 hover:bg-amber-300 rounded-lg p-10 text-4xl'
+                                            className='relative bg-amber-200 hover:bg-amber-300 rounded-lg p-10 text-4xl'
                                             onClick={() => setSequence(sequence + letter)}
                                         >
-                                            {letter} ({LETTER_POINTS[letter]})
+                                            {letter}
+                                            <span className="absolute bottom-2 right-2 text-xs">
+                                                {LETTER_POINTS[letter]}
+                                            </span>
                                         </button>
                                     )
                                 })}
