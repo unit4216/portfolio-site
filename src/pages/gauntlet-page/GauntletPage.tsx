@@ -161,6 +161,8 @@ export const GauntletPage = function () {
         };
     }, [letters, sequence]);
 
+    const progress = Math.min((score/thresholdScore) * 100, 100)
+
     return (
         <div
             className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
@@ -177,7 +179,7 @@ export const GauntletPage = function () {
                             <div>Round {round}</div>
                             <div>Score {score}</div>
                             <div>Threshold {thresholdScore}</div>
-                            <LinearProgress variant="determinate" value={(score/thresholdScore)*100} />
+                            <LinearProgress variant="determinate" value={progress} />
                             <div className='flex flex-row justify-between'>
                                 <button
                                     className='rounded-full'
