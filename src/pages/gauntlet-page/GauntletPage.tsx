@@ -82,6 +82,30 @@ export const GauntletPage = function () {
         }
     }
 
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+
+            if (letters.includes(event.key)) {
+                setSequence(sequence + event.key)
+            }
+
+            if (event.key === 'Backspace') {
+                setSequence(sequence.slice(0,-1))
+            }
+
+            if (event.key === 'Enter') {
+                submitAnswer()
+            }
+
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [letters, sequence]);
+
     return (
         <div
             className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
