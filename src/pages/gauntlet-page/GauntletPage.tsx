@@ -3,8 +3,8 @@ import {useEffect, useState} from "react";
 import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
 
 function getRandomLetters(count = 9): string[] {
-    const consonants = 'bcdfghjklmnpqrstvwxyz';
-    const vowels = 'aeiou'
+    let consonants = 'bcdfghjklmnpqrstvwxyz';
+    let vowels = 'aeiou'
     const result: string[] = [];
 
     const numVowels = Math.round(count * 0.4);
@@ -13,11 +13,13 @@ function getRandomLetters(count = 9): string[] {
     for (let i = 0; i < numConsonants; i++) {
         const randomLetter = consonants[Math.floor(Math.random() * consonants.length)];
         result.push(randomLetter);
+        consonants = consonants.replace(randomLetter,'')
     }
 
     for (let i = 0; i < numVowels; i++) {
         const randomLetter = vowels[Math.floor(Math.random() * vowels.length)];
         result.push(randomLetter);
+        vowels = vowels.replace(randomLetter, '')
     }
 
     return result;
