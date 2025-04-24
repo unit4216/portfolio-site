@@ -1,6 +1,7 @@
 import {Backspace, Clear, Shuffle} from "@mui/icons-material";
 import {useEffect, useState} from "react";
 import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
+import { LinearProgress } from "@mui/material";
 
 const LETTER_POINTS = {
     a: 1,
@@ -176,6 +177,7 @@ export const GauntletPage = function () {
                             <div>Round {round}</div>
                             <div>Score {score}</div>
                             <div>Threshold {thresholdScore}</div>
+                            <LinearProgress variant="determinate" value={(score/thresholdScore)*100} />
                             <div className='flex flex-row justify-between'>
                                 <button
                                     className='rounded-full'
