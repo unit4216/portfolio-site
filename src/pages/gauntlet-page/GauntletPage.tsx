@@ -54,6 +54,12 @@ function getRandomLetters(count = 9): string[] {
     return result;
 }
 
+const getWordScore = (word: string) => {
+    return word.split('').reduce(
+        (acc, letter)=>acc += LETTER_POINTS[letter], 0
+    )
+}
+
 const getAnswerList = (letters: string[]) => {
     const wordList: string[] = dictionary.replaceAll('\r','').split('\n')
     const validWords = wordList.filter(word=>word.length > 2)
@@ -65,8 +71,19 @@ const getAnswerList = (letters: string[]) => {
 
     })
 
+    const scoredAnswers = validAnswers.map(word => ({
+        word,
+        score: getWordScore(word)
+    }));
 
-    return validAnswers
+    scoredAnswers.sort((a, b) => b.score - a.score);
+
+    const thresholdIndex = Math.floor(scoredAnswers.length * 0.50);
+    const topAnswers = scoredAnswers.slice(0, thresholdIndex);
+    return {
+        answers: topAnswers.map(({word})=>word),
+        thresholdScore: topAnswers.slice(-1)[0].score
+    }
 }
 
 
@@ -80,6 +97,7 @@ export const GauntletPage = function () {
     const [answerList, setAnswerList] = useState<string[]>([])
     const [round, setRound] = useState<number>(1)
     const [won, setWon] = useState<boolean>(false)
+    const [thresholdScore, setThresholdScore] = useState<number>(0)
 
 
     function shuffleSequence() {
@@ -92,17 +110,18 @@ export const GauntletPage = function () {
     }
 
     useEffect(()=>{
-        setAnswerList(getAnswerList(letters))
+        const res = getAnswerList(letters)
+        setAnswerList(res.answers)
+        setThresholdScore(res.thresholdScore)
     },[letters])
 
-    const score = sequence.split('').reduce(
-        (acc, letter)=>acc += LETTER_POINTS[letter], 0
-    )
+    const score = getWordScore(sequence)
 
 
     const submitAnswer = () => {
         const answerIsValid = answerList.includes(sequence)
-        if (answerIsValid) {
+        const scoreMeetsThreshold = score >= thresholdScore
+        if (answerIsValid && scoreMeetsThreshold) {
             if (round == 5) {
                 setWon(true)
             }
@@ -156,6 +175,7 @@ export const GauntletPage = function () {
                         <>
                             <div>Round {round}</div>
                             <div>Score {score}</div>
+                            <div>Threshold {thresholdScore}</div>
                             <div className='flex flex-row justify-between'>
                                 <button
                                     className='rounded-full'
