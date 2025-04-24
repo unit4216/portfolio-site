@@ -2,6 +2,35 @@ import {Backspace, Clear, Shuffle} from "@mui/icons-material";
 import {useEffect, useState} from "react";
 import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
 
+const LETTER_POINTS = {
+    a: 1,
+    b: 2,
+    c: 3,
+    d: 2,
+    e: 1,
+    f: 4,
+    g: 2,
+    h: 4,
+    i: 1,
+    j: 8,
+    k: 5,
+    l: 1,
+    m: 3,
+    n: 1,
+    o: 1,
+    p: 3,
+    q: 10,
+    r: 1,
+    s: 1,
+    t: 1,
+    u: 1,
+    v: 4,
+    w: 4,
+    x: 8,
+    y: 4,
+    z: 10
+}
+
 function getRandomLetters(count = 9): string[] {
     let consonants = 'bcdfghjklmnpqrstvwxyz';
     let vowels = 'aeiou'
@@ -66,6 +95,10 @@ export const GauntletPage = function () {
         setAnswerList(getAnswerList(letters))
     },[letters])
 
+    const score = sequence.split('').reduce(
+        (acc, letter)=>acc += LETTER_POINTS[letter], 0
+    )
+
 
     const submitAnswer = () => {
         const answerIsValid = answerList.includes(sequence)
@@ -122,6 +155,7 @@ export const GauntletPage = function () {
                     {!won && (
                         <>
                             <div>Round {round}</div>
+                            <div>Score {score}</div>
                             <div className='flex flex-row justify-between'>
                                 <button
                                     className='rounded-full'
@@ -142,7 +176,7 @@ export const GauntletPage = function () {
                                             className='bg-amber-200 hover:bg-amber-300 rounded-lg p-10 text-4xl'
                                             onClick={() => setSequence(sequence + letter)}
                                         >
-                                            {letter}
+                                            {letter} ({LETTER_POINTS[letter]})
                                         </button>
                                     )
                                 })}
