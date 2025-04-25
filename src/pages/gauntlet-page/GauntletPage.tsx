@@ -78,7 +78,7 @@ const getAnswerList = (letters: string[], round: number) => {
 
     scoredAnswers.sort((a, b) => b.score - a.score);
 
-    const difficulties = [0.9, 0.7, 0.5, 0.3, 0.1]
+    const difficulties = [0.7, 0.55, 0.4, 0.25, 0.1]
 
     const thresholdIndex = Math.floor(scoredAnswers.length * difficulties[round]);
     const topAnswersScoreThreshold = scoredAnswers[thresholdIndex].score
