@@ -15,7 +15,6 @@ const SAMPLES = [
 ]
 
 
-
 export const Metronome = function () {
     const [isPlaying, setIsPlaying] = useState(false);
     const [bpm, setBpm] = useState(120); // default BPM
@@ -34,8 +33,6 @@ export const Metronome = function () {
         intervalId.current = setInterval(() => {
             click.current.play();
         }, interval);
-
-        setIsPlaying(true);
     };
 
     const stopMetronome = () => {
@@ -43,16 +40,24 @@ export const Metronome = function () {
             clearInterval(intervalId.current);
             intervalId.current = null;
         }
-        setIsPlaying(false);
     };
 
     const toggleMetronome = () => {
         if (isPlaying) {
             stopMetronome();
+            setIsPlaying(false);
         } else {
             startMetronome();
+            setIsPlaying(true);
         }
     };
+
+    useEffect(() => {
+        if (isPlaying) {
+            stopMetronome();
+            startMetronome();
+        }
+    }, [bpm]);
 
     return (
         <div className="flex flex-col items-center gap-4">
@@ -72,6 +77,8 @@ export const Metronome = function () {
         </div>
     );
 };
+
+
 
 
 export const SamplerPage = function () {
