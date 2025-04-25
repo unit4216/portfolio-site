@@ -215,7 +215,7 @@ export const GauntletPage = function () {
                                     <Shuffle />
                                 </button>
                             </div>
-                            <div className='grid grid-cols-3 gap-4'>
+                            <div className='grid grid-cols-3 gap-2'>
                                 {letters.map(letter=>{
                                     return (
                                         <button
