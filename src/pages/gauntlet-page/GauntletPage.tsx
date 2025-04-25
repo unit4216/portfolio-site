@@ -186,21 +186,12 @@ export const GauntletPage = function () {
                 </Snackbar>
             <div className='flex flex-row justify-center'>
                 <div className='flex flex-col gap-y-4'>
-                    <div>GAUNTLET</div>
+                    <div className='text-4xl text-center'>gauntlet</div>
                     {won && (
                         <div>You won!</div>
                     )}
                     {!won && (
                         <>
-                            <div className='flex flex-row justify-between'>
-                                {[0,1,2,3,4].map(roundNumber=>{
-                                    return (
-                                        <Circle
-                                            className={`${roundNumber <= round ? 'text-blue-400': 'text-gray-200'}`}
-                                        />
-                                    )
-                                })}
-                            </div>
                             <LinearProgress
                                 variant="determinate"
                                 value={progress}
@@ -231,6 +222,15 @@ export const GauntletPage = function () {
                                                 {LETTER_POINTS[letter]}
                                             </span>
                                         </button>
+                                    )
+                                })}
+                            </div>
+                            <div className='flex flex-row justify-between'>
+                                {[0,1,2,3,4].map(roundNumber=>{
+                                    return (
+                                        <Circle
+                                            className={`${roundNumber <= round ? 'text-blue-400': 'text-gray-200'}`}
+                                        />
                                     )
                                 })}
                             </div>
