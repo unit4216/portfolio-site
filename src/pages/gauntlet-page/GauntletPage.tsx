@@ -192,11 +192,15 @@ export const GauntletPage = function () {
                     )}
                     {!won && (
                         <>
-                            <LinearProgress
-                                variant="determinate"
-                                value={progress}
-                                sx={{ height: 10, borderRadius: 5 }}
-                            />
+                            <div className='flex flex-row justify-between'>
+                                {[0,1,2,3,4].map(roundNumber=>{
+                                    return (
+                                        <Circle
+                                            className={`${roundNumber <= round ? 'text-blue-400': 'text-gray-200'}`}
+                                        />
+                                    )
+                                })}
+                            </div>
                             <div className='flex flex-row justify-between'>
                                 <button
                                     className='rounded-full'
@@ -225,15 +229,11 @@ export const GauntletPage = function () {
                                     )
                                 })}
                             </div>
-                            <div className='flex flex-row justify-between'>
-                                {[0,1,2,3,4].map(roundNumber=>{
-                                    return (
-                                        <Circle
-                                            className={`${roundNumber <= round ? 'text-blue-400': 'text-gray-200'}`}
-                                        />
-                                    )
-                                })}
-                            </div>
+                            <LinearProgress
+                                variant="determinate"
+                                value={progress}
+                                sx={{ height: 10, borderRadius: 5 }}
+                            />
                             <button
                                 onClick={submitAnswer}
                                 className='bg-blue-300 rounded-3xl h-12 hover:bg-blue-400 disabled:bg-gray-200'
