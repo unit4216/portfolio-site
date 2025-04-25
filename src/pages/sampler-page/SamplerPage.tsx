@@ -2,7 +2,7 @@ import cowbell from '../../assets/808-samples/Roland TR-808/CB/CB.wav'
 import bass from '../../assets/808-samples/Roland TR-808/BD/BD0000.wav'
 import snare from '../../assets/808-samples/Roland TR-808/SD/SD0010.wav'
 import closedHat from '../../assets/808-samples/Roland TR-808/CH/CH.wav'
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 
 
 const SAMPLES = [
@@ -13,22 +13,33 @@ const SAMPLES = [
 ]
 
 export const SamplerPage = function () {
+    const audioMap = useRef<Record<string, HTMLAudioElement>>({});
+
+    const playSound = (key: string) => {
+        const audio = audioMap.current[key.toLowerCase()];
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play();
+        }
+    }
 
     useEffect(() => {
+
+        SAMPLES.forEach(sample => {
+            const audio = new Audio(sample.src);
+            audio.load();
+            audioMap.current[sample.key.toLowerCase()] = audio;
+        });
+
         const handleKeyDown = (event: KeyboardEvent) => {
 
-            const relevantSound = SAMPLES.find(sample=>sample.key.toLowerCase() === event.key)
-            if (relevantSound) {
-                new Audio(relevantSound.src).play()
-            }
+            playSound(event.key)
 
         };
 
         window.addEventListener('keydown', handleKeyDown);
 
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
+        return () => { window.removeEventListener('keydown', handleKeyDown);   };
     }, []);
 
     return (
@@ -42,7 +53,7 @@ export const SamplerPage = function () {
                         <button
                             className='relative bg-gray-200 hover:bg-gray-300 rounded-lg h-44 w-44'
                             onClick={() => {
-                                new Audio(sample.src).play()
+                                playSound(sample.key)
                             }}
                         />
                     )
