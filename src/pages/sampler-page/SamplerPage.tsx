@@ -23,6 +23,7 @@ export const SamplerPage = function () {
         }
     }
 
+    // todo lag may be due to space at beginning of waveform
     useEffect(() => {
 
         SAMPLES.forEach(sample => {
