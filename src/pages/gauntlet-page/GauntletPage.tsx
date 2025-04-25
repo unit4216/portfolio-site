@@ -121,8 +121,10 @@ export const GauntletPage = function () {
 
     const score = getWordScore(sequence)
 
+    const scoreTooLow = score < thresholdScore
 
     const submitAnswer = () => {
+        if (scoreTooLow) return
         const answerInAnswerSet = answerList.includes(sequence)
         if (answerInAnswerSet) {
             if (round == 4) {
@@ -222,7 +224,8 @@ export const GauntletPage = function () {
                             </div>
                             <button
                                 onClick={submitAnswer}
-                                className='bg-blue-300 rounded-3xl h-12'
+                                className='bg-blue-300 rounded-3xl h-12 hover:bg-blue-400 disabled:bg-gray-200'
+                                disabled={scoreTooLow}
                             >
                                 Submit
                             </button>
