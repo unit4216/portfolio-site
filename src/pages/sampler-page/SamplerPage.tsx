@@ -40,7 +40,7 @@ export const SamplerPage = function () {
                 {SAMPLES.map(sample=>{
                     return (
                         <button
-                            className='relative bg-amber-200 hover:bg-amber-300 rounded-lg px-10 py-8 text-4xl'
+                            className='relative bg-gray-200 hover:bg-gray-300 rounded-lg px-10 py-8 text-4xl'
                             onClick={() => {
                                 new Audio(sample.src).play()
                             }}
