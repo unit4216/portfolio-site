@@ -2,8 +2,9 @@ import cowbell from '../../assets/808-samples/Roland TR-808/CB/CB.wav'
 import bass from '../../assets/808-samples/Roland TR-808/BD/BD0000.wav'
 import snare from '../../assets/808-samples/Roland TR-808/SD/SD0010.wav'
 import closedHat from '../../assets/808-samples/Roland TR-808/CH/CH.wav'
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import { Howl } from 'howler';
+import metronomeClick from '../../assets/808-samples/Roland TR-808/RS/RS.wav'
 
 
 const SAMPLES = [
@@ -12,6 +13,66 @@ const SAMPLES = [
     {src: snare, key: 's'},
     {src: closedHat, key: 'd'}
 ]
+
+
+
+export const Metronome = function () {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [bpm, setBpm] = useState(120); // default BPM
+    const intervalId = useRef<NodeJS.Timeout | null>(null);
+
+    const click = useRef(
+        new Howl({
+            src: [metronomeClick],
+            preload: true,
+        })
+    );
+
+    const startMetronome = () => {
+        const interval = (60 / bpm) * 1000;
+
+        intervalId.current = setInterval(() => {
+            click.current.play();
+        }, interval);
+
+        setIsPlaying(true);
+    };
+
+    const stopMetronome = () => {
+        if (intervalId.current) {
+            clearInterval(intervalId.current);
+            intervalId.current = null;
+        }
+        setIsPlaying(false);
+    };
+
+    const toggleMetronome = () => {
+        if (isPlaying) {
+            stopMetronome();
+        } else {
+            startMetronome();
+        }
+    };
+
+    return (
+        <div className="flex flex-col items-center gap-4">
+            <input
+                type="range"
+                min="40"
+                max="240"
+                value={bpm}
+                onChange={(e) => setBpm(Number(e.target.value))}
+            />
+            <div className="text-lg">{bpm} BPM</div>
+            <button
+                onClick={toggleMetronome}
+            >
+                {isPlaying ? 'Stop' : 'Start'}
+            </button>
+        </div>
+    );
+};
+
 
 export const SamplerPage = function () {
     const [howls, setHowls] = useState<Record<string, Howl>>({});
@@ -64,6 +125,7 @@ export const SamplerPage = function () {
             className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
             style={{fontFamily: 'Neue Haas Grotesk'}}
         >
+            <Metronome />
             <div className='grid grid-cols-4 gap-1'>
                 {SAMPLES.map(sample=>{
                     return (
