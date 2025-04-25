@@ -99,7 +99,12 @@ export const Metronome = function () {
     };
 
     return (
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-row items-center gap-4">
+            <button
+                onClick={toggleMetronome}
+            >
+                {isPlaying ? <Stop /> : <PlayArrow />}
+            </button>
             <input
                 type="text"
                 value={bpm}
@@ -108,11 +113,6 @@ export const Metronome = function () {
                 className="text-4xl w-24 text-center border border-gray-300 rounded-lg p-2 cursor-ns-resize select-none"
             />
             <div className="text-lg">BPM</div>
-            <button
-                onClick={toggleMetronome}
-            >
-                {isPlaying ? <Stop /> : <PlayArrow />}
-            </button>
         </div>
     );
 };
@@ -168,7 +168,7 @@ export const SamplerPage = function () {
 
     return (
         <div
-            className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
+            className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5] flex flex-col items-center gap-y-8'
             style={{fontFamily: 'Neue Haas Grotesk'}}
         >
             <Metronome />
