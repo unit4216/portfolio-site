@@ -181,7 +181,7 @@ export const SamplerPage = function () {
                             onClick={() => {
                                 howls[sample.key]?.play();
                             }}
-                            {/* todo this should animate on mouse click as well... */}
+                            // todo this should animate on mouse click as well...
                             animate={{
                                 scale: activeKeys.includes(sample.key) ? 1.1 : 1,
                                 backgroundColor: activeKeys.includes(sample.key) ? "#d1d5db" : "#e5e7eb",
