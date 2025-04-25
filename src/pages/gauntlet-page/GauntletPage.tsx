@@ -1,7 +1,7 @@
 import {Backspace, Circle, Clear, Shuffle} from "@mui/icons-material";
 import {useEffect, useState} from "react";
 import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
-import {Alert, LinearProgress} from "@mui/material";
+import {Alert, LinearProgress, Snackbar} from "@mui/material";
 
 const LETTER_POINTS = {
     a: 1,
@@ -174,9 +174,16 @@ export const GauntletPage = function () {
             className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
             style={{fontFamily: 'Neue Haas Grotesk'}}
         >
-            {showAlert && (<Alert severity="error">
-                Not a valid word!
-            </Alert>)}
+                <Snackbar
+                    open={showAlert}
+                    autoHideDuration={3000}
+                    onClose={() => setShowAlert(false)}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert severity="error" onClose={() => setShowAlert(false)}>
+                        Not a valid word!
+                    </Alert>
+                </Snackbar>
             <div className='flex flex-row justify-center'>
                 <div className='flex flex-col gap-y-4'>
                     <div>GAUNTLET</div>
