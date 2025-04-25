@@ -229,17 +229,20 @@ export const GauntletPage = function () {
                                     )
                                 })}
                             </div>
-                            <LinearProgress
-                                variant="determinate"
-                                value={progress}
-                                sx={{ height: 10, borderRadius: 5 }}
-                            />
+
                             <button
                                 onClick={submitAnswer}
-                                className='bg-blue-300 rounded-3xl h-12 hover:bg-blue-400 disabled:bg-gray-200'
+                                className='relative'
                                 disabled={scoreTooLow}
                             >
-                                Submit
+                                <LinearProgress
+                                    variant="determinate"
+                                    value={progress}
+                                    sx={{ height: 50, borderRadius: 5 }}
+                                />
+                                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white">
+                                    Submit
+                                </div>
                             </button>
                         </>
                     )}
