@@ -36,7 +36,7 @@ export const SamplerPage = function () {
             className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
             style={{fontFamily: 'Neue Haas Grotesk'}}
         >
-            <div className='grid grid-cols-3 gap-2'>
+            <div className='grid grid-cols-4 gap-2'>
                 {SAMPLES.map(sample=>{
                     return (
                         <button
