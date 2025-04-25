@@ -235,7 +235,13 @@ export const GauntletPage = function () {
                                     <LinearProgress
                                         variant="determinate"
                                         value={progress}
-                                        sx={{ height: 50, borderRadius: 5 }}
+                                        sx={{
+                                            height: 50,
+                                            borderRadius: 5,
+                                            backgroundColor: scoreTooLow ? '#d1d5db' : '#60a5fa',
+                                            '& .MuiLinearProgress-bar': {
+                                                backgroundColor: scoreTooLow ? '#9ca3af' : '#3b82f6'
+                                            }}}
                                     />
                                     <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white">
                                         Submit
