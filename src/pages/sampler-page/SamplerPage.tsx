@@ -2,16 +2,34 @@ import cowbell from '../../assets/808-samples/Roland TR-808/CB/CB.wav'
 import bass from '../../assets/808-samples/Roland TR-808/BD/BD0000.wav'
 import snare from '../../assets/808-samples/Roland TR-808/SD/SD0010.wav'
 import closedHat from '../../assets/808-samples/Roland TR-808/CH/CH.wav'
+import {useEffect} from "react";
 
 
 const SAMPLES = [
-    {src: cowbell},
-    {src: bass},
-    {src: snare},
-    {src: closedHat}
+    {src: cowbell, key: 'W'},
+    {src: bass, key: 'A'},
+    {src: snare, key: 'S'},
+    {src: closedHat, key: 'D'}
 ]
 
 export const SamplerPage = function () {
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+
+            const relevantSound = SAMPLES.find(sample=>sample.key.toLowerCase() === event.key)
+            if (relevantSound) {
+                new Audio(relevantSound.src).play()
+            }
+
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
 
     return (
         <div
