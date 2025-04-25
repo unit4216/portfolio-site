@@ -10,6 +10,7 @@ import openHat from '../../assets/808-samples/Roland TR-808/OH/OH00.wav'
 import {useEffect, useRef, useState} from "react";
 import { Howl } from 'howler';
 import metronomeClick from '../../assets/808-samples/Roland TR-808/RS/RS.wav'
+import { PlayArrow, Stop } from '@mui/icons-material'
 
 
 const SAMPLES = [
@@ -28,6 +29,9 @@ export const Metronome = function () {
     const [isPlaying, setIsPlaying] = useState(false);
     const [bpm, setBpm] = useState(120); // default BPM
     const intervalId = useRef<NodeJS.Timeout | null>(null);
+    const dragging = useRef(false);
+    const startY = useRef(0);
+    const startBpm = useRef(120);
 
     const click = useRef(
         new Howl({
@@ -68,20 +72,46 @@ export const Metronome = function () {
         }
     }, [bpm]);
 
+    const handleMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
+        dragging.current = true;
+        startY.current = e.clientY;
+        startBpm.current = bpm;
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+        if (dragging.current) {
+            const deltaY = startY.current - e.clientY;
+            const sensitivity = 0.5; // adjust how fast BPM changes
+
+            let newBpm = startBpm.current + deltaY * sensitivity;
+            newBpm = Math.max(30, Math.min(300, newBpm)); // clamp BPM 30-300
+            setBpm(Math.round(newBpm));
+        }
+    };
+
+    const handleMouseUp = () => {
+        dragging.current = false;
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+    };
+
     return (
         <div className="flex flex-col items-center gap-4">
             <input
-                type="range"
-                min="40"
-                max="240"
+                type="text"
                 value={bpm}
-                onChange={(e) => setBpm(Number(e.target.value))}
+                readOnly
+                onMouseDown={handleMouseDown}
+                className="text-4xl w-24 text-center border border-gray-300 rounded-lg p-2 cursor-ns-resize select-none"
             />
-            <div className="text-lg">{bpm} BPM</div>
+            <div className="text-lg">BPM</div>
             <button
                 onClick={toggleMetronome}
             >
-                {isPlaying ? 'Stop' : 'Start'}
+                {isPlaying ? <Stop /> : <PlayArrow />}
             </button>
         </div>
     );
