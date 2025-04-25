@@ -61,11 +61,10 @@ const getWordScore = (word: string) => {
     )
 }
 
-const getAnswerList = (letters: string[]) => {
+const getAnswerList = (letters: string[], round: number) => {
     const wordList: string[] = dictionary.replaceAll('\r','').split('\n')
     const validWords = wordList.filter(word=>word.length > 2)
 
-    // todo introduce difficulty based on round
     const validAnswers = validWords.filter(word=>{
 
         return word.split('').every(letterInWord=>letters.includes(letterInWord))
@@ -79,11 +78,15 @@ const getAnswerList = (letters: string[]) => {
 
     scoredAnswers.sort((a, b) => b.score - a.score);
 
-    const thresholdIndex = Math.floor(scoredAnswers.length * 0.50);
-    const topAnswers = scoredAnswers.slice(0, thresholdIndex);
+    const difficulties = [0.9, 0.7, 0.5, 0.3, 0.1]
+
+    const thresholdIndex = Math.floor(scoredAnswers.length * difficulties[round]);
+    const topAnswersScoreThreshold = scoredAnswers[thresholdIndex].score
     return {
-        answers: topAnswers.map(({word})=>word),
-        thresholdScore: topAnswers.slice(-1)[0].score
+        answers: scoredAnswers
+            .filter(answer=>answer.score >= topAnswersScoreThreshold)
+            .map(answer=>answer.word),
+        thresholdScore: topAnswersScoreThreshold
     }
 }
 
@@ -96,7 +99,7 @@ export const GauntletPage = function () {
     const [letters, setLetters] = useState<string[]>(getRandomLetters())
     const [sequence, setSequence] = useState<string>('')
     const [answerList, setAnswerList] = useState<string[]>([])
-    const [round, setRound] = useState<number>(1)
+    const [round, setRound] = useState<number>(0)
     const [won, setWon] = useState<boolean>(false)
     const [thresholdScore, setThresholdScore] = useState<number>(0)
 
@@ -111,7 +114,7 @@ export const GauntletPage = function () {
     }
 
     useEffect(()=>{
-        const res = getAnswerList(letters)
+        const res = getAnswerList(letters, round)
         setAnswerList(res.answers)
         setThresholdScore(res.thresholdScore)
     },[letters])
@@ -120,10 +123,9 @@ export const GauntletPage = function () {
 
 
     const submitAnswer = () => {
-        const answerIsValid = answerList.includes(sequence)
-        const scoreMeetsThreshold = score >= thresholdScore
-        if (answerIsValid && scoreMeetsThreshold) {
-            if (round == 5) {
+        const answerInAnswerSet = answerList.includes(sequence)
+        if (answerInAnswerSet) {
+            if (round == 4) {
                 setWon(true)
             }
             else {
@@ -176,7 +178,7 @@ export const GauntletPage = function () {
                     )}
                     {!won && (
                         <>
-                            <div>Round {round}</div>
+                            <div>Round {round + 1}</div>
                             <div>Score {score}</div>
                             <div>Threshold {thresholdScore}</div>
                             <LinearProgress variant="determinate" value={progress} />
