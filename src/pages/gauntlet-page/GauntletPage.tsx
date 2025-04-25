@@ -203,17 +203,7 @@ export const GauntletPage = function () {
                                 })}
                             </div>
                             <div className='flex flex-row justify-between'>
-                                <button
-                                    className='rounded-full'
-                                    onClick={() => setSequence(sequence.slice(0,-1))}>
-                                    <Backspace />
-                                </button>
                                 <div className='text-4xl'>{sequence}</div>
-                                <button
-                                    className='rounded-full'
-                                    onClick={shuffleSequence}>
-                                    <Shuffle />
-                                </button>
                             </div>
                             <div className='grid grid-cols-3 gap-2'>
                                 {letters.map(letter=>{
@@ -231,20 +221,32 @@ export const GauntletPage = function () {
                                 })}
                             </div>
 
-                            <button
-                                onClick={submitAnswer}
-                                className='relative'
-                                disabled={scoreTooLow}
-                            >
-                                <LinearProgress
-                                    variant="determinate"
-                                    value={progress}
-                                    sx={{ height: 50, borderRadius: 5 }}
-                                />
-                                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white">
-                                    Submit
-                                </div>
-                            </button>
+                            <div className="flex flex-row gap-4 items-center mt-4">
+                                <button
+                                    className='rounded-full'
+                                    onClick={() => setSequence(sequence.slice(0,-1))}>
+                                    <Backspace />
+                                </button>
+                                <button
+                                    onClick={submitAnswer}
+                                    className="relative flex-1"
+                                    disabled={scoreTooLow}
+                                >
+                                    <LinearProgress
+                                        variant="determinate"
+                                        value={progress}
+                                        sx={{ height: 50, borderRadius: 5 }}
+                                    />
+                                    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white">
+                                        Submit
+                                    </div>
+                                </button>
+                                <button
+                                    className='rounded-full'
+                                    onClick={shuffleSequence}>
+                                    <Shuffle />
+                                </button>
+                            </div>
                         </>
                     )}
                 </div>
