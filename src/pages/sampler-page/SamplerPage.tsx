@@ -177,18 +177,19 @@ export const SamplerPage = function () {
                 {SAMPLES.map(sample=>{
                     return (
                         <motion.button
-                            className={`relative ${activeKeys.includes(sample.key) ? 'bg-gray-300' : 'bg-gray-200'} hover:bg-gray-300 
-                            rounded-lg h-44 w-44`}
+                            className={`relative bg-gray-200 hover:bg-gray-300 rounded-lg h-44 w-44`}
                             onClick={() => {
                                 howls[sample.key]?.play();
                             }}
                             animate={{
                                 scale: activeKeys.includes(sample.key) ? 1.1 : 1,
+                                backgroundColor: activeKeys.includes(sample.key) ? "#d1d5db" : "#e5e7eb",
                             }}
                             transition={{
                                 type: "spring",
                                 stiffness: 300,
                                 damping: 20,
+                                backgroundColor: { duration: 0.2 },
                             }}
                         />
                     )
