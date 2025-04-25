@@ -36,11 +36,11 @@ export const SamplerPage = function () {
             className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
             style={{fontFamily: 'Neue Haas Grotesk'}}
         >
-            <div className='grid grid-cols-4 gap-2'>
+            <div className='grid grid-cols-4 gap-1'>
                 {SAMPLES.map(sample=>{
                     return (
                         <button
-                            className='relative bg-gray-200 hover:bg-gray-300 rounded-lg px-10 py-8 text-4xl'
+                            className='relative bg-gray-200 hover:bg-gray-300 rounded-lg h-44 w-44'
                             onClick={() => {
                                 new Audio(sample.src).play()
                             }}
