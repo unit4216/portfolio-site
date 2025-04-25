@@ -1,8 +1,14 @@
-import sound from '../../assets/808-samples/Roland TR-808/CB/CB.wav'
+import cowbell from '../../assets/808-samples/Roland TR-808/CB/CB.wav'
+import bass from '../../assets/808-samples/Roland TR-808/BD/BD0000.wav'
+import snare from '../../assets/808-samples/Roland TR-808/SD/SD0010.wav'
+import closedHat from '../../assets/808-samples/Roland TR-808/CH/CH.wav'
 
 
 const SAMPLES = [
-    {src: sound}
+    {src: cowbell},
+    {src: bass},
+    {src: snare},
+    {src: closedHat}
 ]
 
 export const SamplerPage = function () {
