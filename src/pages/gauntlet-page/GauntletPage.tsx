@@ -102,7 +102,7 @@ export const GauntletPage = function () {
     const [round, setRound] = useState<number>(0)
     const [won, setWon] = useState<boolean>(false)
     const [thresholdScore, setThresholdScore] = useState<number>(0)
-    const [showAlert, setShowAlert] = useState<boolean>(false)
+    const [showAlert, setShowAlert] = useState<{type: 'error' | 'success', text: string} | null>(null)
 
 
     function shuffleSequence() {
@@ -135,11 +135,12 @@ export const GauntletPage = function () {
                 setRound(round + 1)
                 setLetters(getRandomLetters())
                 setSequence('')
+                setShowAlert({type: 'success', text: 'Nice one!'})
             }
         }
         else {
             setSequence('')
-            setShowAlert(true)
+            setShowAlert({type: 'error', text: 'Not a valid word!'})
         }
     }
 
@@ -175,13 +176,13 @@ export const GauntletPage = function () {
             style={{fontFamily: 'Neue Haas Grotesk'}}
         >
                 <Snackbar
-                    open={showAlert}
+                    open={!!showAlert}
                     autoHideDuration={3000}
-                    onClose={() => setShowAlert(false)}
+                    onClose={() => setShowAlert(null)}
                     anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 >
-                    <Alert severity="error" onClose={() => setShowAlert(false)}>
-                        Not a valid word!
+                    <Alert severity={showAlert?.type} onClose={() => setShowAlert(null)}>
+                        {showAlert?.text}
                     </Alert>
                 </Snackbar>
             <div className='flex flex-row justify-center'>
