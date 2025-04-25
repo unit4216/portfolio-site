@@ -11,6 +11,7 @@ import {useEffect, useRef, useState} from "react";
 import { Howl } from 'howler';
 import metronomeClick from '../../assets/808-samples/Roland TR-808/RS/RS.wav'
 import { PlayArrow, Stop } from '@mui/icons-material'
+import { motion } from "framer-motion";
 
 
 const SAMPLES = [
@@ -175,11 +176,19 @@ export const SamplerPage = function () {
             <div className='grid grid-cols-4 w-fit gap-4 mx-auto'>
                 {SAMPLES.map(sample=>{
                     return (
-                        <button
+                        <motion.button
                             className={`relative ${activeKeys.includes(sample.key) ? 'bg-gray-300' : 'bg-gray-200'} hover:bg-gray-300 
                             rounded-lg h-44 w-44`}
                             onClick={() => {
                                 howls[sample.key]?.play();
+                            }}
+                            animate={{
+                                scale: activeKeys.includes(sample.key) ? 1.1 : 1,
+                            }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 300,
+                                damping: 20,
                             }}
                         />
                     )
