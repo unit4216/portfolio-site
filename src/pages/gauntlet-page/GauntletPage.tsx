@@ -220,7 +220,12 @@ export const GauntletPage = function () {
                                     )
                                 })}
                             </div>
-                            <button onClick={submitAnswer}>Submit</button>
+                            <button
+                                onClick={submitAnswer}
+                                className='bg-blue-300 rounded-3xl h-12'
+                            >
+                                Submit
+                            </button>
                         </>
                     )}
                 </div>
