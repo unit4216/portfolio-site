@@ -1,7 +1,7 @@
 import {Backspace, Circle, Clear, Shuffle} from "@mui/icons-material";
 import {useEffect, useState} from "react";
 import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
-import { LinearProgress } from "@mui/material";
+import {Alert, LinearProgress} from "@mui/material";
 
 const LETTER_POINTS = {
     a: 1,
@@ -102,6 +102,7 @@ export const GauntletPage = function () {
     const [round, setRound] = useState<number>(0)
     const [won, setWon] = useState<boolean>(false)
     const [thresholdScore, setThresholdScore] = useState<number>(0)
+    const [showAlert, setShowAlert] = useState<boolean>(false)
 
 
     function shuffleSequence() {
@@ -138,6 +139,7 @@ export const GauntletPage = function () {
         }
         else {
             setSequence('')
+            setShowAlert(true)
         }
     }
 
@@ -172,6 +174,9 @@ export const GauntletPage = function () {
             className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
             style={{fontFamily: 'Neue Haas Grotesk'}}
         >
+            {showAlert && (<Alert severity="error">
+                Not a valid word!
+            </Alert>)}
             <div className='flex flex-row justify-center'>
                 <div className='flex flex-col gap-y-4'>
                     <div>GAUNTLET</div>
