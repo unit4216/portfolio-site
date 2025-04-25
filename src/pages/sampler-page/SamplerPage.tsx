@@ -2,16 +2,25 @@ import cowbell from '../../assets/808-samples/Roland TR-808/CB/CB.wav'
 import bass from '../../assets/808-samples/Roland TR-808/BD/BD0000.wav'
 import snare from '../../assets/808-samples/Roland TR-808/SD/SD0010.wav'
 import closedHat from '../../assets/808-samples/Roland TR-808/CH/CH.wav'
+import hiTom from '../../assets/808-samples/Roland TR-808/HT/HT00.wav'
+import cymbal from '../../assets/808-samples/Roland TR-808/CY/CY0000.wav'
+import clap from '../../assets/808-samples/Roland TR-808/CP/CP.wav'
+import openHat from '../../assets/808-samples/Roland TR-808/OH/OH00.wav'
+
 import {useEffect, useRef, useState} from "react";
 import { Howl } from 'howler';
 import metronomeClick from '../../assets/808-samples/Roland TR-808/RS/RS.wav'
 
 
 const SAMPLES = [
-    {src: cowbell, key: 'w'},
-    {src: bass, key: 'a'},
-    {src: snare, key: 's'},
-    {src: closedHat, key: 'd'}
+    {src: cowbell, key: 'q'},
+    {src: bass, key: 'w'},
+    {src: snare, key: 'e'},
+    {src: closedHat, key: 'r'},
+    {src: hiTom, key: 'a'},
+    {src: cymbal, key: 's'},
+    {src: clap, key: 'd'},
+    {src: openHat, key: 'f'}
 ]
 
 
