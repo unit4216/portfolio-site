@@ -2,7 +2,8 @@ import cowbell from '../../assets/808-samples/Roland TR-808/CB/CB.wav'
 import bass from '../../assets/808-samples/Roland TR-808/BD/BD0000.wav'
 import snare from '../../assets/808-samples/Roland TR-808/SD/SD0010.wav'
 import closedHat from '../../assets/808-samples/Roland TR-808/CH/CH.wav'
-import {useEffect, useState, useRef} from "react";
+import {useEffect, useState} from "react";
+import { Howl } from 'howler';
 
 
 const SAMPLES = [
@@ -13,35 +14,39 @@ const SAMPLES = [
 ]
 
 export const SamplerPage = function () {
-    const audioMap = useRef<Record<string, HTMLAudioElement>>({});
+    const [howls, setHowls] = useState<Record<string, Howl>>({});
     const [activeKeys, setActiveKeys] = useState<string[]>([])
 
-    const playSound = (key: string) => {
-        const audio = audioMap.current[key.toLowerCase()];
-        if (audio) {
-            audio.currentTime = 0;
-            audio.play();
-        }
-    }
-
-    // todo lag may be due to space at beginning of waveform
     useEffect(() => {
 
+        const loadedHowls: Record<string, Howl> = {};
+
         SAMPLES.forEach(sample => {
-            const audio = new Audio(sample.src);
-            audio.load();
-            audioMap.current[sample.key.toLowerCase()] = audio;
-        });
+            loadedHowls[sample.key] = new Howl({
+                src: [sample.src],
+                preload: true,
+                html5: false,
+            })
+        })
+
+        setHowls(loadedHowls);
+
 
         const handleKeyDown = (event: KeyboardEvent) => {
-
-            playSound(event.key)
-            if (!activeKeys.includes(event.key)) setActiveKeys([...activeKeys, event.key])
-
+            const key = event.key.toLowerCase();
+            if (loadedHowls[key]) {
+                loadedHowls[key].play();
+                setActiveKeys(prev => {
+                    if (!prev.includes(key)) return [...prev, key];
+                    return prev;
+                });
+            }
         };
 
+
         const handleKeyUp = (event: KeyboardEvent) => {
-            setActiveKeys(activeKeys.filter(key=>key!==event.key))
+            const key = event.key.toLowerCase();
+            setActiveKeys(prev => prev.filter(k => k !== key));
         };
 
         window.addEventListener('keydown', handleKeyDown);
@@ -66,7 +71,7 @@ export const SamplerPage = function () {
                             className={`relative ${activeKeys.includes(sample.key) ? 'bg-gray-300' : 'bg-gray-200'} hover:bg-gray-300 
                             rounded-lg h-44 w-44`}
                             onClick={() => {
-                                playSound(sample.key)
+                                howls[sample.key]?.play();
                             }}
                         />
                     )
