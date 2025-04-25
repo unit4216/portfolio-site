@@ -1,4 +1,4 @@
-import {Backspace, Clear, Shuffle} from "@mui/icons-material";
+import {Backspace, Circle, Clear, Shuffle} from "@mui/icons-material";
 import {useEffect, useState} from "react";
 import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
 import { LinearProgress } from "@mui/material";
@@ -178,7 +178,15 @@ export const GauntletPage = function () {
                     )}
                     {!won && (
                         <>
-                            <div>Round {round + 1}</div>
+                            <div className='flex flex-row justify-between'>
+                                {[0,1,2,3,4].map(roundNumber=>{
+                                    return (
+                                        <Circle
+                                            className={`${roundNumber <= round ? 'text-blue-400': 'text-gray-200'}`}
+                                        />
+                                    )
+                                })}
+                            </div>
                             <LinearProgress
                                 variant="determinate"
                                 value={progress}
