@@ -133,7 +133,7 @@ export const SamplerPage = function () {
             style={{fontFamily: 'Neue Haas Grotesk'}}
         >
             <Metronome />
-            <div className='grid grid-cols-4 gap-1'>
+            <div className='grid grid-cols-4 w-fit gap-4 mx-auto'>
                 {SAMPLES.map(sample=>{
                     return (
                         <button
