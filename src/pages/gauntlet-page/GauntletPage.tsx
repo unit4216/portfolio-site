@@ -179,9 +179,11 @@ export const GauntletPage = function () {
                     {!won && (
                         <>
                             <div>Round {round + 1}</div>
-                            <div>Score {score}</div>
-                            <div>Threshold {thresholdScore}</div>
-                            <LinearProgress variant="determinate" value={progress} />
+                            <LinearProgress
+                                variant="determinate"
+                                value={progress}
+                                sx={{ height: 10, borderRadius: 5 }}
+                            />
                             <div className='flex flex-row justify-between'>
                                 <button
                                     className='rounded-full'
