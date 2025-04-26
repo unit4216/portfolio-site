@@ -16,3 +16,14 @@ export const PLATFORMS = [
   { type: "ground", x: 1200, y: 500, src: ground },
   { type: "ground", x: 1300, y: 500, src: ground },
 ];
+
+export enum AnimationState {
+  ATTACK = "attack",
+  JUMP = "jump",
+  RUN = "run",
+  IDLE = "idle",
+}
+
+export const GRAVITY = 0.5;
+export const JUMP_FORCE = -12;
+export const FLOOR_Y = 600;

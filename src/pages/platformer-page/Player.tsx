@@ -3,19 +3,15 @@ import jumpKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/_
 import runKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Run.gif";
 import idleKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Idle.gif";
 import { useEffect, useRef, useState } from "react";
-import { PLATFORMS } from "./common.ts";
+import {
+  AnimationState,
+  FLOOR_Y,
+  GRAVITY,
+  JUMP_FORCE,
+  PLATFORMS,
+} from "./common.ts";
 
-export enum AnimationState {
-  ATTACK = "attack",
-  JUMP = "jump",
-  RUN = "run",
-  IDLE = "idle",
-}
-
-const GRAVITY = 0.5;
-const JUMP_FORCE = -12;
-const MOVE_SPEED = 5;
-const FLOOR_Y = 600;
+const MOVE_SPEED = 4;
 
 export const Player = function ({
   keysPressed,

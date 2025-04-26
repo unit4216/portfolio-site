@@ -1,6 +1,8 @@
 import skeleton from "../../assets/Skeletons_Free_Pack/gifs/skeleton-idle.gif";
 import { useState } from "react";
 
+const MOVE_SPEED = 3;
+
 export const Enemy = function () {
   const [enemyPos, setEnemyPos] = useState({ x: 400, y: 400 });
 
