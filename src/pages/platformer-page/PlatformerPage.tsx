@@ -8,6 +8,7 @@ import bgCloseTrees from "../../assets/parallax_demon_woods_pack/layers/parallax
 import bgFarTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png";
 import bgMidTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png";
 import ground from "../../assets/DarkForest1.2/ground_tile.png";
+import skeleton from "../../assets/Skeletons_Free_Pack/gifs/skeleton-idle.gif";
 
 const level = [
   { type: "ground", x: 0, y: 600, src: ground },
@@ -28,6 +29,8 @@ const level = [
 
 export const PlatformerPage = () => {
   const [position, setPosition] = useState({ x: 100, y: 300 });
+  const [enemyPos, setEnemyPos] = useState({ x: 400, y: 400 });
+
   const [velocity, setVelocity] = useState({ x: 0, y: 0 });
   const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>(
     {},
@@ -197,6 +200,22 @@ export const PlatformerPage = () => {
           position: "absolute",
           left: position.x,
           top: position.y,
+          imageRendering: "pixelated",
+          transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
+          filter: "saturate(2) contrast(5)",
+          zIndex: 10,
+        }}
+      />
+
+      <img
+        alt={"worm"}
+        src={skeleton}
+        style={{
+          width: "240px",
+          height: "160px",
+          position: "absolute",
+          left: enemyPos.x,
+          top: enemyPos.y,
           imageRendering: "pixelated",
           transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
           filter: "saturate(2) contrast(5)",
