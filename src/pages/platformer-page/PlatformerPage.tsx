@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import idleKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_PNGSheets/_Idle.png";
-import attackKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_PNGSheets/_Attack.png";
+import idleKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Idle.gif";
+import attackKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Attack.gif";
 
 export const PlatformerPage = () => {
   const [position, setPosition] = useState({ x: 100, y: 300 });
@@ -9,11 +9,6 @@ export const PlatformerPage = () => {
     {},
   );
   const requestRef = useRef<number>(0);
-
-  const frameWidth = 164;
-  const frameHeight = 128;
-  const sheetWidth = frameWidth * 10;
-  const sheetHeight = frameHeight * 1;
 
   const GRAVITY = 0.5;
   const JUMP_FORCE = -12;
@@ -80,16 +75,17 @@ export const PlatformerPage = () => {
         className="absolute left-0 w-full bg-green-700"
         style={{ top: FLOOR_Y + 50, height: "100px" }}
       />
-      <div
-        className="absolute"
+      <img
+        alt={"knight"}
+        src={keysPressed["e"] ? attackKnight : idleKnight}
         style={{
-          width: frameWidth + "px",
-          height: frameHeight + "px",
+          width: "240px",
+          height: "160px",
+          position: "absolute",
           left: position.x,
           top: position.y,
-          backgroundImage: `url(${keysPressed["e"] ? attackKnight : idleKnight})`,
-          backgroundSize: `${sheetWidth}px ${sheetHeight}px`,
           imageRendering: "pixelated",
+          transform: "translate(-50%, -50%)",
         }}
       />
     </div>
