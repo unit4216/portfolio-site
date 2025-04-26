@@ -6,6 +6,7 @@ import bgMidTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-d
 import ground from "../../assets/DarkForest1.2/ground_tile.png";
 import skeleton from "../../assets/Skeletons_Free_Pack/gifs/skeleton-idle.gif";
 import { AnimationState, Player } from "./Player.tsx";
+import { Background } from "./Background.tsx";
 
 const level = [
   { type: "ground", x: 0, y: 600, src: ground },
@@ -137,30 +138,7 @@ export const PlatformerPage = () => {
 
   return (
     <div className="relative w-screen h-screen bg-white overflow-hidden">
-      <img
-        src={bgBg}
-        alt="bgwoods"
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ zIndex: 0, imageRendering: "pixelated" }}
-      />
-      <img
-        src={bgFarTrees}
-        alt="bgFarTrees"
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ zIndex: 1, imageRendering: "pixelated" }}
-      />
-      <img
-        src={bgMidTrees}
-        alt="bgMidTrees"
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ zIndex: 2, imageRendering: "pixelated" }}
-      />
-      <img
-        src={bgCloseTrees}
-        alt="bgCloseTrees"
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ zIndex: 3, imageRendering: "pixelated" }}
-      />
+      <Background />
 
       {level.map((tile, index) => (
         <img
