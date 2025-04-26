@@ -108,7 +108,7 @@ export const Player = function ({
 
     requestRef.current = requestAnimationFrame(update);
     return () => cancelAnimationFrame(requestRef.current!);
-  }, [keysPressed, velocity, position, JUMP_FORCE]);
+  }, [keysPressed, velocity, position]);
 
   return (
     <img
