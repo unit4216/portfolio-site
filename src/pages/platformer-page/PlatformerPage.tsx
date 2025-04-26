@@ -3,6 +3,10 @@ import idleKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/_
 import attackKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Attack.gif";
 import runKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Run.gif";
 import jumpKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Jump.gif";
+import bgBg from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-bg.png";
+import bgCloseTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png";
+import bgFarTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png";
+import bgMidTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png";
 
 export const PlatformerPage = () => {
   const [position, setPosition] = useState({ x: 100, y: 300 });
@@ -20,7 +24,7 @@ export const PlatformerPage = () => {
   const GRAVITY = 0.5;
   const JUMP_FORCE = -12;
   const MOVE_SPEED = 5;
-  const FLOOR_Y = 400;
+  const FLOOR_Y = 600;
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -103,10 +107,31 @@ export const PlatformerPage = () => {
 
   return (
     <div className="relative w-screen h-screen bg-sky-300 overflow-hidden">
-      <div
-        className="absolute left-0 w-full bg-green-700"
-        style={{ top: FLOOR_Y + 50, height: "100px" }}
+      <img
+        src={bgBg}
+        alt="Sky"
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        style={{ zIndex: 0 }}
       />
+      <img
+        src={bgFarTrees}
+        alt="Far Trees"
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        style={{ zIndex: 1 }}
+      />
+      <img
+        src={bgMidTrees}
+        alt="Mid Trees"
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        style={{ zIndex: 2 }}
+      />
+      <img
+        src={bgCloseTrees}
+        alt="Bushes"
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        style={{ zIndex: 3 }}
+      />
+
       <img
         alt={"knight"}
         src={currentSprite}
@@ -119,6 +144,7 @@ export const PlatformerPage = () => {
           imageRendering: "pixelated",
           transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
           filter: "saturate(2) contrast(5)",
+          zIndex: 10,
         }}
       />
     </div>
