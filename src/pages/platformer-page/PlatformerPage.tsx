@@ -109,25 +109,25 @@ export const PlatformerPage = () => {
     <div className="relative w-screen h-screen bg-sky-300 overflow-hidden">
       <img
         src={bgBg}
-        alt="Sky"
+        alt="bgwoods"
         className="absolute top-0 left-0 w-full h-full object-cover"
         style={{ zIndex: 0 }}
       />
       <img
         src={bgFarTrees}
-        alt="Far Trees"
+        alt="bgFarTrees"
         className="absolute top-0 left-0 w-full h-full object-cover"
         style={{ zIndex: 1 }}
       />
       <img
         src={bgMidTrees}
-        alt="Mid Trees"
+        alt="bgMidTrees"
         className="absolute top-0 left-0 w-full h-full object-cover"
         style={{ zIndex: 2 }}
       />
       <img
         src={bgCloseTrees}
-        alt="Bushes"
+        alt="bgCloseTrees"
         className="absolute top-0 left-0 w-full h-full object-cover"
         style={{ zIndex: 3 }}
       />
