@@ -118,6 +118,7 @@ export const PlatformerPage = () => {
           top: position.y,
           imageRendering: "pixelated",
           transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
+          filter: "invert(1)",
         }}
       />
     </div>
