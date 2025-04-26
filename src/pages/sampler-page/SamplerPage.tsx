@@ -10,7 +10,7 @@ import openHat from '../../assets/808-samples/Roland TR-808/OH/OH00.wav'
 import {useEffect, useRef, useState} from "react";
 import { Howl } from 'howler';
 import metronomeClick from '../../assets/808-samples/Roland TR-808/RS/RS.wav'
-import { PlayArrow, Stop } from '@mui/icons-material'
+import {Circle, PlayArrow, Stop} from '@mui/icons-material'
 import { motion } from "framer-motion";
 
 
@@ -28,6 +28,7 @@ const SAMPLES = [
 
 export const Metronome = function () {
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isMetronomeClick, setIsMetronomeClick] = useState(false);
     const [bpm, setBpm] = useState(120); // default BPM
     const intervalId = useRef<NodeJS.Timeout | null>(null);
     const dragging = useRef(false);
@@ -46,6 +47,9 @@ export const Metronome = function () {
 
         intervalId.current = setInterval(() => {
             click.current.play();
+
+            setIsMetronomeClick(true);
+            setTimeout(() => { setIsMetronomeClick(false); }, 100);
         }, interval);
     };
 
@@ -114,6 +118,7 @@ export const Metronome = function () {
                 className="text-4xl w-24 text-center border border-gray-300 rounded-lg p-2 cursor-ns-resize select-none"
             />
             <div className="text-lg">BPM</div>
+            <Circle sx={{color: isMetronomeClick ? 'red' : 'gray'}}/>
         </div>
     );
 };
