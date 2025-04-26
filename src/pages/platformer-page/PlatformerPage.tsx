@@ -136,7 +136,7 @@ export const PlatformerPage = () => {
   }, [keysPressed, velocity, position, JUMP_FORCE]);
 
   return (
-    <div className="relative w-screen h-screen bg-sky-300 overflow-hidden">
+    <div className="relative w-screen h-screen bg-white overflow-hidden">
       <img
         src={bgBg}
         alt="bgwoods"
