@@ -12,7 +12,15 @@ import ground from "../../assets/DarkForest1.2/ground_tile.png";
 const level = [
   { type: "ground", x: 0, y: 600, src: ground },
   { type: "ground", x: 100, y: 600, src: ground },
+  { type: "ground", x: 200, y: 600, src: ground },
   { type: "ground", x: 300, y: 600, src: ground },
+  { type: "ground", x: 400, y: 600, src: ground },
+  { type: "ground", x: 500, y: 600, src: ground },
+  { type: "ground", x: 600, y: 600, src: ground },
+  { type: "ground", x: 700, y: 600, src: ground },
+  { type: "ground", x: 800, y: 600, src: ground },
+  { type: "ground", x: 900, y: 600, src: ground },
+  { type: "ground", x: 1000, y: 600, src: ground },
 ];
 
 export const PlatformerPage = () => {
@@ -52,42 +60,63 @@ export const PlatformerPage = () => {
 
   useEffect(() => {
     const update = () => {
-      setVelocity((v) => {
-        let newVx = 0;
-        if (keysPressed["ArrowLeft"] || keysPressed["a"]) newVx = -MOVE_SPEED;
-        if (keysPressed["ArrowRight"] || keysPressed["d"]) newVx = MOVE_SPEED;
+      let newVx = 0;
+      if (keysPressed["ArrowLeft"] || keysPressed["a"]) newVx = -MOVE_SPEED;
+      if (keysPressed["ArrowRight"] || keysPressed["d"]) newVx = MOVE_SPEED;
 
-        let newVy = v.y + GRAVITY;
+      let newVy = velocity.y + GRAVITY;
+
+      let isOnGround = false;
+
+      for (const tile of level) {
+        const playerBottom = position.y + 80;
+        const playerLeft = position.x - 120 / 2;
+        const playerRight = position.x + 120 / 2;
+
+        const tileTop = tile.y;
+        const tileLeft = tile.x;
+        const tileRight = tile.x + 128;
 
         if (
-          (keysPressed["ArrowUp"] || keysPressed["w"] || keysPressed[" "]) &&
-          position.y >= FLOOR_Y
+          playerBottom <= tileTop &&
+          playerBottom + velocity.y >= tileTop &&
+          playerRight > tileLeft &&
+          playerLeft < tileRight
         ) {
-          newVy = JUMP_FORCE;
+          setPosition((p) => ({ ...p, y: tileTop - 80 }));
+          newVy = 0;
+          isOnGround = true;
         }
+      }
 
-        return { x: newVx, y: newVy };
-      });
+      if (
+        (keysPressed["ArrowUp"] || keysPressed["w"] || keysPressed[" "]) &&
+        isOnGround
+      ) {
+        newVy = JUMP_FORCE;
+      }
+
+      setVelocity({ x: newVx, y: newVy });
 
       if (keysPressed["e"]) {
         setAnimationState("attack");
-      } else if (position.y < FLOOR_Y) {
+      } else if (newVy < 0 || newVy > 5) {
         setAnimationState("jump");
-      } else if (velocity.x !== 0) {
+      } else if (newVx !== 0) {
         setAnimationState("run");
       } else {
         setAnimationState("idle");
       }
 
-      if (velocity.x > 0) {
+      if (newVx > 0) {
         setFacing("right");
-      } else if (velocity.x < 0) {
+      } else if (newVx < 0) {
         setFacing("left");
       }
 
       setPosition((p) => {
-        const newX = p.x + velocity.x;
-        let newY = p.y + velocity.y;
+        const newX = p.x + newVx;
+        let newY = p.y + newVy;
 
         if (newY > FLOOR_Y) {
           newY = FLOOR_Y;
