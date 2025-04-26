@@ -1,11 +1,10 @@
-import { Backspace, Circle, Clear, Shuffle } from "@mui/icons-material";
+import { Backspace, Circle, Shuffle } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import dictionary from "../../assets/12dicts-6.0.2/American/2of12.txt?raw";
 import { Alert, LinearProgress, Snackbar } from "@mui/material";
 import { motion } from "framer-motion";
-import { Howl } from "howler";
 
-const LETTER_POINTS = {
+const LETTER_POINTS: Record<string, number> = {
   a: 1,
   b: 2,
   c: 3,
