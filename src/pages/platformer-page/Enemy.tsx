@@ -4,8 +4,8 @@ import skeletonWalk from "../../assets/Skeletons_Free_Pack/gifs/skeleton-walk.gi
 import { useEffect, useRef, useState } from "react";
 import { AnimationState, FLOOR_Y, GRAVITY, PLATFORMS } from "./common.ts";
 
-const SPRITE_WIDTH = 120;
-const SPRITE_HEIGHT = 80;
+const SPRITE_WIDTH = 150;
+const SPRITE_HEIGHT = 100;
 
 export const Enemy = function () {
   const [position, setPosition] = useState({ x: 400, y: 400 });
