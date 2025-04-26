@@ -7,6 +7,13 @@ import bgBg from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-w
 import bgCloseTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png";
 import bgFarTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png";
 import bgMidTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png";
+import ground from "../../assets/DarkForest1.2/ground_tile.png";
+
+const level = [
+  { type: "ground", x: 0, y: 600, src: ground },
+  { type: "ground", x: 100, y: 600, src: ground },
+  { type: "ground", x: 300, y: 600, src: ground },
+];
 
 export const PlatformerPage = () => {
   const [position, setPosition] = useState({ x: 100, y: 300 });
@@ -131,6 +138,23 @@ export const PlatformerPage = () => {
         className="absolute top-0 left-0 w-full h-full object-cover"
         style={{ zIndex: 3, imageRendering: "pixelated" }}
       />
+
+      {level.map((tile, index) => (
+        <img
+          key={index}
+          src={tile.src}
+          alt={tile.type}
+          className="absolute"
+          style={{
+            left: tile.x,
+            top: tile.y,
+            width: "128px",
+            height: "24px",
+            imageRendering: "pixelated",
+            zIndex: 10,
+          }}
+        />
+      ))}
 
       <img
         alt={"knight"}
