@@ -147,6 +147,13 @@ export const SamplerPage = function () {
   const [dryGain, setDryGain] = useState<GainNode | null>(null);
   const [wetGain, setWetGain] = useState<GainNode | null>(null);
   const [reverbMix, setReverbMix] = useState(0);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordedEvents, setRecordedEvents] = useState<
+    { key: string; time: number }[]
+  >([]);
+  const [recordingStartTime, setRecordingStartTime] = useState<number | null>(
+    null,
+  );
 
   const playSample = (key: string) => {
     if (!audioContext || !samples[key] || !dryGain || !wetGain || !convolver)
@@ -218,6 +225,14 @@ export const SamplerPage = function () {
         if (!prev.includes(key)) return [...prev, key];
         return prev;
       });
+
+      if (isRecording && recordingStartTime !== null) {
+        const currentTime = performance.now();
+        setRecordedEvents((prev) => [
+          ...prev,
+          { key, time: currentTime - recordingStartTime },
+        ]);
+      }
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
@@ -234,12 +249,63 @@ export const SamplerPage = function () {
     };
   }, [audioContext, dryGain, wetGain, convolver, activeKeys, playSample]);
 
+  const startRecording = () => {
+    setRecordedEvents([]);
+    setRecordingStartTime(performance.now());
+    setIsRecording(true);
+  };
+
+  const stopRecording = () => {
+    setIsRecording(false);
+    setRecordingStartTime(null);
+  };
+
+  const playRecording = () => {
+    if (recordedEvents.length === 0) return;
+
+    recordedEvents.forEach(({ key, time }) => {
+      setTimeout(() => {
+        playSample(key);
+        setActiveKeys((prev) => [...prev, key]);
+        setTimeout(() => {
+          setActiveKeys((prev) => prev.filter((k) => k !== key));
+        }, 100);
+      }, time);
+    });
+  };
+
   return (
     <div
       className="text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5] flex flex-col items-center gap-y-8 h-full"
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
       <Metronome audioContext={audioContext} />
+      <div className="flex flex-row gap-4 mb-8">
+        {!isRecording ? (
+          <button
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+            onClick={startRecording}
+          >
+            Record
+          </button>
+        ) : (
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+            onClick={stopRecording}
+          >
+            Stop
+          </button>
+        )}
+
+        <button
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          onClick={playRecording}
+          disabled={recordedEvents.length === 0}
+        >
+          Play
+        </button>
+      </div>
+
       <div className="flex flex-col items-center mb-8">
         <label className="mb-2">
           Reverb Mix: {Math.round(reverbMix * 100)}%
