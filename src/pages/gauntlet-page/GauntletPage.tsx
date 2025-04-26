@@ -237,6 +237,7 @@ export const GauntletPage = function () {
                                     return (
                                         <motion.button
                                             className='relative rounded-lg px-10 py-8 text-4xl'
+                                            // todo make buttons expand on click as well
                                             onClick={() => setSequence(sequence + letter)}
                                             animate={{
                                                 scale: activeKeys.includes(letter.toLowerCase()) ? 1.1 : 1,
