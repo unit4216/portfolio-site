@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import skeleton from "../../assets/Skeletons_Free_Pack/gifs/skeleton-idle.gif";
 import { Player } from "./Player.tsx";
 import { Background } from "./Background.tsx";
 import { PLATFORMS } from "./common.ts";
+import { Enemy } from "./Enemy.tsx";
 
 export const PlatformerPage = () => {
-  const [enemyPos, setEnemyPos] = useState({ x: 400, y: 400 });
   const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>(
     {},
   );
@@ -48,20 +47,7 @@ export const PlatformerPage = () => {
       ))}
 
       <Player keysPressed={keysPressed} />
-      <img
-        alt={"worm"}
-        src={skeleton}
-        style={{
-          width: "240px",
-          height: "160px",
-          position: "absolute",
-          left: enemyPos.x,
-          top: enemyPos.y,
-          imageRendering: "pixelated",
-          filter: "saturate(2) contrast(5)",
-          zIndex: 10,
-        }}
-      />
+      <Enemy />
     </div>
   );
 };
