@@ -7,17 +7,12 @@ export const PlatformerPage = () => {
   const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>(
     {},
   );
-  const requestRef = useRef<number>();
-
-  const [frameX, setFrameX] = useState(0);
-  const [frameY, setFrameY] = useState(0);
+  const requestRef = useRef<number>(0);
 
   const frameWidth = 164;
   const frameHeight = 128;
   const sheetWidth = frameWidth * 10;
   const sheetHeight = frameHeight * 1;
-
-  let frameCounter = 0;
 
   const GRAVITY = 0.5;
   const JUMP_FORCE = -12;
@@ -72,17 +67,11 @@ export const PlatformerPage = () => {
       });
 
       requestRef.current = requestAnimationFrame(update);
-
-      frameCounter++;
-
-      if (frameCounter % 6 === 0) {
-        setFrameX((prev) => (prev + frameWidth) % 10);
-      }
     };
 
     requestRef.current = requestAnimationFrame(update);
     return () => cancelAnimationFrame(requestRef.current!);
-  }, [keysPressed, velocity, position]);
+  }, [keysPressed, velocity, position, JUMP_FORCE]);
 
   return (
     <div
@@ -101,7 +90,6 @@ export const PlatformerPage = () => {
           left: position.x,
           top: position.y,
           backgroundImage: `url(${idleKnight})`,
-          backgroundPosition: `${-frameX}px ${-frameY}px`,
           backgroundSize: `${sheetWidth}px ${sheetHeight}px`,
           imageRendering: "pixelated",
         }}
