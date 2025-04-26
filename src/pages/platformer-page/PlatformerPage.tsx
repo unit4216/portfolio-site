@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import idleKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Idle.gif";
-import attackKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Attack.gif";
-import runKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Run.gif";
-import jumpKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Jump.gif";
 import bgBg from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-bg.png";
 import bgCloseTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-close-trees.png";
 import bgFarTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-far-trees.png";
 import bgMidTrees from "../../assets/parallax_demon_woods_pack/layers/parallax-demon-woods-mid-trees.png";
 import ground from "../../assets/DarkForest1.2/ground_tile.png";
 import skeleton from "../../assets/Skeletons_Free_Pack/gifs/skeleton-idle.gif";
+import { AnimationState, Player } from "./Player.tsx";
 
 const level = [
   { type: "ground", x: 0, y: 600, src: ground },
@@ -35,9 +32,9 @@ export const PlatformerPage = () => {
   const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>(
     {},
   );
-  const [animationState, setAnimationState] = useState<
-    "idle" | "run" | "attack" | "jump"
-  >("idle");
+  const [animationState, setAnimationState] = useState<AnimationState>(
+    AnimationState.IDLE,
+  );
   const [facing, setFacing] = useState<"right" | "left">("right");
 
   const requestRef = useRef<number>(0);
@@ -105,13 +102,13 @@ export const PlatformerPage = () => {
       setVelocity({ x: newVx, y: newVy });
 
       if (keysPressed["e"]) {
-        setAnimationState("attack");
+        setAnimationState(AnimationState.ATTACK);
       } else if (newVy < 0 || newVy > 5) {
-        setAnimationState("jump");
+        setAnimationState(AnimationState.JUMP);
       } else if (newVx !== 0) {
-        setAnimationState("run");
+        setAnimationState(AnimationState.RUN);
       } else {
-        setAnimationState("idle");
+        setAnimationState(AnimationState.IDLE);
       }
 
       if (newVx > 0) {
@@ -137,15 +134,6 @@ export const PlatformerPage = () => {
     requestRef.current = requestAnimationFrame(update);
     return () => cancelAnimationFrame(requestRef.current!);
   }, [keysPressed, velocity, position, JUMP_FORCE]);
-
-  const currentSprite =
-    animationState === "attack"
-      ? attackKnight
-      : animationState === "jump"
-        ? jumpKnight
-        : animationState === "run"
-          ? runKnight
-          : idleKnight;
 
   return (
     <div className="relative w-screen h-screen bg-sky-300 overflow-hidden">
@@ -191,22 +179,11 @@ export const PlatformerPage = () => {
         />
       ))}
 
-      <img
-        alt={"knight"}
-        src={currentSprite}
-        style={{
-          width: "240px",
-          height: "160px",
-          position: "absolute",
-          left: position.x,
-          top: position.y,
-          imageRendering: "pixelated",
-          transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
-          filter: "saturate(2) contrast(5)",
-          zIndex: 10,
-        }}
+      <Player
+        position={position}
+        facing={facing}
+        animationState={animationState}
       />
-
       <img
         alt={"worm"}
         src={skeleton}
