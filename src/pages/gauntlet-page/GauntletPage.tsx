@@ -1,300 +1,297 @@
-import {Backspace, Circle, Clear, Shuffle} from "@mui/icons-material";
-import {useEffect, useState} from "react";
-import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
-import {Alert, LinearProgress, Snackbar} from "@mui/material";
+import { Backspace, Circle, Clear, Shuffle } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import dictionary from "../../assets/12dicts-6.0.2/American/2of12.txt?raw";
+import { Alert, LinearProgress, Snackbar } from "@mui/material";
 import { motion } from "framer-motion";
-import {Howl} from "howler";
+import { Howl } from "howler";
 
 const LETTER_POINTS = {
-    a: 1,
-    b: 2,
-    c: 3,
-    d: 2,
-    e: 1,
-    f: 4,
-    g: 2,
-    h: 4,
-    i: 1,
-    j: 8,
-    k: 5,
-    l: 1,
-    m: 3,
-    n: 1,
-    o: 1,
-    p: 3,
-    q: 10,
-    r: 1,
-    s: 1,
-    t: 1,
-    u: 1,
-    v: 4,
-    w: 4,
-    x: 8,
-    y: 4,
-    z: 10
-}
+  a: 1,
+  b: 2,
+  c: 3,
+  d: 2,
+  e: 1,
+  f: 4,
+  g: 2,
+  h: 4,
+  i: 1,
+  j: 8,
+  k: 5,
+  l: 1,
+  m: 3,
+  n: 1,
+  o: 1,
+  p: 3,
+  q: 10,
+  r: 1,
+  s: 1,
+  t: 1,
+  u: 1,
+  v: 4,
+  w: 4,
+  x: 8,
+  y: 4,
+  z: 10,
+};
 
 function getRandomLetters(count = 9): string[] {
-    let consonants = 'bcdfghjklmnpqrstvwxyz';
-    let vowels = 'aeiou'
-    const result: string[] = [];
+  let consonants = "bcdfghjklmnpqrstvwxyz";
+  let vowels = "aeiou";
+  const result: string[] = [];
 
-    const numVowels = Math.round(count * 0.4);
-    const numConsonants = count - numVowels;
+  const numVowels = Math.round(count * 0.4);
+  const numConsonants = count - numVowels;
 
-    for (let i = 0; i < numConsonants; i++) {
-        const randomLetter = consonants[Math.floor(Math.random() * consonants.length)];
-        result.push(randomLetter);
-        consonants = consonants.replace(randomLetter,'')
-    }
+  for (let i = 0; i < numConsonants; i++) {
+    const randomLetter =
+      consonants[Math.floor(Math.random() * consonants.length)];
+    result.push(randomLetter);
+    consonants = consonants.replace(randomLetter, "");
+  }
 
-    for (let i = 0; i < numVowels; i++) {
-        const randomLetter = vowels[Math.floor(Math.random() * vowels.length)];
-        result.push(randomLetter);
-        vowels = vowels.replace(randomLetter, '')
-    }
+  for (let i = 0; i < numVowels; i++) {
+    const randomLetter = vowels[Math.floor(Math.random() * vowels.length)];
+    result.push(randomLetter);
+    vowels = vowels.replace(randomLetter, "");
+  }
 
-    return result;
+  return result;
 }
 
 const getWordScore = (word: string) => {
-    return word.split('').reduce(
-        (acc, letter)=>acc += LETTER_POINTS[letter], 0
-    )
-}
+  return word
+    .split("")
+    .reduce((acc, letter) => (acc += LETTER_POINTS[letter]), 0);
+};
 
 const getAnswerList = (letters: string[], round: number) => {
-    const wordList: string[] = dictionary.replaceAll('\r','').split('\n')
-    const validWords = wordList.filter(word=>word.length > 2)
+  const wordList: string[] = dictionary.replaceAll("\r", "").split("\n");
+  const validWords = wordList.filter((word) => word.length > 2);
 
-    const validAnswers = validWords.filter(word=>{
+  const validAnswers = validWords.filter((word) => {
+    return word
+      .split("")
+      .every((letterInWord) => letters.includes(letterInWord));
+  });
 
-        return word.split('').every(letterInWord=>letters.includes(letterInWord))
+  const scoredAnswers = validAnswers.map((word) => ({
+    word,
+    score: getWordScore(word),
+  }));
 
-    })
+  scoredAnswers.sort((a, b) => b.score - a.score);
 
-    const scoredAnswers = validAnswers.map(word => ({
-        word,
-        score: getWordScore(word)
-    }));
+  const difficulties = [0.7, 0.55, 0.4, 0.25, 0.1];
 
-    scoredAnswers.sort((a, b) => b.score - a.score);
-
-    const difficulties = [0.7, 0.55, 0.4, 0.25, 0.1]
-
-    const thresholdIndex = Math.floor(scoredAnswers.length * difficulties[round]);
-    const topAnswersScoreThreshold = scoredAnswers[thresholdIndex].score
-    return {
-        answers: scoredAnswers
-            .filter(answer=>answer.score >= topAnswersScoreThreshold)
-            .map(answer=>answer.word),
-        thresholdScore: topAnswersScoreThreshold
-    }
-}
-
-
-
-
+  const thresholdIndex = Math.floor(scoredAnswers.length * difficulties[round]);
+  const topAnswersScoreThreshold = scoredAnswers[thresholdIndex].score;
+  return {
+    answers: scoredAnswers
+      .filter((answer) => answer.score >= topAnswersScoreThreshold)
+      .map((answer) => answer.word),
+    thresholdScore: topAnswersScoreThreshold,
+  };
+};
 
 export const GauntletPage = function () {
+  const [letters, setLetters] = useState<string[]>(getRandomLetters());
+  const [sequence, setSequence] = useState<string>("");
+  const [answerList, setAnswerList] = useState<string[]>([]);
+  const [round, setRound] = useState<number>(0);
+  const [won, setWon] = useState<boolean>(false);
+  const [thresholdScore, setThresholdScore] = useState<number>(0);
+  const [showAlert, setShowAlert] = useState<{
+    type: "error" | "success";
+    text: string;
+  } | null>(null);
+  const [activeKeys, setActiveKeys] = useState<string[]>([]);
 
-    const [letters, setLetters] = useState<string[]>(getRandomLetters())
-    const [sequence, setSequence] = useState<string>('')
-    const [answerList, setAnswerList] = useState<string[]>([])
-    const [round, setRound] = useState<number>(0)
-    const [won, setWon] = useState<boolean>(false)
-    const [thresholdScore, setThresholdScore] = useState<number>(0)
-    const [showAlert, setShowAlert] = useState<{type: 'error' | 'success', text: string} | null>(null)
-    const [activeKeys, setActiveKeys] = useState<string[]>([])
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const key = event.key.toLowerCase();
+      setActiveKeys((prev) => {
+        if (!prev.includes(key)) return [...prev, key];
+        return prev;
+      });
+    };
 
-    useEffect(() => {
+    const handleKeyUp = (event: KeyboardEvent) => {
+      const key = event.key.toLowerCase();
+      setActiveKeys((prev) => prev.filter((k) => k !== key));
+    };
 
-        const handleKeyDown = (event: KeyboardEvent) => {
-            const key = event.key.toLowerCase();
-            setActiveKeys(prev => {
-                    if (!prev.includes(key)) return [...prev, key];
-                    return prev;
-                });
-            }
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
 
-        const handleKeyUp = (event: KeyboardEvent) => {
-            const key = event.key.toLowerCase();
-            setActiveKeys(prev => prev.filter(k => k !== key));
-        };
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [activeKeys]);
 
-        window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener("keyup", handleKeyUp);
-
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown);
-            window.removeEventListener("keyup", handleKeyUp);
-        };
-
-    }, [activeKeys]);
-
-    function shuffleSequence() {
-        const lettersRef = [...letters]
-        for (let i = lettersRef.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [lettersRef[i], lettersRef[j]] = [lettersRef[j], lettersRef[i]];
-        }
-        setLetters(lettersRef)
+  function shuffleSequence() {
+    const lettersRef = [...letters];
+    for (let i = lettersRef.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [lettersRef[i], lettersRef[j]] = [lettersRef[j], lettersRef[i]];
     }
+    setLetters(lettersRef);
+  }
 
-    useEffect(()=>{
-        const res = getAnswerList(letters, round)
-        setAnswerList(res.answers)
-        setThresholdScore(res.thresholdScore)
-    },[letters])
+  useEffect(() => {
+    const res = getAnswerList(letters, round);
+    setAnswerList(res.answers);
+    setThresholdScore(res.thresholdScore);
+  }, [letters]);
 
-    const score = getWordScore(sequence)
+  const score = getWordScore(sequence);
 
-    const scoreTooLow = score < thresholdScore
+  const scoreTooLow = score < thresholdScore;
 
-    const submitAnswer = () => {
-        if (scoreTooLow) return
-        const answerInAnswerSet = answerList.includes(sequence)
-        if (answerInAnswerSet) {
-            if (round == 4) {
-                setWon(true)
-            }
-            else {
-                setRound(round + 1)
-                setLetters(getRandomLetters())
-                setSequence('')
-                setShowAlert({type: 'success', text: 'Nice one!'})
-            }
-        }
-        else {
-            setSequence('')
-            setShowAlert({type: 'error', text: 'Not a valid word!'})
-        }
+  const submitAnswer = () => {
+    if (scoreTooLow) return;
+    const answerInAnswerSet = answerList.includes(sequence);
+    if (answerInAnswerSet) {
+      if (round == 4) {
+        setWon(true);
+      } else {
+        setRound(round + 1);
+        setLetters(getRandomLetters());
+        setSequence("");
+        setShowAlert({ type: "success", text: "Nice one!" });
+      }
+    } else {
+      setSequence("");
+      setShowAlert({ type: "error", text: "Not a valid word!" });
     }
+  };
 
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (letters.includes(event.key)) {
+        setSequence(sequence + event.key);
+      }
 
-            if (letters.includes(event.key)) {
-                setSequence(sequence + event.key)
-            }
+      if (event.key === "Backspace") {
+        setSequence(sequence.slice(0, -1));
+      }
 
-            if (event.key === 'Backspace') {
-                setSequence(sequence.slice(0,-1))
-            }
+      if (event.key === "Enter") {
+        submitAnswer();
+      }
+    };
 
-            if (event.key === 'Enter') {
-                submitAnswer()
-            }
+    window.addEventListener("keydown", handleKeyDown);
 
-        };
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [letters, sequence]);
 
-        window.addEventListener('keydown', handleKeyDown);
+  const progress = Math.min((score / thresholdScore) * 100, 100);
 
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [letters, sequence]);
+  return (
+    <div
+      className="text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5] h-full"
+      style={{ fontFamily: "Neue Haas Grotesk" }}
+    >
+      <Snackbar
+        open={!!showAlert}
+        autoHideDuration={3000}
+        onClose={() => setShowAlert(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity={showAlert?.type} onClose={() => setShowAlert(null)}>
+          {showAlert?.text}
+        </Alert>
+      </Snackbar>
+      <div className="flex flex-row justify-center">
+        <div className="flex flex-col gap-y-4">
+          <div className="text-4xl text-center">gauntlet</div>
+          {won && <div>You won!</div>}
+          {!won && (
+            <>
+              <div className="flex flex-row justify-between">
+                {[0, 1, 2, 3, 4].map((roundNumber) => {
+                  return (
+                    <Circle
+                      className={`${roundNumber <= round ? "text-blue-400" : "text-gray-200"}`}
+                    />
+                  );
+                })}
+              </div>
+              <div className="flex flex-row justify-between">
+                <div className="text-4xl">{sequence}</div>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {letters.map((letter) => {
+                  return (
+                    <motion.button
+                      className="relative rounded-lg px-10 py-8 text-4xl"
+                      // todo make buttons expand on click as well
+                      onClick={() => setSequence(sequence + letter)}
+                      animate={{
+                        scale: activeKeys.includes(letter.toLowerCase())
+                          ? 1.1
+                          : 1,
+                        backgroundColor: activeKeys.includes(
+                          letter.toLowerCase(),
+                        )
+                          ? "#ffd230"
+                          : "#fee685",
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20,
+                        backgroundColor: { duration: 0.2 },
+                      }}
+                    >
+                      {letter}
+                      <span className="absolute bottom-2 right-2 text-xs">
+                        {LETTER_POINTS[letter]}
+                      </span>
+                    </motion.button>
+                  );
+                })}
+              </div>
 
-    const progress = Math.min((score/thresholdScore) * 100, 100)
-
-    return (
-        <div
-            className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5] h-full'
-            style={{fontFamily: 'Neue Haas Grotesk'}}
-        >
-                <Snackbar
-                    open={!!showAlert}
-                    autoHideDuration={3000}
-                    onClose={() => setShowAlert(null)}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+              <div className="flex flex-row gap-4 items-center mt-4">
+                <button
+                  className="rounded-full"
+                  onClick={() => setSequence(sequence.slice(0, -1))}
                 >
-                    <Alert severity={showAlert?.type} onClose={() => setShowAlert(null)}>
-                        {showAlert?.text}
-                    </Alert>
-                </Snackbar>
-            <div className='flex flex-row justify-center'>
-                <div className='flex flex-col gap-y-4'>
-                    <div className='text-4xl text-center'>gauntlet</div>
-                    {won && (
-                        <div>You won!</div>
-                    )}
-                    {!won && (
-                        <>
-                            <div className='flex flex-row justify-between'>
-                                {[0,1,2,3,4].map(roundNumber=>{
-                                    return (
-                                        <Circle
-                                            className={`${roundNumber <= round ? 'text-blue-400': 'text-gray-200'}`}
-                                        />
-                                    )
-                                })}
-                            </div>
-                            <div className='flex flex-row justify-between'>
-                                <div className='text-4xl'>{sequence}</div>
-                            </div>
-                            <div className='grid grid-cols-3 gap-2'>
-                                {letters.map(letter=>{
-                                    return (
-                                        <motion.button
-                                            className='relative rounded-lg px-10 py-8 text-4xl'
-                                            // todo make buttons expand on click as well
-                                            onClick={() => setSequence(sequence + letter)}
-                                            animate={{
-                                                scale: activeKeys.includes(letter.toLowerCase()) ? 1.1 : 1,
-                                                backgroundColor: activeKeys.includes(letter.toLowerCase()) ? "#ffd230" : "#fee685",
-                                            }}
-                                            transition={{
-                                                type: "spring",
-                                                stiffness: 300,
-                                                damping: 20,
-                                                backgroundColor: { duration: 0.2 },
-                                            }}
-                                        >
-                                            {letter}
-                                            <span className="absolute bottom-2 right-2 text-xs">
-                                                {LETTER_POINTS[letter]}
-                                            </span>
-                                        </motion.button>
-                                    )
-                                })}
-                            </div>
-
-                            <div className="flex flex-row gap-4 items-center mt-4">
-                                <button
-                                    className='rounded-full'
-                                    onClick={() => setSequence(sequence.slice(0,-1))}>
-                                    <Backspace />
-                                </button>
-                                <button
-                                    onClick={submitAnswer}
-                                    className="relative flex-1"
-                                    disabled={scoreTooLow}
-                                >
-                                    <LinearProgress
-                                        variant="determinate"
-                                        value={progress}
-                                        sx={{
-                                            height: 50,
-                                            borderRadius: 5,
-                                            backgroundColor: scoreTooLow ? '#d1d5db' : '#60a5fa',
-                                            '& .MuiLinearProgress-bar': {
-                                                backgroundColor: scoreTooLow ? '#9ca3af' : '#3b82f6'
-                                            }}}
-                                    />
-                                    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white">
-                                        Submit
-                                    </div>
-                                </button>
-                                <button
-                                    className='rounded-full'
-                                    onClick={shuffleSequence}>
-                                    <Shuffle />
-                                </button>
-                            </div>
-                        </>
-                    )}
-                </div>
-            </div>
+                  <Backspace />
+                </button>
+                <button
+                  onClick={submitAnswer}
+                  className="relative flex-1"
+                  disabled={scoreTooLow}
+                >
+                  <LinearProgress
+                    variant="determinate"
+                    value={progress}
+                    sx={{
+                      height: 50,
+                      borderRadius: 5,
+                      backgroundColor: scoreTooLow ? "#d1d5db" : "#60a5fa",
+                      "& .MuiLinearProgress-bar": {
+                        backgroundColor: scoreTooLow ? "#9ca3af" : "#3b82f6",
+                      },
+                    }}
+                  />
+                  <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white">
+                    Submit
+                  </div>
+                </button>
+                <button className="rounded-full" onClick={shuffleSequence}>
+                  <Shuffle />
+                </button>
+              </div>
+            </>
+          )}
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
