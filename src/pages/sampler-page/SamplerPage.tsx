@@ -280,32 +280,6 @@ export const SamplerPage = function () {
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
       <Metronome audioContext={audioContext} />
-      <div className="flex flex-row gap-4 mb-8">
-        {!isRecording ? (
-          <button
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-            onClick={startRecording}
-          >
-            Record
-          </button>
-        ) : (
-          <button
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-            onClick={stopRecording}
-          >
-            Stop
-          </button>
-        )}
-
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-          onClick={playRecording}
-          disabled={recordedEvents.length === 0}
-        >
-          Play
-        </button>
-      </div>
-
       <div className="flex flex-col items-center mb-8">
         <label className="mb-2">
           Reverb Mix: {Math.round(reverbMix * 100)}%
@@ -353,6 +327,31 @@ export const SamplerPage = function () {
             />
           );
         })}
+      </div>
+      <div className="flex flex-row gap-4 mb-8">
+        {!isRecording ? (
+          <button
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+            onClick={startRecording}
+          >
+            Record
+          </button>
+        ) : (
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+            onClick={stopRecording}
+          >
+            Stop
+          </button>
+        )}
+
+        <button
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          onClick={playRecording}
+          disabled={recordedEvents.length === 0}
+        >
+          Play
+        </button>
       </div>
     </div>
   );
