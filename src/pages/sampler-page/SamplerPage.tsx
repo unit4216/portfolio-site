@@ -107,7 +107,7 @@ export const Metronome = function ({
   const handleMouseMove = (e: MouseEvent) => {
     if (dragging.current) {
       const deltaY = startY.current - e.clientY;
-      const sensitivity = 0.5; // adjust how fast BPM changes
+      const sensitivity = 0.5;
 
       let newBpm = startBpm.current + deltaY * sensitivity;
       newBpm = Math.max(30, Math.min(300, newBpm));
