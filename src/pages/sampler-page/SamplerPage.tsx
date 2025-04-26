@@ -27,7 +27,7 @@ const SAMPLES = [
 export const Metronome = function () {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMetronomeClick, setIsMetronomeClick] = useState(false);
-  const [bpm, setBpm] = useState(120); // default BPM
+  const [bpm, setBpm] = useState(120);
   const intervalId = useRef<NodeJS.Timeout | null>(null);
   const dragging = useRef(false);
   const startY = useRef(0);
@@ -92,7 +92,7 @@ export const Metronome = function () {
       const sensitivity = 0.5; // adjust how fast BPM changes
 
       let newBpm = startBpm.current + deltaY * sensitivity;
-      newBpm = Math.max(30, Math.min(300, newBpm)); // clamp BPM 30-300
+      newBpm = Math.max(30, Math.min(300, newBpm));
       setBpm(Math.round(newBpm));
     }
   };
@@ -122,31 +122,84 @@ export const Metronome = function () {
 };
 
 export const SamplerPage = function () {
-  const [howls, setHowls] = useState<Record<string, Howl>>({});
+  const [samples, setSamples] = useState<Record<string, AudioBuffer>>({});
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [convolver, setConvolver] = useState<ConvolverNode | null>(null);
+  const [dryGain, setDryGain] = useState<GainNode | null>(null);
+  const [wetGain, setWetGain] = useState<GainNode | null>(null);
+  const [reverbMix, setReverbMix] = useState(0);
+
+  const playSample = (key: string) => {
+    if (!audioContext || !samples[key] || !dryGain || !wetGain || !convolver)
+      return;
+
+    const source = audioContext.createBufferSource();
+    source.buffer = samples[key];
+
+    source.connect(dryGain);
+    source.connect(convolver);
+    convolver.connect(wetGain);
+
+    source.start(0);
+  };
 
   useEffect(() => {
-    const loadedHowls: Record<string, Howl> = {};
+    const ctx = new (window.AudioContext ||
+      (window as any).webkitAudioContext)();
+    setAudioContext(ctx);
 
-    SAMPLES.forEach((sample) => {
-      loadedHowls[sample.key] = new Howl({
-        src: [sample.src],
-        preload: true,
-        html5: false,
+    const conv = ctx.createConvolver();
+    setConvolver(conv);
+
+    const dry = ctx.createGain();
+    const wet = ctx.createGain();
+    dry.connect(ctx.destination);
+    wet.connect(ctx.destination);
+
+    dry.gain.value = 1;
+    wet.gain.value = 0;
+
+    setDryGain(dry);
+    setWetGain(wet);
+
+    fetch("./impulse.wav")
+      .then((response) => response.arrayBuffer())
+      .then((arrayBuffer) => ctx.decodeAudioData(arrayBuffer))
+      .then((decodedAudio) => {
+        conv.buffer = decodedAudio;
       });
-    });
 
-    setHowls(loadedHowls);
+    return () => {
+      ctx.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!audioContext || !dryGain || !wetGain || !convolver) return;
+
+    const loadSamples = async () => {
+      const loadedBuffers: Record<string, AudioBuffer> = {};
+
+      for (const sample of SAMPLES) {
+        const response = await fetch(sample.src);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        loadedBuffers[sample.key] = audioBuffer;
+      }
+
+      setSamples(loadedBuffers);
+    };
+
+    loadSamples();
 
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
-      if (loadedHowls[key]) {
-        loadedHowls[key].play();
-        setActiveKeys((prev) => {
-          if (!prev.includes(key)) return [...prev, key];
-          return prev;
-        });
-      }
+      playSample(key);
+      setActiveKeys((prev) => {
+        if (!prev.includes(key)) return [...prev, key];
+        return prev;
+      });
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
@@ -161,7 +214,7 @@ export const SamplerPage = function () {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [activeKeys]);
+  }, [audioContext, dryGain, wetGain, convolver, activeKeys, playSample]);
 
   return (
     <div
@@ -169,13 +222,36 @@ export const SamplerPage = function () {
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
       <Metronome />
+      <div className="flex flex-col items-center mb-8">
+        <label className="mb-2">
+          Reverb Mix: {Math.round(reverbMix * 100)}%
+        </label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={reverbMix}
+          onChange={(e) => {
+            const mix = parseFloat(e.target.value);
+            setReverbMix(mix);
+
+            if (dryGain && wetGain) {
+              dryGain.gain.value = 1 - mix;
+              wetGain.gain.value = mix;
+            }
+          }}
+          className="w-64"
+        />
+      </div>
+
       <div className="grid grid-cols-4 w-fit gap-4 mx-auto">
         {SAMPLES.map((sample) => {
           return (
             <motion.button
               className={`relative bg-gray-200 hover:bg-gray-300 rounded-lg h-44 w-44`}
               onClick={() => {
-                howls[sample.key]?.play();
+                playSample(sample.key);
               }}
               // todo this should animate on mouse click as well...
               animate={{
