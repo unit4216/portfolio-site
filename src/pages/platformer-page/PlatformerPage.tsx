@@ -74,10 +74,7 @@ export const PlatformerPage = () => {
   }, [keysPressed, velocity, position, JUMP_FORCE]);
 
   return (
-    <div
-      className="relative w-screen h-screen bg-sky-300 overflow-hidden"
-      style={{ fontFamily: "sans-serif" }}
-    >
+    <div className="relative w-screen h-screen bg-sky-300 overflow-hidden">
       <div
         className="absolute left-0 w-full bg-green-700"
         style={{ top: FLOOR_Y + 50, height: "100px" }}
