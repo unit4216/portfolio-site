@@ -1,7 +1,4 @@
 import "../../App.css";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import { Circle, KeyboardArrowDown, OpenInNew } from "@mui/icons-material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
