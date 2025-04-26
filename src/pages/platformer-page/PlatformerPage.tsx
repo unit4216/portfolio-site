@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import idleKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_PNGSheets/_Idle.png";
+import attackKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_PNGSheets/_Attack.png";
 
 export const PlatformerPage = () => {
   const [position, setPosition] = useState({ x: 100, y: 300 });
@@ -86,7 +87,7 @@ export const PlatformerPage = () => {
           height: frameHeight + "px",
           left: position.x,
           top: position.y,
-          backgroundImage: `url(${idleKnight})`,
+          backgroundImage: `url(${keysPressed["e"] ? attackKnight : idleKnight})`,
           backgroundSize: `${sheetWidth}px ${sheetHeight}px`,
           imageRendering: "pixelated",
         }}
