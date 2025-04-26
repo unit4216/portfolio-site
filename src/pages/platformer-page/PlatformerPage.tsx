@@ -111,25 +111,25 @@ export const PlatformerPage = () => {
         src={bgBg}
         alt="bgwoods"
         className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ zIndex: 0 }}
+        style={{ zIndex: 0, imageRendering: "pixelated" }}
       />
       <img
         src={bgFarTrees}
         alt="bgFarTrees"
         className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ zIndex: 1 }}
+        style={{ zIndex: 1, imageRendering: "pixelated" }}
       />
       <img
         src={bgMidTrees}
         alt="bgMidTrees"
         className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ zIndex: 2 }}
+        style={{ zIndex: 2, imageRendering: "pixelated" }}
       />
       <img
         src={bgCloseTrees}
         alt="bgCloseTrees"
         className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ zIndex: 3 }}
+        style={{ zIndex: 3, imageRendering: "pixelated" }}
       />
 
       <img
