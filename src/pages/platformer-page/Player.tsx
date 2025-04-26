@@ -10,6 +10,7 @@ import {
   JUMP_FORCE,
   PLATFORMS,
 } from "./common.ts";
+import { ENEMY_WIDTH } from "./Enemy.tsx";
 
 const MOVE_SPEED = 4;
 const SPRITE_WIDTH = 240;
@@ -17,8 +18,10 @@ const SPRITE_HEIGHT = 160;
 
 export const Player = function ({
   keysPressed,
+  enemyPosition,
 }: {
   keysPressed: Record<string, boolean>;
+  enemyPosition: { x: number; y: number };
 }) {
   const [facing, setFacing] = useState<"right" | "left">("right");
 
@@ -44,14 +47,30 @@ export const Player = function ({
       if (keysPressed["ArrowLeft"] || keysPressed["a"]) newVx = -MOVE_SPEED;
       if (keysPressed["ArrowRight"] || keysPressed["d"]) newVx = MOVE_SPEED;
 
+      const playerLeft = position.x - SPRITE_WIDTH / 2;
+      const playerRight = position.x + SPRITE_WIDTH / 2;
+      const enemyLeft = enemyPosition.x - ENEMY_WIDTH / 2;
+      const enemyRight = enemyPosition.x + ENEMY_WIDTH / 2;
+
+      if (
+        (newVx > 0 &&
+          playerRight + newVx > enemyLeft &&
+          playerLeft < enemyRight) ||
+        (newVx < 0 &&
+          playerLeft + newVx < enemyRight &&
+          playerRight > enemyLeft)
+      ) {
+        newVx = 0;
+      }
+
       let newVy = velocity.y + GRAVITY;
 
       let isOnGround = false;
 
       for (const tile of PLATFORMS) {
         const playerBottom = position.y + SPRITE_HEIGHT / 2;
-        const playerLeft = position.x - SPRITE_WIDTH / 2 / 2;
-        const playerRight = position.x + SPRITE_WIDTH / 2 / 2;
+        const playerLeft = position.x - SPRITE_WIDTH / 2;
+        const playerRight = position.x + SPRITE_WIDTH / 2;
 
         const tileTop = tile.y;
         const tileLeft = tile.x;
@@ -126,6 +145,7 @@ export const Player = function ({
         transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
         filter: "saturate(2) contrast(5)",
         zIndex: 10,
+        backgroundColor: "black",
       }}
     />
   );

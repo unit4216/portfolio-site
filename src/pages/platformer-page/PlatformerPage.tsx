@@ -48,7 +48,7 @@ export const PlatformerPage = () => {
         />
       ))}
 
-      <Player keysPressed={keysPressed} />
+      <Player keysPressed={keysPressed} enemyPosition={enemyPosition} />
       <Enemy
         position={enemyPosition}
         setPosition={(pos) => setEnemyPosition(pos)}

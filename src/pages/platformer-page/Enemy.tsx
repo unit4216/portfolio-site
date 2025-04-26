@@ -4,8 +4,8 @@ import skeletonWalk from "../../assets/Skeletons_Free_Pack/gifs/skeleton-walk.gi
 import { useEffect, useRef, useState } from "react";
 import { AnimationState, FLOOR_Y, GRAVITY, PLATFORMS } from "./common.ts";
 
-const SPRITE_WIDTH = 150;
-const SPRITE_HEIGHT = 100;
+export const ENEMY_WIDTH = 150;
+export const ENEMY_HEIGHT = 100;
 
 export const Enemy = function ({
   position,
@@ -34,9 +34,9 @@ export const Enemy = function ({
       let newVy = velocity.y + GRAVITY;
 
       for (const tile of PLATFORMS) {
-        const playerBottom = position.y + SPRITE_HEIGHT / 2;
-        const playerLeft = position.x - SPRITE_WIDTH / 2 / 2;
-        const playerRight = position.x + SPRITE_WIDTH / 2 / 2;
+        const playerBottom = position.y + ENEMY_HEIGHT / 2;
+        const playerLeft = position.x - ENEMY_WIDTH / 2;
+        const playerRight = position.x + ENEMY_WIDTH / 2;
 
         const tileTop = tile.y;
         const tileLeft = tile.x;
@@ -48,7 +48,7 @@ export const Enemy = function ({
           playerRight > tileLeft &&
           playerLeft < tileRight
         ) {
-          setPosition({ ...position, y: tileTop - SPRITE_HEIGHT / 2 });
+          setPosition({ ...position, y: tileTop - ENEMY_HEIGHT / 2 });
           newVy = 0;
         }
       }
@@ -87,14 +87,15 @@ export const Enemy = function ({
       alt={"enemy"}
       src={spriteMap[animationState]}
       style={{
-        width: `${SPRITE_WIDTH}px`,
-        height: `${SPRITE_HEIGHT}px`,
+        width: `${ENEMY_WIDTH}px`,
+        height: `${ENEMY_HEIGHT}px`,
         position: "absolute",
         left: position.x,
         top: position.y,
         imageRendering: "pixelated",
         transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
         zIndex: 10,
+        backgroundColor: "black",
       }}
     />
   );
