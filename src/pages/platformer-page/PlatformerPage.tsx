@@ -20,7 +20,10 @@ const level = [
   { type: "ground", x: 700, y: 600, src: ground },
   { type: "ground", x: 800, y: 600, src: ground },
   { type: "ground", x: 900, y: 600, src: ground },
-  { type: "ground", x: 1000, y: 600, src: ground },
+  { type: "ground", x: 1000, y: 500, src: ground },
+  { type: "ground", x: 1100, y: 500, src: ground },
+  { type: "ground", x: 1200, y: 500, src: ground },
+  { type: "ground", x: 1300, y: 500, src: ground },
 ];
 
 export const PlatformerPage = () => {
