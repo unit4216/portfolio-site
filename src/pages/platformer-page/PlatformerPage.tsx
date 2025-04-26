@@ -12,8 +12,8 @@ export const PlatformerPage = () => {
   const [frameX, setFrameX] = useState(0);
   const [frameY, setFrameY] = useState(0);
 
-  const frameWidth = 64;
-  const frameHeight = 64;
+  const frameWidth = 164;
+  const frameHeight = 128;
   const sheetWidth = frameWidth * 10;
   const sheetHeight = frameHeight * 1;
 
