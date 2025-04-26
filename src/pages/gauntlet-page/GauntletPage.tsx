@@ -2,6 +2,8 @@ import {Backspace, Circle, Clear, Shuffle} from "@mui/icons-material";
 import {useEffect, useState} from "react";
 import dictionary from '../../assets/12dicts-6.0.2/American/2of12.txt?raw'
 import {Alert, LinearProgress, Snackbar} from "@mui/material";
+import { motion } from "framer-motion";
+import {Howl} from "howler";
 
 const LETTER_POINTS = {
     a: 1,
@@ -103,7 +105,32 @@ export const GauntletPage = function () {
     const [won, setWon] = useState<boolean>(false)
     const [thresholdScore, setThresholdScore] = useState<number>(0)
     const [showAlert, setShowAlert] = useState<{type: 'error' | 'success', text: string} | null>(null)
+    const [activeKeys, setActiveKeys] = useState<string[]>([])
 
+    useEffect(() => {
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const key = event.key.toLowerCase();
+            setActiveKeys(prev => {
+                    if (!prev.includes(key)) return [...prev, key];
+                    return prev;
+                });
+            }
+
+        const handleKeyUp = (event: KeyboardEvent) => {
+            const key = event.key.toLowerCase();
+            setActiveKeys(prev => prev.filter(k => k !== key));
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener("keyup", handleKeyUp);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keyup", handleKeyUp);
+        };
+
+    }, [activeKeys]);
 
     function shuffleSequence() {
         const lettersRef = [...letters]
@@ -208,15 +235,25 @@ export const GauntletPage = function () {
                             <div className='grid grid-cols-3 gap-2'>
                                 {letters.map(letter=>{
                                     return (
-                                        <button
-                                            className='relative bg-amber-200 hover:bg-amber-300 rounded-lg px-10 py-8 text-4xl'
+                                        <motion.button
+                                            className='relative rounded-lg px-10 py-8 text-4xl'
                                             onClick={() => setSequence(sequence + letter)}
+                                            animate={{
+                                                scale: activeKeys.includes(letter.toLowerCase()) ? 1.1 : 1,
+                                                backgroundColor: activeKeys.includes(letter.toLowerCase()) ? "#ffd230" : "#fee685",
+                                            }}
+                                            transition={{
+                                                type: "spring",
+                                                stiffness: 300,
+                                                damping: 20,
+                                                backgroundColor: { duration: 0.2 },
+                                            }}
                                         >
                                             {letter}
                                             <span className="absolute bottom-2 right-2 text-xs">
                                                 {LETTER_POINTS[letter]}
                                             </span>
-                                        </button>
+                                        </motion.button>
                                     )
                                 })}
                             </div>
