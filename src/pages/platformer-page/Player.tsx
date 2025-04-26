@@ -10,7 +10,7 @@ import {
   JUMP_FORCE,
   PLATFORMS,
 } from "./common.ts";
-import { ENEMY_COLLISION_WIDTH, ENEMY_WIDTH } from "./Enemy.tsx";
+import { ENEMY_COLLISION_WIDTH } from "./Enemy.tsx";
 
 const MOVE_SPEED = 4;
 const SPRITE_WIDTH = 240;
