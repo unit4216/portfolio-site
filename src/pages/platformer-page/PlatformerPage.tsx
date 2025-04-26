@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import idleKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Idle.gif";
 import attackKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Attack.gif";
+import runKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Run.gif";
 
 export const PlatformerPage = () => {
   const [position, setPosition] = useState({ x: 100, y: 300 });
@@ -8,6 +9,11 @@ export const PlatformerPage = () => {
   const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>(
     {},
   );
+  const [animationState, setAnimationState] = useState<
+    "idle" | "run" | "attack"
+  >("idle");
+  const [facing, setFacing] = useState<"right" | "left">("right");
+
   const requestRef = useRef<number>(0);
 
   const GRAVITY = 0.5;
@@ -51,6 +57,20 @@ export const PlatformerPage = () => {
         return { x: newVx, y: newVy };
       });
 
+      if (keysPressed["e"]) {
+        setAnimationState("attack");
+      } else if (velocity.x !== 0) {
+        setAnimationState("run");
+      } else {
+        setAnimationState("idle");
+      }
+
+      if (velocity.x > 0) {
+        setFacing("right");
+      } else if (velocity.x < 0) {
+        setFacing("left");
+      }
+
       setPosition((p) => {
         const newX = p.x + velocity.x;
         let newY = p.y + velocity.y;
@@ -69,6 +89,13 @@ export const PlatformerPage = () => {
     return () => cancelAnimationFrame(requestRef.current!);
   }, [keysPressed, velocity, position, JUMP_FORCE]);
 
+  const currentSprite =
+    animationState === "attack"
+      ? attackKnight
+      : animationState === "run"
+        ? runKnight
+        : idleKnight;
+
   return (
     <div className="relative w-screen h-screen bg-sky-300 overflow-hidden">
       <div
@@ -77,7 +104,7 @@ export const PlatformerPage = () => {
       />
       <img
         alt={"knight"}
-        src={keysPressed["e"] ? attackKnight : idleKnight}
+        src={currentSprite}
         style={{
           width: "240px",
           height: "160px",
@@ -85,7 +112,7 @@ export const PlatformerPage = () => {
           left: position.x,
           top: position.y,
           imageRendering: "pixelated",
-          transform: "translate(-50%, -50%)",
+          transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
         }}
       />
     </div>
