@@ -8,7 +8,6 @@ import clap from "../../assets/808-samples/Roland TR-808/CP/CP.wav";
 import openHat from "../../assets/808-samples/Roland TR-808/OH/OH00.wav";
 
 import { useEffect, useRef, useState } from "react";
-import { Howl } from "howler";
 import metronomeClick from "../../assets/808-samples/Roland TR-808/RS/RS.wav";
 import { Circle, PlayArrow, Stop } from "@mui/icons-material";
 import { motion } from "framer-motion";
@@ -24,7 +23,11 @@ const SAMPLES = [
   { src: openHat, key: "f" },
 ];
 
-export const Metronome = function () {
+export const Metronome = function ({
+  audioContext,
+}: {
+  audioContext: AudioContext | null;
+}) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMetronomeClick, setIsMetronomeClick] = useState(false);
   const [bpm, setBpm] = useState(120);
@@ -32,19 +35,30 @@ export const Metronome = function () {
   const dragging = useRef(false);
   const startY = useRef(0);
   const startBpm = useRef(120);
+  const [clickBuffer, setClickBuffer] = useState<AudioBuffer | null>(null);
 
-  const click = useRef(
-    new Howl({
-      src: [metronomeClick],
-      preload: true,
-    }),
-  );
+  useEffect(() => {
+    if (!audioContext) return;
+
+    fetch(metronomeClick)
+      .then((response) => response.arrayBuffer())
+      .then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer))
+      .then((decoded) => setClickBuffer(decoded));
+  }, [audioContext]);
+
+  const playClick = () => {
+    if (!audioContext || !clickBuffer) return;
+    const source = audioContext.createBufferSource();
+    source.buffer = clickBuffer;
+    source.connect(audioContext.destination);
+    source.start();
+  };
 
   const startMetronome = () => {
     const interval = (60 / bpm) * 1000;
 
     intervalId.current = setInterval(() => {
-      click.current.play();
+      playClick();
 
       setIsMetronomeClick(true);
       setTimeout(() => {
@@ -61,6 +75,10 @@ export const Metronome = function () {
   };
 
   const toggleMetronome = () => {
+    if (audioContext?.state === "suspended") {
+      audioContext.resume();
+    }
+
     if (isPlaying) {
       stopMetronome();
       setIsPlaying(false);
@@ -221,7 +239,7 @@ export const SamplerPage = function () {
       className="text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5] flex flex-col items-center gap-y-8 h-full"
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
-      <Metronome />
+      <Metronome audioContext={audioContext} />
       <div className="flex flex-col items-center mb-8">
         <label className="mb-2">
           Reverb Mix: {Math.round(reverbMix * 100)}%
