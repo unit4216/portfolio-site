@@ -172,7 +172,7 @@ export const GauntletPage = function () {
 
     return (
         <div
-            className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]'
+            className='text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5] h-full'
             style={{fontFamily: 'Neue Haas Grotesk'}}
         >
                 <Snackbar
