@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import idleKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Idle.gif";
 import attackKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Attack.gif";
 import runKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Run.gif";
+import jumpKnight from "../../assets/FreeKnight_v1/Colour1/Outline/120x80_gifs/__Jump.gif";
 
 export const PlatformerPage = () => {
   const [position, setPosition] = useState({ x: 100, y: 300 });
@@ -10,7 +11,7 @@ export const PlatformerPage = () => {
     {},
   );
   const [animationState, setAnimationState] = useState<
-    "idle" | "run" | "attack"
+    "idle" | "run" | "attack" | "jump"
   >("idle");
   const [facing, setFacing] = useState<"right" | "left">("right");
 
@@ -59,6 +60,8 @@ export const PlatformerPage = () => {
 
       if (keysPressed["e"]) {
         setAnimationState("attack");
+      } else if (position.y < FLOOR_Y) {
+        setAnimationState("jump");
       } else if (velocity.x !== 0) {
         setAnimationState("run");
       } else {
@@ -92,9 +95,11 @@ export const PlatformerPage = () => {
   const currentSprite =
     animationState === "attack"
       ? attackKnight
-      : animationState === "run"
-        ? runKnight
-        : idleKnight;
+      : animationState === "jump"
+        ? jumpKnight
+        : animationState === "run"
+          ? runKnight
+          : idleKnight;
 
   return (
     <div className="relative w-screen h-screen bg-sky-300 overflow-hidden">
