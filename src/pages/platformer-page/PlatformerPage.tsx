@@ -8,6 +8,8 @@ export const PlatformerPage = () => {
   const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>(
     {},
   );
+  const [enemyPosition, setEnemyPosition] = useState({ x: 400, y: 400 });
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       setKeysPressed((prev) => ({ ...prev, [e.key]: true }));
@@ -47,7 +49,10 @@ export const PlatformerPage = () => {
       ))}
 
       <Player keysPressed={keysPressed} />
-      <Enemy />
+      <Enemy
+        position={enemyPosition}
+        setPosition={(pos) => setEnemyPosition(pos)}
+      />
     </div>
   );
 };

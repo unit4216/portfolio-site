@@ -7,8 +7,13 @@ import { AnimationState, FLOOR_Y, GRAVITY, PLATFORMS } from "./common.ts";
 const SPRITE_WIDTH = 150;
 const SPRITE_HEIGHT = 100;
 
-export const Enemy = function () {
-  const [position, setPosition] = useState({ x: 400, y: 400 });
+export const Enemy = function ({
+  position,
+  setPosition,
+}: {
+  position: { x: number; y: number };
+  setPosition: (pos: { x: number; y: number }) => void;
+}) {
   const [animationState, setAnimationState] = useState<AnimationState>(
     AnimationState.IDLE,
   );
@@ -43,7 +48,7 @@ export const Enemy = function () {
           playerRight > tileLeft &&
           playerLeft < tileRight
         ) {
-          setPosition((p) => ({ ...p, y: tileTop - SPRITE_HEIGHT / 2 }));
+          setPosition({ ...position, y: tileTop - SPRITE_HEIGHT / 2 });
           newVy = 0;
         }
       }
@@ -62,23 +67,20 @@ export const Enemy = function () {
         setFacing("left");
       }
 
-      setPosition((p) => {
-        const newX = p.x + newVx;
-        let newY = p.y + newVy;
+      const newX = position.x + newVx;
+      let newY = position.y + newVy;
 
-        if (newY > FLOOR_Y) {
-          newY = FLOOR_Y;
-        }
-
-        return { x: newX, y: newY };
-      });
+      if (newY > FLOOR_Y) {
+        newY = FLOOR_Y;
+      }
+      setPosition({ x: newX, y: newY });
 
       requestRef.current = requestAnimationFrame(update);
     };
 
     requestRef.current = requestAnimationFrame(update);
     return () => cancelAnimationFrame(requestRef.current!);
-  }, [velocity, position]);
+  }, [velocity, position, setPosition]);
 
   return (
     <img
