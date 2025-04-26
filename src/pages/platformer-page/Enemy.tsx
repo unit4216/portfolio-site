@@ -7,6 +7,8 @@ import { AnimationState, FLOOR_Y, GRAVITY, PLATFORMS } from "./common.ts";
 export const ENEMY_WIDTH = 150;
 export const ENEMY_HEIGHT = 100;
 
+export const ENEMY_COLLISION_WIDTH = 30;
+
 export const Enemy = function ({
   position,
   setPosition,
@@ -95,7 +97,6 @@ export const Enemy = function ({
         imageRendering: "pixelated",
         transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
         zIndex: 10,
-        backgroundColor: "black",
       }}
     />
   );
