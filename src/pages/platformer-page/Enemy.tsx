@@ -1,22 +1,94 @@
-import skeleton from "../../assets/Skeletons_Free_Pack/gifs/skeleton-idle.gif";
-import { useState } from "react";
+import skeletonIdle from "../../assets/Skeletons_Free_Pack/gifs/skeleton-idle.gif";
+import skeletonWalk from "../../assets/Skeletons_Free_Pack/gifs/skeleton-walk.gif";
 
-const MOVE_SPEED = 3;
+import { useEffect, useRef, useState } from "react";
+import { AnimationState, FLOOR_Y, GRAVITY, PLATFORMS } from "./common.ts";
 
 export const Enemy = function () {
-  const [enemyPos, setEnemyPos] = useState({ x: 400, y: 400 });
+  const [position, setPosition] = useState({ x: 400, y: 400 });
+  const [animationState, setAnimationState] = useState<AnimationState>(
+    AnimationState.IDLE,
+  );
+  const [velocity, setVelocity] = useState({ x: 0, y: 0 });
+  const [facing, setFacing] = useState<"right" | "left">("left");
+  const requestRef = useRef<number>(0);
+
+  const spriteMap: Record<AnimationState, string> = {
+    [AnimationState.RUN]: skeletonWalk,
+    [AnimationState.IDLE]: skeletonIdle,
+    [AnimationState.ATTACK]: "",
+    [AnimationState.JUMP]: "",
+  };
+  useEffect(() => {
+    const update = () => {
+      const newVx = 0;
+
+      let newVy = velocity.y + GRAVITY;
+
+      for (const tile of PLATFORMS) {
+        const playerBottom = position.y + 40;
+        const playerLeft = position.x - 120 / 2;
+        const playerRight = position.x + 120 / 2;
+
+        const tileTop = tile.y;
+        const tileLeft = tile.x;
+        const tileRight = tile.x + 128;
+
+        if (
+          playerBottom <= tileTop &&
+          playerBottom + velocity.y >= tileTop &&
+          playerRight > tileLeft &&
+          playerLeft < tileRight
+        ) {
+          setPosition((p) => ({ ...p, y: tileTop - 40 }));
+          newVy = 0;
+        }
+      }
+
+      setVelocity({ x: newVx, y: newVy });
+
+      if (newVx !== 0) {
+        setAnimationState(AnimationState.RUN);
+      } else {
+        setAnimationState(AnimationState.IDLE);
+      }
+
+      if (newVx > 0) {
+        setFacing("right");
+      } else if (newVx < 0) {
+        setFacing("left");
+      }
+
+      setPosition((p) => {
+        const newX = p.x + newVx;
+        let newY = p.y + newVy;
+
+        if (newY > FLOOR_Y) {
+          newY = FLOOR_Y;
+        }
+
+        return { x: newX, y: newY };
+      });
+
+      requestRef.current = requestAnimationFrame(update);
+    };
+
+    requestRef.current = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(requestRef.current!);
+  }, [velocity, position]);
 
   return (
     <img
-      alt={"worm"}
-      src={skeleton}
+      alt={"enemy"}
+      src={spriteMap[animationState]}
       style={{
         width: "120px",
         height: "80px",
         position: "absolute",
-        left: enemyPos.x,
-        top: enemyPos.y,
+        left: position.x,
+        top: position.y,
         imageRendering: "pixelated",
+        transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
         zIndex: 10,
       }}
     />

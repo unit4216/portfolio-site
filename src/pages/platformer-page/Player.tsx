@@ -12,6 +12,8 @@ import {
 } from "./common.ts";
 
 const MOVE_SPEED = 4;
+const SPRITE_WIDTH = 240;
+const SPRITE_HEIGHT = 160;
 
 export const Player = function ({
   keysPressed,
@@ -47,9 +49,9 @@ export const Player = function ({
       let isOnGround = false;
 
       for (const tile of PLATFORMS) {
-        const playerBottom = position.y + 80;
-        const playerLeft = position.x - 120 / 2;
-        const playerRight = position.x + 120 / 2;
+        const playerBottom = position.y + SPRITE_HEIGHT / 2;
+        const playerLeft = position.x - SPRITE_WIDTH / 2 / 2;
+        const playerRight = position.x + SPRITE_WIDTH / 2 / 2;
 
         const tileTop = tile.y;
         const tileLeft = tile.x;
@@ -61,7 +63,7 @@ export const Player = function ({
           playerRight > tileLeft &&
           playerLeft < tileRight
         ) {
-          setPosition((p) => ({ ...p, y: tileTop - 80 }));
+          setPosition((p) => ({ ...p, y: tileTop - SPRITE_HEIGHT / 2 }));
           newVy = 0;
           isOnGround = true;
         }
@@ -115,8 +117,8 @@ export const Player = function ({
       alt={"knight"}
       src={spriteMap[animationState]}
       style={{
-        width: "240px",
-        height: "160px",
+        width: `${SPRITE_WIDTH}px`,
+        height: `${SPRITE_HEIGHT}px`,
         position: "absolute",
         left: position.x,
         top: position.y,
