@@ -17,6 +17,7 @@ const SPRITE_WIDTH = 240;
 const SPRITE_HEIGHT = 160;
 
 const COLLISION_WIDTH = 20;
+const ATTACK_COLLISION_PADDING = 60;
 
 export const Player = function ({
   keysPressed,
@@ -44,6 +45,7 @@ export const Player = function ({
     [AnimationState.RUN]: runKnight,
     [AnimationState.IDLE]: idleKnight,
     [AnimationState.HURT]: "",
+    [AnimationState.DEAD]: "",
   };
 
   useEffect(() => {
@@ -130,9 +132,10 @@ export const Player = function ({
       });
 
       if (animationState === AnimationState.ATTACK) {
-        // todo variable for this
-        const playerLeft = position.x - (COLLISION_WIDTH + 60);
-        const playerRight = position.x + (COLLISION_WIDTH + 60);
+        const playerLeft =
+          position.x - (COLLISION_WIDTH + ATTACK_COLLISION_PADDING);
+        const playerRight =
+          position.x + (COLLISION_WIDTH + ATTACK_COLLISION_PADDING);
         const enemyLeft = enemyPosition.x - ENEMY_COLLISION_WIDTH / 2;
         const enemyRight = enemyPosition.x + ENEMY_COLLISION_WIDTH / 2;
 
