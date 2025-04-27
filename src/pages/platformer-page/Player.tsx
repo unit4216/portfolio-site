@@ -159,7 +159,7 @@ export const Player = function ({
     if (isBeingHit) {
       setTimeout(() => {
         setIsBeingHit(false);
-      }, 500);
+      }, 200);
     }
   }, [isBeingHit]);
 
