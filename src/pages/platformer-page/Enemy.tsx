@@ -14,6 +14,7 @@ export const ENEMY_COLLISION_WIDTH = 30;
 export interface EnemyData {
   position: { x: number; y: number };
   hurt: boolean;
+  destroyed: boolean;
 }
 
 export const Enemy = function ({
@@ -21,11 +22,15 @@ export const Enemy = function ({
   setPosition,
   hurt,
   setHurt,
+  setDestroyed,
+  destroyed,
 }: {
   position: { x: number; y: number };
   setPosition: (pos: { x: number; y: number }) => void;
   hurt: boolean;
   setHurt: (hurt: boolean) => void;
+  setDestroyed: (destroyed: boolean) => void;
+  destroyed: boolean;
 }) {
   const [animationState, setAnimationState] = useState<AnimationState>(
     AnimationState.IDLE,
@@ -34,7 +39,6 @@ export const Enemy = function ({
   const [facing, setFacing] = useState<"right" | "left">("left");
   const requestRef = useRef<number>(0);
   const [health, setHealth] = useState<number>(100);
-  const [destroyed, setDestroyed] = useState<boolean>(false);
 
   const spriteMap: Record<AnimationState, string> = {
     [AnimationState.RUN]: skeletonWalk,

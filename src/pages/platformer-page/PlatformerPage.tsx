@@ -10,9 +10,22 @@ export const PlatformerPage = () => {
     {},
   );
   const [enemies, setEnemies] = useState<Record<string, EnemyData>>({
-    [uuid()]: { position: { x: 400, y: 400 }, hurt: false },
-    [uuid()]: { position: { x: 600, y: 400 }, hurt: false },
+    [uuid()]: { position: { x: 400, y: 400 }, hurt: false, destroyed: false },
   });
+
+  // spawn new enemy when old enemy destroyed
+  useEffect(() => {
+    const allDestroyed = Object.entries(enemies).every(
+      ([_, data]) => data.destroyed,
+    );
+    if (allDestroyed) {
+      enemies[uuid()] = {
+        position: { x: 600, y: 400 },
+        hurt: false,
+        destroyed: false,
+      };
+    }
+  }, [enemies]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -42,6 +55,13 @@ export const PlatformerPage = () => {
     setEnemies((prev) => ({
       ...prev,
       [enemyId]: { ...prev[enemyId], hurt },
+    }));
+  };
+
+  const setEnemyDestroyed = (enemyId: string, destroyed: boolean) => {
+    setEnemies((prev) => ({
+      ...prev,
+      [enemyId]: { ...prev[enemyId], destroyed },
     }));
   };
 
@@ -82,6 +102,10 @@ export const PlatformerPage = () => {
             setPosition={(pos) => setEnemyPosition(enemyId, pos)}
             hurt={enemy.hurt}
             setHurt={(hurt) => setEnemyHurt(enemyId, hurt)}
+            setDestroyed={(destroyed: boolean) =>
+              setEnemyDestroyed(enemyId, destroyed)
+            }
+            destroyed={enemy.destroyed}
           />
         );
       })}
