@@ -1,5 +1,6 @@
 import skeletonIdle from "../../assets/Skeletons_Free_Pack/gifs/skeleton-idle.gif";
 import skeletonWalk from "../../assets/Skeletons_Free_Pack/gifs/skeleton-walk.gif";
+import skeletonHurt from "../../assets/Skeletons_Free_Pack/gifs/skeleton-hurt.gif";
 
 import { useEffect, useRef, useState } from "react";
 import { AnimationState, FLOOR_Y, GRAVITY, PLATFORMS } from "./common.ts";
@@ -12,9 +13,13 @@ export const ENEMY_COLLISION_WIDTH = 30;
 export const Enemy = function ({
   position,
   setPosition,
+  hurt,
+  setHurt,
 }: {
   position: { x: number; y: number };
   setPosition: (pos: { x: number; y: number }) => void;
+  hurt: boolean;
+  setHurt: (hurt: boolean) => void;
 }) {
   const [animationState, setAnimationState] = useState<AnimationState>(
     AnimationState.IDLE,
@@ -28,7 +33,9 @@ export const Enemy = function ({
     [AnimationState.IDLE]: skeletonIdle,
     [AnimationState.ATTACK]: "",
     [AnimationState.JUMP]: "",
+    [AnimationState.HURT]: skeletonHurt,
   };
+
   useEffect(() => {
     const update = () => {
       const newVx = 0;
@@ -57,7 +64,13 @@ export const Enemy = function ({
 
       setVelocity({ x: newVx, y: newVy });
 
-      if (newVx !== 0) {
+      if (hurt) {
+        setAnimationState(AnimationState.HURT);
+        setTimeout(() => {
+          setAnimationState(AnimationState.IDLE);
+          setHurt(false);
+        }, 500);
+      } else if (newVx !== 0) {
         setAnimationState(AnimationState.RUN);
       } else {
         setAnimationState(AnimationState.IDLE);

@@ -22,6 +22,7 @@ export enum AnimationState {
   JUMP = "jump",
   RUN = "run",
   IDLE = "idle",
+  HURT = "hurt",
 }
 
 export const GRAVITY = 0.5;

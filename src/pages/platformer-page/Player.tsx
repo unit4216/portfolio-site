@@ -21,9 +21,11 @@ const COLLISION_WIDTH = 20;
 export const Player = function ({
   keysPressed,
   enemyPosition,
+  setEnemyHurt,
 }: {
   keysPressed: Record<string, boolean>;
   enemyPosition: { x: number; y: number };
+  setEnemyHurt: (hurt: boolean) => void;
 }) {
   const [facing, setFacing] = useState<"right" | "left">("right");
 
@@ -41,6 +43,7 @@ export const Player = function ({
     [AnimationState.JUMP]: jumpKnight,
     [AnimationState.RUN]: runKnight,
     [AnimationState.IDLE]: idleKnight,
+    [AnimationState.HURT]: "",
   };
 
   useEffect(() => {
@@ -125,6 +128,17 @@ export const Player = function ({
 
         return { x: newX, y: newY };
       });
+
+      if (animationState === AnimationState.ATTACK) {
+        const playerLeft = position.x - COLLISION_WIDTH;
+        const playerRight = position.x + COLLISION_WIDTH;
+        const enemyLeft = enemyPosition.x - ENEMY_COLLISION_WIDTH / 2;
+        const enemyRight = enemyPosition.x + ENEMY_COLLISION_WIDTH / 2;
+
+        if (playerRight > enemyLeft && playerLeft < enemyRight) {
+          setEnemyHurt(true);
+        }
+      }
 
       requestRef.current = requestAnimationFrame(update);
     };
