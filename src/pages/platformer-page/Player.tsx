@@ -38,6 +38,8 @@ export const Player = function ({
     AnimationState.IDLE,
   );
   const [position, setPosition] = useState({ x: 100, y: 300 });
+  // used for cooldown between attacks
+  const [isBeingHit, setIsBeingHit] = useState(false);
 
   const spriteMap: Record<AnimationState, string> = {
     [AnimationState.ATTACK]: attackKnight,
@@ -139,8 +141,9 @@ export const Player = function ({
         const enemyLeft = enemyPosition.x - ENEMY_COLLISION_WIDTH / 2;
         const enemyRight = enemyPosition.x + ENEMY_COLLISION_WIDTH / 2;
 
-        if (playerRight > enemyLeft && playerLeft < enemyRight) {
+        if (!isBeingHit && playerRight > enemyLeft && playerLeft < enemyRight) {
           setEnemyHurt(true);
+          setIsBeingHit(true);
         }
       }
 
@@ -150,6 +153,15 @@ export const Player = function ({
     requestRef.current = requestAnimationFrame(update);
     return () => cancelAnimationFrame(requestRef.current!);
   }, [keysPressed, velocity, position]);
+
+  // attack cooldown
+  useEffect(() => {
+    if (isBeingHit) {
+      setTimeout(() => {
+        setIsBeingHit(false);
+      }, 500);
+    }
+  }, [isBeingHit]);
 
   return (
     <img
