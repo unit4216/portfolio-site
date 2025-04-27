@@ -155,7 +155,6 @@ export const Player = function ({
             attackRight > enemyLeft &&
             attackLeft < enemyRight
           ) {
-            console.log("hurt");
             setEnemyHurt(true, enemyId);
             setIsAttacking(true);
             break;
