@@ -130,8 +130,9 @@ export const Player = function ({
       });
 
       if (animationState === AnimationState.ATTACK) {
-        const playerLeft = position.x - COLLISION_WIDTH;
-        const playerRight = position.x + COLLISION_WIDTH;
+        // todo variable for this
+        const playerLeft = position.x - (COLLISION_WIDTH + 60);
+        const playerRight = position.x + (COLLISION_WIDTH + 60);
         const enemyLeft = enemyPosition.x - ENEMY_COLLISION_WIDTH / 2;
         const enemyRight = enemyPosition.x + ENEMY_COLLISION_WIDTH / 2;
 
