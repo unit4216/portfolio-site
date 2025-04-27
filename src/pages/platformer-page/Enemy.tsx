@@ -27,6 +27,7 @@ export const Enemy = function ({
   const [velocity, setVelocity] = useState({ x: 0, y: 0 });
   const [facing, setFacing] = useState<"right" | "left">("left");
   const requestRef = useRef<number>(0);
+  const [health, setHealth] = useState(100);
 
   const spriteMap: Record<AnimationState, string> = {
     [AnimationState.RUN]: skeletonWalk,
@@ -97,20 +98,46 @@ export const Enemy = function ({
     return () => cancelAnimationFrame(requestRef.current!);
   }, [velocity, position, setPosition]);
 
+  useEffect(() => {
+    if (hurt) setHealth((prev) => Math.max(prev - 20, 0));
+  }, [hurt]);
+
   return (
-    <img
-      alt={"enemy"}
-      src={spriteMap[animationState]}
-      style={{
-        width: `${ENEMY_WIDTH}px`,
-        height: `${ENEMY_HEIGHT}px`,
-        position: "absolute",
-        left: position.x,
-        top: position.y,
-        imageRendering: "pixelated",
-        transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
-        zIndex: 10,
-      }}
-    />
+    <>
+      <div
+        style={{
+          position: "absolute",
+          left: position.x - 30,
+          top: position.y - 80,
+          width: "60px",
+          height: "8px",
+          backgroundColor: "red",
+          zIndex: 11,
+          transform: "translateX(-50%)",
+        }}
+      >
+        <div
+          style={{
+            width: `${health}%`,
+            height: "100%",
+            backgroundColor: "limegreen",
+          }}
+        />
+      </div>
+      <img
+        alt={"enemy"}
+        src={spriteMap[animationState]}
+        style={{
+          width: `${ENEMY_WIDTH}px`,
+          height: `${ENEMY_HEIGHT}px`,
+          position: "absolute",
+          left: position.x,
+          top: position.y,
+          imageRendering: "pixelated",
+          transform: `translate(-50%, -50%) scaleX(${facing === "left" ? -1 : 1})`,
+          zIndex: 10,
+        }}
+      />
+    </>
   );
 };
