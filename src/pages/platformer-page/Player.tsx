@@ -76,8 +76,8 @@ export const Player = function ({
 
       for (const tile of PLATFORMS) {
         const playerBottom = position.y + SPRITE_HEIGHT / 2;
-        const playerLeft = position.x - SPRITE_WIDTH / 2;
-        const playerRight = position.x + SPRITE_WIDTH / 2;
+        const playerLeft = position.x - COLLISION_WIDTH / 2;
+        const playerRight = position.x + COLLISION_WIDTH / 2;
 
         const tileTop = tile.y;
         const tileLeft = tile.x;
