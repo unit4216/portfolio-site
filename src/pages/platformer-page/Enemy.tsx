@@ -72,6 +72,8 @@ export const Enemy = function ({
         setAnimationState(AnimationState.DEAD);
         setTimeout(() => {
           setDestroyed(true);
+          // todo temporary - we should probably make position nullable
+          setPosition({ x: 9999999, y: 9999999 });
         }, 1500);
       } else if (hurt) {
         setAnimationState(AnimationState.HURT);
