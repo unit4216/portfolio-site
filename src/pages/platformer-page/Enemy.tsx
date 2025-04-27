@@ -1,6 +1,7 @@
 import skeletonIdle from "../../assets/Skeletons_Free_Pack/gifs/skeleton-idle.gif";
 import skeletonWalk from "../../assets/Skeletons_Free_Pack/gifs/skeleton-walk.gif";
 import skeletonHurt from "../../assets/Skeletons_Free_Pack/gifs/skeleton-hurt.gif";
+import skeletonDead from "../../assets/Skeletons_Free_Pack/gifs/skeleton-die.gif";
 
 import { useEffect, useRef, useState } from "react";
 import { AnimationState, FLOOR_Y, GRAVITY, PLATFORMS } from "./common.ts";
@@ -27,7 +28,8 @@ export const Enemy = function ({
   const [velocity, setVelocity] = useState({ x: 0, y: 0 });
   const [facing, setFacing] = useState<"right" | "left">("left");
   const requestRef = useRef<number>(0);
-  const [health, setHealth] = useState(100);
+  const [health, setHealth] = useState<number>(100);
+  const [destroyed, setDestroyed] = useState<boolean>(false);
 
   const spriteMap: Record<AnimationState, string> = {
     [AnimationState.RUN]: skeletonWalk,
@@ -35,6 +37,7 @@ export const Enemy = function ({
     [AnimationState.ATTACK]: "",
     [AnimationState.JUMP]: "",
     [AnimationState.HURT]: skeletonHurt,
+    [AnimationState.DEAD]: skeletonDead,
   };
 
   useEffect(() => {
@@ -65,7 +68,12 @@ export const Enemy = function ({
 
       setVelocity({ x: newVx, y: newVy });
 
-      if (hurt) {
+      if (!health) {
+        setAnimationState(AnimationState.DEAD);
+        setTimeout(() => {
+          setDestroyed(true);
+        }, 1500);
+      } else if (hurt) {
         setAnimationState(AnimationState.HURT);
         setTimeout(() => {
           setAnimationState(AnimationState.IDLE);
@@ -101,6 +109,8 @@ export const Enemy = function ({
   useEffect(() => {
     if (hurt) setHealth((prev) => Math.max(prev - 20, 0));
   }, [hurt]);
+
+  if (destroyed) return null;
 
   return (
     <>
