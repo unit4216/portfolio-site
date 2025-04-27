@@ -10,7 +10,7 @@ import {
   JUMP_FORCE,
   PLATFORMS,
 } from "./common.ts";
-import { ENEMY_COLLISION_WIDTH } from "./Enemy.tsx";
+import { ENEMY_COLLISION_WIDTH, EnemyData } from "./Enemy.tsx";
 
 const MOVE_SPEED = 4;
 const SPRITE_WIDTH = 240;
@@ -21,12 +21,12 @@ const ATTACK_COLLISION_PADDING = 60;
 
 export const Player = function ({
   keysPressed,
-  enemyPosition,
+  enemies,
   setEnemyHurt,
 }: {
   keysPressed: Record<string, boolean>;
-  enemyPosition: { x: number; y: number };
-  setEnemyHurt: (hurt: boolean) => void;
+  enemies: Record<string, EnemyData>;
+  setEnemyHurt: (hurt: boolean, enemyId: string) => void;
 }) {
   const [facing, setFacing] = useState<"right" | "left">("right");
 
@@ -39,7 +39,7 @@ export const Player = function ({
   );
   const [position, setPosition] = useState({ x: 100, y: 300 });
   // used for cooldown between attacks
-  const [isBeingHit, setIsBeingHit] = useState(false);
+  const [isAttacking, setIsAttacking] = useState(false);
 
   const spriteMap: Record<AnimationState, string> = {
     [AnimationState.ATTACK]: attackKnight,
@@ -56,20 +56,23 @@ export const Player = function ({
       if (keysPressed["ArrowLeft"] || keysPressed["a"]) newVx = -MOVE_SPEED;
       if (keysPressed["ArrowRight"] || keysPressed["d"]) newVx = MOVE_SPEED;
 
-      const playerLeft = position.x - COLLISION_WIDTH / 2;
-      const playerRight = position.x + COLLISION_WIDTH / 2;
-      const enemyLeft = enemyPosition.x - ENEMY_COLLISION_WIDTH / 2;
-      const enemyRight = enemyPosition.x + ENEMY_COLLISION_WIDTH / 2;
+      for (const enemyId in enemies) {
+        const enemy = enemies[enemyId];
+        const playerLeft = position.x - COLLISION_WIDTH / 2;
+        const playerRight = position.x + COLLISION_WIDTH / 2;
+        const enemyLeft = enemy.position.x - ENEMY_COLLISION_WIDTH / 2;
+        const enemyRight = enemy.position.x + ENEMY_COLLISION_WIDTH / 2;
 
-      if (
-        (newVx > 0 &&
-          playerRight + newVx > enemyLeft &&
-          playerLeft < enemyRight) ||
-        (newVx < 0 &&
-          playerLeft + newVx < enemyRight &&
-          playerRight > enemyLeft)
-      ) {
-        newVx = 0;
+        if (
+          (newVx > 0 &&
+            playerRight + newVx > enemyLeft &&
+            playerLeft < enemyRight) ||
+          (newVx < 0 &&
+            playerLeft + newVx < enemyRight &&
+            playerRight > enemyLeft)
+        ) {
+          newVx = 0;
+        }
       }
 
       let newVy = velocity.y + GRAVITY;
@@ -134,16 +137,29 @@ export const Player = function ({
       });
 
       if (animationState === AnimationState.ATTACK) {
-        const playerLeft =
+        const attackLeft =
           position.x - (COLLISION_WIDTH + ATTACK_COLLISION_PADDING);
-        const playerRight =
+        const attackRight =
           position.x + (COLLISION_WIDTH + ATTACK_COLLISION_PADDING);
-        const enemyLeft = enemyPosition.x - ENEMY_COLLISION_WIDTH / 2;
-        const enemyRight = enemyPosition.x + ENEMY_COLLISION_WIDTH / 2;
 
-        if (!isBeingHit && playerRight > enemyLeft && playerLeft < enemyRight) {
-          setEnemyHurt(true);
-          setIsBeingHit(true);
+        for (const enemyId in enemies) {
+          const enemy = enemies[enemyId];
+          const enemyLeft = enemy.position.x - ENEMY_COLLISION_WIDTH / 2;
+          const enemyRight = enemy.position.x + ENEMY_COLLISION_WIDTH / 2;
+
+          console.log(attackLeft, enemyLeft);
+          console.log(attackRight, enemyRight);
+
+          if (
+            !isAttacking &&
+            attackRight > enemyLeft &&
+            attackLeft < enemyRight
+          ) {
+            console.log("hurt");
+            setEnemyHurt(true, enemyId);
+            setIsAttacking(true);
+            break;
+          }
         }
       }
 
@@ -156,12 +172,12 @@ export const Player = function ({
 
   // attack cooldown
   useEffect(() => {
-    if (isBeingHit) {
+    if (isAttacking) {
       setTimeout(() => {
-        setIsBeingHit(false);
+        setIsAttacking(false);
       }, 200);
     }
-  }, [isBeingHit]);
+  }, [isAttacking]);
 
   return (
     <img

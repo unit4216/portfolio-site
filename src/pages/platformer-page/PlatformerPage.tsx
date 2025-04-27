@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { Player } from "./Player.tsx";
 import { Background } from "./Background.tsx";
 import { PLATFORMS } from "./common.ts";
-import { Enemy } from "./Enemy.tsx";
+import { Enemy, EnemyData } from "./Enemy.tsx";
+import { v4 as uuid } from "uuid";
 
 export const PlatformerPage = () => {
   const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>(
     {},
   );
-  const [enemyPosition, setEnemyPosition] = useState({ x: 400, y: 400 });
-  const [enemyHurt, setEnemyHurt] = useState<boolean>(false);
+  const [enemies, setEnemies] = useState<Record<string, EnemyData>>({
+    [uuid()]: { position: { x: 400, y: 400 }, hurt: false },
+    [uuid()]: { position: { x: 600, y: 400 }, hurt: false },
+  });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -28,10 +31,23 @@ export const PlatformerPage = () => {
     };
   }, []);
 
+  const setEnemyPosition = (enemyId: string, pos: { x: number; y: number }) => {
+    setEnemies((prev) => ({
+      ...prev,
+      [enemyId]: { ...prev[enemyId], position: pos },
+    }));
+  };
+
+  const setEnemyHurt = (enemyId: string, hurt: boolean) => {
+    setEnemies((prev) => ({
+      ...prev,
+      [enemyId]: { ...prev[enemyId], hurt },
+    }));
+  };
+
   return (
     <div className="relative w-screen h-screen bg-white overflow-hidden">
       <Background />
-
       {PLATFORMS.map((tile, index) => (
         <img
           key={index}
@@ -48,18 +64,27 @@ export const PlatformerPage = () => {
           }}
         />
       ))}
-
       <Player
         keysPressed={keysPressed}
-        enemyPosition={enemyPosition}
-        setEnemyHurt={(hurt: boolean) => setEnemyHurt(hurt)}
+        enemies={enemies}
+        setEnemyHurt={(hurt: boolean, enemyId: string) => {
+          setEnemies((prev) => ({
+            ...prev,
+            [enemyId]: { ...prev[enemyId], hurt },
+          }));
+        }}
       />
-      <Enemy
-        position={enemyPosition}
-        setPosition={(pos) => setEnemyPosition(pos)}
-        hurt={enemyHurt}
-        setHurt={(hurt: boolean) => setEnemyHurt(hurt)}
-      />
+      {Object.entries(enemies).map(([enemyId, enemy]) => {
+        return (
+          <Enemy
+            key={enemyId}
+            position={enemy.position}
+            setPosition={(pos) => setEnemyPosition(enemyId, pos)}
+            hurt={enemy.hurt}
+            setHurt={(hurt) => setEnemyHurt(enemyId, hurt)}
+          />
+        );
+      })}
     </div>
   );
 };

@@ -11,6 +11,11 @@ export const ENEMY_HEIGHT = 100;
 
 export const ENEMY_COLLISION_WIDTH = 30;
 
+export interface EnemyData {
+  position: { x: number; y: number };
+  hurt: boolean;
+}
+
 export const Enemy = function ({
   position,
   setPosition,
