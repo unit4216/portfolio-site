@@ -117,8 +117,8 @@ export const Enemy = function ({
       <div
         style={{
           position: "absolute",
-          left: position.x - 30,
-          top: position.y - 80,
+          left: position.x,
+          top: position.y - ENEMY_HEIGHT / 2,
           width: "60px",
           height: "8px",
           backgroundColor: "red",
