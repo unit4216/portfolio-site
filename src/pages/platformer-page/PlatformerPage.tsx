@@ -76,7 +76,7 @@ export const PlatformerPage = () => {
     <div
       className="relative w-screen h-screen bg-white"
       style={{
-        transform: `translateX(${-playerPosition.x + window.innerWidth / 2}px)`,
+        transform: `translateX(${-Math.max(0, playerPosition.x - window.innerWidth / 2)}px)`,
       }}
     >
       <Background scrollX={playerPosition.x} />
