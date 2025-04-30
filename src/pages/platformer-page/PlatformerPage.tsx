@@ -5,6 +5,8 @@ import { PLATFORMS } from "./common.ts";
 import { Enemy, EnemyData } from "./Enemy.tsx";
 import { v4 as uuid } from "uuid";
 
+export const LEVEL_WIDTH = "5000px";
+
 export const PlatformerPage = () => {
   const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>(
     {},
@@ -73,56 +75,60 @@ export const PlatformerPage = () => {
   };
 
   return (
-    <div
-      className="relative w-screen h-screen bg-white"
-      style={{
-        transform: `translateX(${-Math.max(0, playerPosition.x - window.innerWidth / 2)}px)`,
-      }}
-    >
-      <Background scrollX={playerPosition.x} />
-      {PLATFORMS.map((tile, index) => (
-        <img
-          key={index}
-          src={tile.src}
-          alt={tile.type}
-          className="absolute"
-          style={{
-            left: tile.x,
-            top: tile.y,
-            width: "128px",
-            height: "24px",
-            imageRendering: "pixelated",
-            zIndex: 10,
+    <div className="w-screen h-screen overflow-hidden relative">
+      <div
+        className="absolute top-0 left-0 h-screen"
+        style={{
+          width: LEVEL_WIDTH,
+          transform: `translateX(${-Math.max(0, playerPosition.x - window.innerWidth / 2)}px)`,
+          transition: "transform 0.02s linear",
+        }}
+      >
+        <Background scrollX={playerPosition.x} />
+        {PLATFORMS.map((tile, index) => (
+          <img
+            key={index}
+            src={tile.src}
+            alt={tile.type}
+            className="absolute"
+            style={{
+              left: tile.x,
+              top: tile.y,
+              width: "128px",
+              height: "24px",
+              imageRendering: "pixelated",
+              zIndex: 10,
+            }}
+          />
+        ))}
+        <Player
+          keysPressed={keysPressed}
+          enemies={enemies}
+          position={playerPosition}
+          setPosition={(position) => setPlayerPosition(position)}
+          setEnemyHurt={(hurt: boolean, enemyId: string) => {
+            setEnemies((prev) => ({
+              ...prev,
+              [enemyId]: { ...prev[enemyId], hurt },
+            }));
           }}
         />
-      ))}
-      <Player
-        keysPressed={keysPressed}
-        enemies={enemies}
-        position={playerPosition}
-        setPosition={(position) => setPlayerPosition(position)}
-        setEnemyHurt={(hurt: boolean, enemyId: string) => {
-          setEnemies((prev) => ({
-            ...prev,
-            [enemyId]: { ...prev[enemyId], hurt },
-          }));
-        }}
-      />
-      {Object.entries(enemies).map(([enemyId, enemy]) => {
-        return (
-          <Enemy
-            key={enemyId}
-            position={enemy.position}
-            setPosition={(pos) => setEnemyPosition(enemyId, pos)}
-            hurt={enemy.hurt}
-            setHurt={(hurt) => setEnemyHurt(enemyId, hurt)}
-            setDestroyed={(destroyed: boolean) =>
-              setEnemyDestroyed(enemyId, destroyed)
-            }
-            destroyed={enemy.destroyed}
-          />
-        );
-      })}
+        {Object.entries(enemies).map(([enemyId, enemy]) => {
+          return (
+            <Enemy
+              key={enemyId}
+              position={enemy.position}
+              setPosition={(pos) => setEnemyPosition(enemyId, pos)}
+              hurt={enemy.hurt}
+              setHurt={(hurt) => setEnemyHurt(enemyId, hurt)}
+              setDestroyed={(destroyed: boolean) =>
+                setEnemyDestroyed(enemyId, destroyed)
+              }
+              destroyed={enemy.destroyed}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
