@@ -1,26 +1,26 @@
 import ground from "../../assets/DarkForest1.2/ground_tile.png";
 
-export const PLATFORMS = [
-  { type: "ground", x: -500, y: 600, src: ground },
-  { type: "ground", x: -400, y: 600, src: ground },
-  { type: "ground", x: -300, y: 600, src: ground },
-  { type: "ground", x: -200, y: 600, src: ground },
-  { type: "ground", x: -100, y: 600, src: ground },
-  { type: "ground", x: 0, y: 600, src: ground },
-  { type: "ground", x: 100, y: 600, src: ground },
-  { type: "ground", x: 200, y: 600, src: ground },
-  { type: "ground", x: 300, y: 600, src: ground },
-  { type: "ground", x: 400, y: 600, src: ground },
-  { type: "ground", x: 500, y: 600, src: ground },
-  { type: "ground", x: 600, y: 600, src: ground },
-  { type: "ground", x: 700, y: 600, src: ground },
-  { type: "ground", x: 800, y: 600, src: ground },
-  { type: "ground", x: 900, y: 600, src: ground },
-  { type: "ground", x: 1000, y: 500, src: ground },
-  { type: "ground", x: 1100, y: 500, src: ground },
-  { type: "ground", x: 1200, y: 500, src: ground },
-  { type: "ground", x: 1300, y: 500, src: ground },
-];
+export function generatePlatforms(
+  startX: number,
+  endX: number,
+  step: number,
+  y: number,
+) {
+  const platforms = [];
+
+  for (let x = startX; x <= endX; x += step) {
+    platforms.push({
+      type: "ground",
+      x,
+      y,
+      src: ground,
+    });
+  }
+
+  return platforms;
+}
+
+export const PLATFORMS = generatePlatforms(0, 5000, 100, 600);
 
 export enum AnimationState {
   ATTACK = "attack",
