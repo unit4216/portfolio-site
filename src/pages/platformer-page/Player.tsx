@@ -66,13 +66,22 @@ export const Player = function ({
         const enemyLeft = enemy.position.x - ENEMY_COLLISION_WIDTH / 2;
         const enemyRight = enemy.position.x + ENEMY_COLLISION_WIDTH / 2;
 
+        const playerTop = position.y - SPRITE_HEIGHT / 2;
+        const playerBottom = position.y + SPRITE_HEIGHT / 2;
+        const enemyTop = enemy.position.y - ENEMY_COLLISION_WIDTH / 2;
+        const enemyBottom = enemy.position.y + ENEMY_COLLISION_WIDTH / 2;
+
+        const isVerticallyOverlapping =
+          playerBottom > enemyTop && playerTop < enemyBottom;
+
         if (
-          (newVx > 0 &&
+          isVerticallyOverlapping &&
+          ((newVx > 0 &&
             playerRight + newVx > enemyLeft &&
             playerLeft < enemyRight) ||
-          (newVx < 0 &&
-            playerLeft + newVx < enemyRight &&
-            playerRight > enemyLeft)
+            (newVx < 0 &&
+              playerLeft + newVx < enemyRight &&
+              playerRight > enemyLeft))
         ) {
           newVx = 0;
         }
