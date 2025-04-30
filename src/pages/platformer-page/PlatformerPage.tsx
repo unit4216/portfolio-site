@@ -5,7 +5,7 @@ import { PLATFORMS } from "./common.ts";
 import { Enemy, EnemyData } from "./Enemy.tsx";
 import { v4 as uuid } from "uuid";
 
-export const LEVEL_WIDTH = "5000px";
+export const LEVEL_WIDTH = 5000;
 
 export const PlatformerPage = () => {
   const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>(
@@ -74,7 +74,7 @@ export const PlatformerPage = () => {
     }));
   };
 
-  const maxScroll = 5000 - window.innerWidth;
+  const maxScroll = LEVEL_WIDTH - window.innerWidth;
   const scrollX = Math.min(
     Math.max(playerPosition.x - window.innerWidth / 2, 0),
     maxScroll,
