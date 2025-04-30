@@ -13,19 +13,25 @@ export const PlatformerPage = () => {
     [uuid()]: { position: { x: 400, y: 400 }, hurt: false, destroyed: false },
   });
 
+  const allDestroyed = Object.entries(enemies).every(
+    ([_, data]) => data.destroyed,
+  );
+
   // spawn new enemy when old enemy destroyed
   useEffect(() => {
-    const allDestroyed = Object.entries(enemies).every(
-      ([_, data]) => data.destroyed,
-    );
     if (allDestroyed) {
-      enemies[uuid()] = {
-        position: { x: 600, y: 400 },
-        hurt: false,
-        destroyed: false,
+      const enemiesRef = {
+        ...enemies,
+        [uuid()]: {
+          position: { x: 600, y: 400 },
+          hurt: false,
+          destroyed: false,
+        },
       };
+
+      setTimeout(() => setEnemies(enemiesRef), 1000);
     }
-  }, [enemies]);
+  }, [allDestroyed]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
