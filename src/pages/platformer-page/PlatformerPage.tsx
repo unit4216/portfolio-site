@@ -79,7 +79,7 @@ export const PlatformerPage = () => {
         transform: `translateX(${-playerPosition.x + window.innerWidth / 2}px)`,
       }}
     >
-      <Background />
+      <Background scrollX={playerPosition.x} />
       {PLATFORMS.map((tile, index) => (
         <img
           key={index}
