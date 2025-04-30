@@ -74,13 +74,19 @@ export const PlatformerPage = () => {
     }));
   };
 
+  const maxScroll = 5000 - window.innerWidth;
+  const scrollX = Math.min(
+    Math.max(playerPosition.x - window.innerWidth / 2, 0),
+    maxScroll,
+  );
+
   return (
     <div className="w-screen h-screen overflow-hidden relative">
       <div
         className="absolute top-0 left-0 h-screen"
         style={{
           width: LEVEL_WIDTH,
-          transform: `translateX(${-Math.max(0, playerPosition.x - window.innerWidth / 2)}px)`,
+          transform: `translateX(${-scrollX}px)`,
           transition: "transform 0.02s linear",
         }}
       >
