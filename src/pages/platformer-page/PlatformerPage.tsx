@@ -12,6 +12,7 @@ export const PlatformerPage = () => {
   const [enemies, setEnemies] = useState<Record<string, EnemyData>>({
     [uuid()]: { position: { x: 400, y: 400 }, hurt: false, destroyed: false },
   });
+  const [playerPosition, setPlayerPosition] = useState({ x: 100, y: 300 });
 
   const allDestroyed = Object.entries(enemies).every(
     ([_, data]) => data.destroyed,
@@ -72,7 +73,12 @@ export const PlatformerPage = () => {
   };
 
   return (
-    <div className="relative w-screen h-screen bg-white overflow-hidden">
+    <div
+      className="relative w-screen h-screen bg-white overflow-hidden"
+      style={{
+        transform: `translateX(${-playerPosition.x + window.innerWidth / 2}px)`,
+      }}
+    >
       <Background />
       {PLATFORMS.map((tile, index) => (
         <img
@@ -93,6 +99,8 @@ export const PlatformerPage = () => {
       <Player
         keysPressed={keysPressed}
         enemies={enemies}
+        position={playerPosition}
+        setPosition={(position) => setPlayerPosition(position)}
         setEnemyHurt={(hurt: boolean, enemyId: string) => {
           setEnemies((prev) => ({
             ...prev,

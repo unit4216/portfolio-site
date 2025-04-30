@@ -23,10 +23,14 @@ export const Player = function ({
   keysPressed,
   enemies,
   setEnemyHurt,
+  position,
+  setPosition,
 }: {
   keysPressed: Record<string, boolean>;
   enemies: Record<string, EnemyData>;
   setEnemyHurt: (hurt: boolean, enemyId: string) => void;
+  position: { x: number; y: number };
+  setPosition: (pos: { x: number; y: number }) => void;
 }) {
   const [facing, setFacing] = useState<"right" | "left">("right");
 
@@ -37,7 +41,6 @@ export const Player = function ({
   const [animationState, setAnimationState] = useState<AnimationState>(
     AnimationState.IDLE,
   );
-  const [position, setPosition] = useState({ x: 100, y: 300 });
   // used for cooldown between attacks
   const [isAttacking, setIsAttacking] = useState(false);
 
@@ -94,7 +97,7 @@ export const Player = function ({
           playerRight > tileLeft &&
           playerLeft < tileRight
         ) {
-          setPosition((p) => ({ ...p, y: tileTop - SPRITE_HEIGHT / 2 }));
+          setPosition({ ...position, y: tileTop - SPRITE_HEIGHT / 2 });
           newVy = 0;
           isOnGround = true;
         }
@@ -125,16 +128,14 @@ export const Player = function ({
         setFacing("left");
       }
 
-      setPosition((p) => {
-        const newX = p.x + newVx;
-        let newY = p.y + newVy;
+      const newX = position.x + newVx;
+      let newY = position.y + newVy;
 
-        if (newY > FLOOR_Y) {
-          newY = FLOOR_Y;
-        }
+      if (newY > FLOOR_Y) {
+        newY = FLOOR_Y;
+      }
 
-        return { x: newX, y: newY };
-      });
+      setPosition({ x: newX, y: newY });
 
       if (animationState === AnimationState.ATTACK) {
         const attackLeft =
