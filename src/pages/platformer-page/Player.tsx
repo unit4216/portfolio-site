@@ -12,7 +12,7 @@ import {
 } from "./common.ts";
 import { ENEMY_COLLISION_WIDTH, EnemyData } from "./Enemy.tsx";
 
-const MOVE_SPEED = 4;
+const MOVE_SPEED = 3;
 const SPRITE_WIDTH = 240;
 const SPRITE_HEIGHT = 160;
 
