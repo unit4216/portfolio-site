@@ -24,6 +24,7 @@ export const Enemy = function ({
   setHurt,
   setDestroyed,
   destroyed,
+  playerPosition,
 }: {
   position: { x: number; y: number };
   setPosition: (pos: { x: number; y: number }) => void;
@@ -31,6 +32,7 @@ export const Enemy = function ({
   setHurt: (hurt: boolean) => void;
   setDestroyed: (destroyed: boolean) => void;
   destroyed: boolean;
+  playerPosition: { x: number; y: number };
 }) {
   const [animationState, setAnimationState] = useState<AnimationState>(
     AnimationState.IDLE,
@@ -51,8 +53,13 @@ export const Enemy = function ({
 
   useEffect(() => {
     const update = () => {
-      const newVx = 0;
+      let newVx = 0;
+      const dx = playerPosition.x - position.x;
+      const distanceThreshold = 20;
 
+      if (Math.abs(dx) > distanceThreshold) {
+        newVx = dx > 0 ? 1 : -1;
+      }
       let newVy = velocity.y + GRAVITY;
 
       for (const tile of PLATFORMS) {
@@ -115,7 +122,7 @@ export const Enemy = function ({
 
     requestRef.current = requestAnimationFrame(update);
     return () => cancelAnimationFrame(requestRef.current!);
-  }, [velocity, position, setPosition]);
+  }, [velocity, position, setPosition, playerPosition]);
 
   useEffect(() => {
     if (hurt) setHealth((prev) => Math.max(prev - 20, 0));

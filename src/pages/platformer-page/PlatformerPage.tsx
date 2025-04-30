@@ -131,6 +131,7 @@ export const PlatformerPage = () => {
                 setEnemyDestroyed(enemyId, destroyed)
               }
               destroyed={enemy.destroyed}
+              playerPosition={playerPosition}
             />
           );
         })}
