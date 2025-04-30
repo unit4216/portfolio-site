@@ -74,7 +74,7 @@ export const PlatformerPage = () => {
 
   return (
     <div
-      className="relative w-screen h-screen bg-white overflow-hidden"
+      className="relative w-screen h-screen bg-white"
       style={{
         transform: `translateX(${-playerPosition.x + window.innerWidth / 2}px)`,
       }}

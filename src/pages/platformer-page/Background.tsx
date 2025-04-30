@@ -10,7 +10,7 @@ export const Background = function ({ scrollX }: { scrollX: number }) {
         style={{
           backgroundImage: `url(${bgBg})`,
           backgroundRepeat: "repeat-x",
-          backgroundPositionX: `${-scrollX * 0.2}px`,
+          backgroundPositionX: `${-scrollX * 0.02}px`,
           backgroundSize: "cover",
           zIndex: 0,
           imageRendering: "pixelated",
@@ -21,7 +21,7 @@ export const Background = function ({ scrollX }: { scrollX: number }) {
         style={{
           backgroundImage: `url(${bgFarTrees})`,
           backgroundRepeat: "repeat-x",
-          backgroundPositionX: `${-scrollX * 0.4}px`,
+          backgroundPositionX: `${-scrollX * 0.01}px`,
           backgroundSize: "cover",
           zIndex: 1,
           imageRendering: "pixelated",
@@ -32,7 +32,7 @@ export const Background = function ({ scrollX }: { scrollX: number }) {
         style={{
           backgroundImage: `url(${bgMidTrees})`,
           backgroundRepeat: "repeat-x",
-          backgroundPositionX: `${-scrollX * 0.6}px`,
+          backgroundPositionX: `${-scrollX * 0.1}px`,
           backgroundSize: "cover",
           zIndex: 2,
           imageRendering: "pixelated",
@@ -43,7 +43,7 @@ export const Background = function ({ scrollX }: { scrollX: number }) {
         style={{
           backgroundImage: `url(${bgCloseTrees})`,
           backgroundRepeat: "repeat-x",
-          backgroundPositionX: `${-scrollX * 0.8}px`,
+          backgroundPositionX: `${-scrollX * 0.2}px`,
           backgroundSize: "cover",
           zIndex: 3,
           imageRendering: "pixelated",
