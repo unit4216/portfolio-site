@@ -129,7 +129,7 @@ export const PlatformerPage = () => {
             bottom: 100,
             left: 100,
             width: "500px",
-            height: "100px",
+            height: "50px",
             backgroundColor: "red",
             zIndex: 11,
           }}
