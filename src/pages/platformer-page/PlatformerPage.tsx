@@ -123,25 +123,6 @@ export const PlatformerPage = () => {
             }));
           }}
         />
-        <div
-          style={{
-            position: "absolute",
-            bottom: 100,
-            left: 100,
-            width: "500px",
-            height: "50px",
-            backgroundColor: "red",
-            zIndex: 11,
-          }}
-        >
-          <div
-            style={{
-              width: `${playerHealth}%`,
-              height: "100%",
-              backgroundColor: "limegreen",
-            }}
-          />
-        </div>
         {Object.entries(enemies).map(([enemyId, enemy]) => {
           return (
             <Enemy
@@ -159,6 +140,25 @@ export const PlatformerPage = () => {
             />
           );
         })}
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: 100,
+          left: 100,
+          width: "500px",
+          height: "50px",
+          backgroundColor: "red",
+          zIndex: 11,
+        }}
+      >
+        <div
+          style={{
+            width: `${playerHealth}%`,
+            height: "100%",
+            backgroundColor: "limegreen",
+          }}
+        />
       </div>
     </div>
   );
