@@ -5,7 +5,7 @@ import { PLATFORMS } from "./common.ts";
 import { Enemy, EnemyData } from "./Enemy.tsx";
 import { v4 as uuid } from "uuid";
 
-export const LEVEL_WIDTH = 5000;
+export const LEVEL_WIDTH = 3000;
 
 export const PlatformerPage = () => {
   const [keysPressed, setKeysPressed] = useState<{ [key: string]: boolean }>(
