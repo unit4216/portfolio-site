@@ -2,6 +2,7 @@ import skeletonIdle from "../../assets/Skeletons_Free_Pack/gifs/skeleton-idle.gi
 import skeletonWalk from "../../assets/Skeletons_Free_Pack/gifs/skeleton-walk.gif";
 import skeletonHurt from "../../assets/Skeletons_Free_Pack/gifs/skeleton-hurt.gif";
 import skeletonDead from "../../assets/Skeletons_Free_Pack/gifs/skeleton-die.gif";
+import skeletonAttack from "../../assets/Skeletons_Free_Pack/gifs/skeleton-attack.gif";
 
 import { useEffect, useRef, useState } from "react";
 import { AnimationState, FLOOR_Y, GRAVITY, PLATFORMS } from "./common.ts";
@@ -25,6 +26,7 @@ export const Enemy = function ({
   setDestroyed,
   destroyed,
   playerPosition,
+  hurtPlayer,
 }: {
   position: { x: number; y: number };
   setPosition: (pos: { x: number; y: number }) => void;
@@ -33,6 +35,7 @@ export const Enemy = function ({
   setDestroyed: (destroyed: boolean) => void;
   destroyed: boolean;
   playerPosition: { x: number; y: number };
+  hurtPlayer: () => void;
 }) {
   const [animationState, setAnimationState] = useState<AnimationState>(
     AnimationState.IDLE,
@@ -41,11 +44,12 @@ export const Enemy = function ({
   const [facing, setFacing] = useState<"right" | "left">("left");
   const requestRef = useRef<number>(0);
   const [health, setHealth] = useState<number>(100);
+  const attackingRef = useRef(false);
 
   const spriteMap: Record<AnimationState, string> = {
     [AnimationState.RUN]: skeletonWalk,
     [AnimationState.IDLE]: skeletonIdle,
-    [AnimationState.ATTACK]: "",
+    [AnimationState.ATTACK]: skeletonAttack,
     [AnimationState.JUMP]: "",
     [AnimationState.HURT]: skeletonHurt,
     [AnimationState.DEAD]: skeletonDead,
@@ -60,6 +64,13 @@ export const Enemy = function ({
       if (Math.abs(dx) > distanceThreshold) {
         newVx = dx > 0 ? 1 : -1;
       }
+      const isHorizontallyOverlapping =
+        Math.abs(position.x - playerPosition.x) < ENEMY_COLLISION_WIDTH;
+      const isVerticallyOverlapping =
+        Math.abs(position.y - playerPosition.y) < ENEMY_HEIGHT;
+
+      const shouldAttack = isHorizontallyOverlapping && isVerticallyOverlapping;
+
       let newVy = velocity.y + GRAVITY;
 
       for (const tile of PLATFORMS) {
@@ -97,6 +108,19 @@ export const Enemy = function ({
           setAnimationState(AnimationState.IDLE);
           setHurt(false);
         }, 500);
+      } else if (
+        shouldAttack &&
+        animationState !== AnimationState.HURT &&
+        animationState !== AnimationState.DEAD
+      ) {
+        setAnimationState(AnimationState.ATTACK);
+        if (!attackingRef.current) {
+          attackingRef.current = true;
+          setTimeout(() => {
+            hurtPlayer();
+            attackingRef.current = false;
+          }, 1000);
+        }
       } else if (newVx !== 0) {
         setAnimationState(AnimationState.RUN);
       } else {

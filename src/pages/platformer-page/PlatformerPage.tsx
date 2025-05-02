@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Player } from "./Player.tsx";
 import { Background } from "./Background.tsx";
 import { PLATFORMS } from "./common.ts";
-import { Enemy, EnemyData } from "./Enemy.tsx";
+import { Enemy, ENEMY_HEIGHT, EnemyData } from "./Enemy.tsx";
 import { v4 as uuid } from "uuid";
 
 export const LEVEL_WIDTH = 3000;
@@ -15,6 +15,10 @@ export const PlatformerPage = () => {
     [uuid()]: { position: { x: 400, y: 400 }, hurt: false, destroyed: false },
   });
   const [playerPosition, setPlayerPosition] = useState({ x: 100, y: 300 });
+  const [playerHealth, setPlayerHealth] = useState<number>(100);
+
+  const reducePlayerHealth = () =>
+    setPlayerHealth(Math.max(playerHealth - 10, 0));
 
   const allDestroyed = Object.entries(enemies).every(
     ([_, data]) => data.destroyed,
@@ -119,6 +123,25 @@ export const PlatformerPage = () => {
             }));
           }}
         />
+        <div
+          style={{
+            position: "absolute",
+            bottom: 100,
+            left: 100,
+            width: "500px",
+            height: "100px",
+            backgroundColor: "red",
+            zIndex: 11,
+          }}
+        >
+          <div
+            style={{
+              width: `${playerHealth}%`,
+              height: "100%",
+              backgroundColor: "limegreen",
+            }}
+          />
+        </div>
         {Object.entries(enemies).map(([enemyId, enemy]) => {
           return (
             <Enemy
@@ -132,6 +155,7 @@ export const PlatformerPage = () => {
               }
               destroyed={enemy.destroyed}
               playerPosition={playerPosition}
+              hurtPlayer={reducePlayerHealth}
             />
           );
         })}
