@@ -46,6 +46,7 @@ Answer:
 // Helper to get table schemas as a string
 function getTableSchemas(db: Database): string {
   const res = db.exec("SELECT name, sql FROM sqlite_master WHERE type='table'");
+  console.log(res)
   if (!res[0]) return "";
   return res[0].values.map((row) => row[0]).join("\n");
 }
