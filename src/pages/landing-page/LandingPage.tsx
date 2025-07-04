@@ -223,8 +223,12 @@ export const ContactForm = () => {
       viewport={{ once: true, amount: 0.3 }}
     >
       <motion.div className="flex flex-row gap-x-4" variants={itemVariants}>
-        <StyledTextField placeholder={"First Name"} />
-        <StyledTextField placeholder={"Last Name"} />
+        <div className="w-1/2">
+          <StyledTextField placeholder={"First Name"} />
+        </div>
+        <div className="w-1/2">
+          <StyledTextField placeholder={"Last Name"} />
+        </div>
       </motion.div>
       <motion.div variants={itemVariants}>
         <StyledTextField placeholder={"Email"} />
