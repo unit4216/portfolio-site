@@ -6,6 +6,66 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import { TextField } from "@mui/material";
 import { motion } from "framer-motion";
 
+// Animation variants for staggered entrance animations
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut"
+    }
+  }
+};
+
+const slideInLeft = {
+  hidden: { opacity: 0, x: -50 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut"
+    }
+  }
+};
+
+const slideInRight = {
+  hidden: { opacity: 0, x: 50 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut"
+    }
+  }
+};
+
 export function MasonryGrid() {
   const items = [
     { id: 1, text: "project1", height: "h-48", img: null },
@@ -21,9 +81,22 @@ export function MasonryGrid() {
   ];
 
   return (
-    <div className="columns-2 gap-4 p-4">
-      {items.map((item) => (
-        <a href={item.url} target="_blank" className="block mb-4">
+    <motion.div 
+      className="columns-2 gap-4 p-4"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+    >
+      {items.map((item, index) => (
+        <motion.a 
+          href={item.url} 
+          target="_blank" 
+          className="block mb-4"
+          variants={itemVariants}
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
+        >
           <motion.div
             className={`relative group break-inside-avoid rounded-lg overflow-hidden shadow-md border-none ${item.height}`}
             whileHover={{ scale: 1.03 }}
@@ -44,9 +117,9 @@ export function MasonryGrid() {
               </motion.div>
             </div>
           </motion.div>
-        </a>
+        </motion.a>
       ))}
-    </div>
+    </motion.div>
   );
 }
 
@@ -58,28 +131,48 @@ const ResumeAccordion = () => {
   ];
 
   return (
-    <div>
-      {EXPERIENCES.map((experience) => (
-        <Accordion
-          className="!bg-transparent !shadow-none border-b-[1px] border-[#282828] !rounded-none"
-          sx={{ "&::before": { display: "none" } }}
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+    >
+      {EXPERIENCES.map((experience, index) => (
+        <motion.div
+          key={index}
+          variants={itemVariants}
+          whileHover={{ x: 10 }}
+          transition={{ duration: 0.2 }}
         >
-          <AccordionSummary
-            expandIcon={<KeyboardArrowDown className="text-[#282828]" />}
+          <Accordion
+            className="!bg-transparent !shadow-none border-b-[1px] border-[#282828] !rounded-none"
+            sx={{ "&::before": { display: "none" } }}
           >
-            <div className="text-[30px]">{experience.title}</div>
-          </AccordionSummary>
-          <AccordionDetails>
-            <div className="text-[20px]">{experience.description}</div>
-          </AccordionDetails>
-        </Accordion>
+            <AccordionSummary
+              expandIcon={<KeyboardArrowDown className="text-[#282828]" />}
+            >
+              <div className="text-[30px]">{experience.title}</div>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div className="text-[20px]">{experience.description}</div>
+            </AccordionDetails>
+          </Accordion>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 };
 
 const CustomHR = () => {
-  return <hr className="border-t-[1px] text-[#282828] border-[#282828]" />;
+  return (
+    <motion.hr 
+      className="border-t-[1px] text-[#282828] border-[#282828]"
+      initial={{ scaleX: 0 }}
+      whileInView={{ scaleX: 1 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      viewport={{ once: true }}
+    />
+  );
 };
 
 const StyledTextField = ({
@@ -90,43 +183,68 @@ const StyledTextField = ({
   placeholder: string;
 }) => {
   return (
-    <TextField
-      rows={rows}
-      multiline
-      fullWidth
-      placeholder={placeholder}
-      sx={{
-        "& .MuiOutlinedInput-root": {
-          borderRadius: 0,
-          "& fieldset": {
-            borderWidth: "2px",
-            borderColor: "#282828",
+    <motion.div
+      whileHover={{ scale: 1.01 }}
+      transition={{ duration: 0.2 }}
+    >
+      <TextField
+        rows={rows}
+        multiline
+        fullWidth
+        placeholder={placeholder}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            borderRadius: 0,
+            "& fieldset": {
+              borderWidth: "2px",
+              borderColor: "#282828",
+            },
+            "&:hover fieldset": {
+              borderColor: "#282828",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#282828",
+            },
           },
-          "&:hover fieldset": {
-            borderColor: "#282828",
-          },
-          "&.Mui-focused fieldset": {
-            borderColor: "#282828",
-          },
-        },
-      }}
-    />
+        }}
+      />
+    </motion.div>
   );
 };
 
 export const ContactForm = () => {
   return (
-    <div className="flex flex-col gap-y-4">
-      <div className="flex flex-row gap-x-4">
+    <motion.div 
+      className="flex flex-col gap-y-4"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+    >
+      <motion.div className="flex flex-row gap-x-4" variants={itemVariants}>
         <StyledTextField placeholder={"First Name"} />
         <StyledTextField placeholder={"Last Name"} />
-      </div>
-      <StyledTextField placeholder={"Email"} />
-      <StyledTextField placeholder={"Enter message"} rows={5} />
-      <button className="rounded-none border-[2px] border-[#282828] w-22 h-9">
+      </motion.div>
+      <motion.div variants={itemVariants}>
+        <StyledTextField placeholder={"Email"} />
+      </motion.div>
+      <motion.div variants={itemVariants}>
+        <StyledTextField placeholder={"Enter message"} rows={5} />
+      </motion.div>
+      <motion.button 
+        className="rounded-none border-[2px] border-[#282828] w-22 h-9"
+        variants={itemVariants}
+        whileHover={{ 
+          scale: 1.05,
+          backgroundColor: "#282828",
+          color: "#F5F5F5"
+        }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.2 }}
+      >
         Send
-      </button>
-    </div>
+      </motion.button>
+    </motion.div>
   );
 };
 
@@ -148,91 +266,220 @@ export const LandingPage = () => {
       className="text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5]"
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
-      <div className="fixed z-50 top-0 left-0 w-full bg-[#F5F5F5] px-40 py-4">
+      <motion.div 
+        className="fixed z-50 top-0 left-0 w-full bg-[#F5F5F5] px-40 py-4"
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className="flex flex-row justify-end gap-x-10 text-[25px]">
-          {sections.map((section) => {
-            return <button onClick={() => scrollTo(section)}>{section}</button>;
+          {sections.map((section, index) => {
+            return (
+              <motion.button 
+                key={section}
+                onClick={() => scrollTo(section)}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {section}
+              </motion.button>
+            );
           })}
         </div>
-      </div>
+      </motion.div>
+      
       <section className="h-screen">
-        <div className="text-[200px] w-1/3">pablo</div>
-        <div className="text-[200px] w-2/3 text-right">paliza</div>
-        <div className="text-[200px] w-full flex flex-row justify-between items-center">
-          <div className="text-[25px]">*Full stack software engineer</div>
+        <motion.div 
+          className="text-[200px] w-1/3"
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        >
+          pablo
+        </motion.div>
+        <motion.div 
+          className="text-[200px] w-2/3 text-right"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+        >
+          paliza
+        </motion.div>
+        <motion.div 
+          className="text-[200px] w-full flex flex-row justify-between items-center"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
+        >
+          <motion.div 
+            className="text-[25px]"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          >
+            *Full stack software engineer
+          </motion.div>
 
-          <div>carre*</div>
-        </div>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          >
+            carre*
+          </motion.div>
+        </motion.div>
       </section>
+      
       <section className=" scroll-mt-16" id={"Work"}>
-        <div className="text-[45px] mt-44">Projects</div>
+        <motion.div 
+          className="text-[45px] mt-44"
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          Projects
+        </motion.div>
         <CustomHR />
         <div className="mt-10">
           <MasonryGrid />
         </div>
       </section>
+      
       <section className="scroll-mt-16" id={"About"}>
-        <div className="text-[45px] mt-44">About Me</div>
+        <motion.div 
+          className="text-[45px] mt-44"
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          About Me
+        </motion.div>
         <CustomHR />
         <div className="mt-24" />
         <div className="flex flex-row">
-          <div className="w-1/2 text-[30px]">
+          <motion.div 
+            className="w-1/2 text-[30px]"
+            variants={slideInLeft}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             I'm a full-stack software developer with five years of experience
             designing solutions for problems.
-          </div>
-          <div className="w-1/2">
+          </motion.div>
+          <motion.div 
+            className="w-1/2"
+            variants={slideInRight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <ResumeAccordion />
-          </div>
+          </motion.div>
         </div>
-        <div className="flex flex-row mt-44 justify-center gap-x-4 items-center">
+        <motion.div 
+          className="flex flex-row mt-44 justify-center gap-x-4 items-center"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+        >
           {SKILLS.map((skill, index) => {
             return (
-              <>
+              <motion.div
+                key={skill}
+                variants={itemVariants}
+                whileHover={{ scale: 1.1, y: -5 }}
+                transition={{ duration: 0.2 }}
+              >
                 <div className="text-[24px]">{skill}</div>
                 {index < SKILLS.length - 1 && (
-                  <Circle className="text-[#282828]" sx={{ fontSize: "6px" }} />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
+                  >
+                    <Circle className="text-[#282828]" sx={{ fontSize: "6px" }} />
+                  </motion.div>
                 )}
-              </>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </section>
+      
       <section className="scroll-mt-16" id={"Contact"}>
-        <div className="text-[45px] mt-44">Contact</div>
+        <motion.div 
+          className="text-[45px] mt-44"
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          Contact
+        </motion.div>
         <CustomHR />
         <div className="mt-24" />
         <div className="flex flex-row mb-32">
-          <div className="w-1/2 text-[30px]">
+          <motion.div 
+            className="w-1/2 text-[30px]"
+            variants={slideInLeft}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             If you're interested in hiring me, please reach out.
-          </div>
-          <div className="w-1/2">
+          </motion.div>
+          <motion.div 
+            className="w-1/2"
+            variants={slideInRight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             <ContactForm />
-          </div>
+          </motion.div>
         </div>
       </section>
+      
       <CustomHR />
       <div className="mt-10" />
-      <div className="flex flex-row items-center justify-between">
+      <motion.div 
+        className="flex flex-row items-center justify-between"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
         <div className={"text-[#6B7280] text-[14px]"}>
           &copy; 2025 Pablo Paliza. All rights reserved.
         </div>
         <div className="flex flex-row items-center gap-x-2">
-          <a
+          <motion.a
             href="https://www.linkedin.com/in/pablo-paliza-carre-029676134/"
             target="_blank"
             rel="noopener noreferrer"
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.2 }}
           >
             <img src={"./src/assets/linkedin-icon.png"} className="h-6" />
-          </a>
-          <a
+          </motion.a>
+          <motion.a
             href="https://www.github.com/unit4216"
             target="_blank"
             rel="noopener noreferrer"
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.2 }}
           >
             <img src={"./src/assets/github-icon.png"} className="h-6" />
-          </a>
+          </motion.a>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
