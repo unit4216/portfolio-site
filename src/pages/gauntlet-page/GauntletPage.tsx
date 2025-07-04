@@ -314,7 +314,7 @@ export const GauntletPage = function () {
 
                 <motion.button
                   onClick={submitAnswer}
-                  className="relative flex-1 h-14 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="relative flex-1 h-14 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
                   disabled={scoreTooLow}
                   whileHover={{ scale: scoreTooLow ? 1 : 1.02 }}
                   whileTap={{ scale: scoreTooLow ? 1 : 0.98 }}
@@ -324,11 +324,11 @@ export const GauntletPage = function () {
                     value={progress}
                                           sx={{
                         height: 56,
-                        borderRadius: "16px",
+                        borderRadius: "24px",
                         backgroundColor: scoreTooLow ? "#e2e8f0" : "#dbeafe",
                         "& .MuiLinearProgress-bar": {
                           backgroundColor: scoreTooLow ? "#94a3b8" : "#3b82f6",
-                          borderRadius: "16px",
+                          borderRadius: "24px",
                         },
                       }}
                   />
