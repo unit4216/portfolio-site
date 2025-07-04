@@ -2,21 +2,49 @@ import React, { useEffect, useRef, useState } from "react";
 // @ts-ignore
 import initSqlJs, { Database } from "sql.js";
 
-// Placeholder LLM functions
-async function askLLMForSQL(question: string, schemas: string): Promise<string> {
-  // In production, call your LLM API here
-  // For now, return a canned SQL query for demo
-  if (question.toLowerCase().includes("most sales")) {
-    return "SELECT e.name, COUNT(*) as sales_count FROM employees e JOIN sales s ON e.id = s.employee_id GROUP BY e.id ORDER BY sales_count DESC LIMIT 1;";
-  }
-  return "SELECT * FROM cars LIMIT 3;";
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
+
+// Helper to call Gemini API for text generation
+async function callGemini(prompt: string): Promise<string> {
+  const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + GEMINI_API_KEY;
+  const body = {
+    contents: [{ parts: [{ text: prompt }] }]
+  };
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error("Gemini API error");
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response from Gemini.";
 }
 
+// LLM: Generate SQL from question and schema
+async function askLLMForSQL(question: string, schemas: string): Promise<string> {
+  const prompt = `
+You are an expert SQL assistant. Given the following database schema:
+${schemas}
+
+Write a single SQLite SQL query (no explanation, just the SQL) to answer this question:
+"${question}"
+  `.trim();
+  const sql = await callGemini(prompt);
+  // Extract just the SQL (strip markdown, etc)
+  return sql.replace(/```sql|```/g, "").trim();
+}
+
+// LLM: Summarize SQL results
 async function summarizeResults(question: string, results: any[]): Promise<string> {
-  // In production, call your LLM API here
-  // For now, return a canned summary
-  if (results.length === 0) return "No results found.";
-  return `Here are the results: ${JSON.stringify(results)}`;
+  const prompt = `
+You are a helpful assistant. Given the user's question and the SQL query results, write a concise, clear answer for the user.
+
+Question: ${question}
+Results: ${JSON.stringify(results)}
+
+Answer:
+  `.trim();
+  return await callGemini(prompt);
 }
 
 // Helper to get table schemas as a string
@@ -36,7 +64,8 @@ export default function DataChatPage() {
   // Initialize the database with car dealership data
   useEffect(() => {
     (async () => {
-      const SQL = await initSqlJs({});
+      const SQL = await initSqlJs({  locateFile: file => `https://sql.js.org/dist/${file}`
+      });
       const db = new SQL.Database();
       // Create tables
       db.run(`
