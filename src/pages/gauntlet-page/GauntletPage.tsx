@@ -270,11 +270,11 @@ export const GauntletPage = function () {
               </motion.div>
 
               {/* Letter Grid */}
-              <div className="grid grid-cols-3 gap-3 w-full max-w-xl mx-auto">
+              <div className="grid grid-cols-3 gap-2 w-full max-w-lg mx-auto">
                 {letters.map((letter, index) => (
                   <motion.button
                     key={index}
-                    className="relative aspect-square rounded-2xl text-2xl font-medium transition-all duration-200 hover:shadow-lg"
+                    className="relative aspect-square rounded-xl text-xl font-medium transition-all duration-200 hover:shadow-lg"
                     onClick={() => setSequence(sequence + letter)}
                     animate={{
                       scale: activeKeys.includes(letter.toLowerCase()) ? 1.05 : 1,
@@ -294,7 +294,7 @@ export const GauntletPage = function () {
                     }}
                   >
                     <span className="text-slate-800">{letter}</span>
-                    <span className="absolute bottom-2 right-2 text-xs font-medium text-slate-500">
+                    <span className="absolute bottom-1 right-1 text-xs font-medium text-slate-500">
                       {LETTER_POINTS[letter]}
                     </span>
                   </motion.button>
