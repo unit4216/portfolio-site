@@ -317,14 +317,12 @@ export const LandingPage = () => {
         >
           <motion.div 
             className="text-[25px]"
-            whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >
             *Full stack software engineer
           </motion.div>
 
           <motion.div
-            whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           >
             carre*
