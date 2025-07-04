@@ -200,44 +200,72 @@ const WaveformViewer = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Get device pixel ratio for crisp rendering
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    
+    // Set canvas size accounting for device pixel ratio
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    
+    // Scale the context to match the device pixel ratio
+    ctx.scale(dpr, dpr);
+    
+    // Set canvas display size
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+
     // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, rect.width, rect.height);
 
     // Get audio data
     const channelData = audioBuffer.getChannelData(0);
     const samples = channelData.length;
-    const step = Math.ceil(samples / canvas.width);
-    const amp = canvas.height / 2;
+    const canvasWidth = rect.width;
+    const canvasHeight = rect.height;
+    
+    // Improved sampling for better resolution
+    const step = samples / canvasWidth;
+    const amp = canvasHeight / 2;
 
     // Draw background
     ctx.fillStyle = '#1a1a1a';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
     // Draw grid
     ctx.strokeStyle = '#333333';
     ctx.lineWidth = 1;
-    for (let i = 0; i < canvas.width; i += 20) {
+    for (let i = 0; i < canvasWidth; i += 20) {
       ctx.beginPath();
       ctx.moveTo(i, 0);
-      ctx.lineTo(i, canvas.height);
+      ctx.lineTo(i, canvasHeight);
       ctx.stroke();
     }
-    for (let i = 0; i < canvas.height; i += 20) {
+    for (let i = 0; i < canvasHeight; i += 20) {
       ctx.beginPath();
       ctx.moveTo(0, i);
-      ctx.lineTo(canvas.width, i);
+      ctx.lineTo(canvasWidth, i);
       ctx.stroke();
     }
 
-    // Draw waveform
+    // Draw waveform with improved resolution
     ctx.beginPath();
     ctx.strokeStyle = '#00ff88';
     ctx.lineWidth = 2;
 
-    for (let i = 0; i < canvas.width; i++) {
-      const dataIndex = step * i;
+    for (let i = 0; i < canvasWidth; i++) {
+      const dataIndex = Math.floor(i * step);
       const x = i;
-      const y = (channelData[dataIndex] || 0) * amp + amp;
+      
+      // Average multiple samples for smoother waveform
+      let sum = 0;
+      const samplesToAverage = Math.max(1, Math.floor(step));
+      for (let j = 0; j < samplesToAverage && dataIndex + j < samples; j++) {
+        sum += channelData[dataIndex + j] || 0;
+      }
+      const average = sum / samplesToAverage;
+      
+      const y = average * amp + amp;
       ctx.lineTo(x, y);
     }
 
@@ -245,12 +273,12 @@ const WaveformViewer = ({
 
     // Draw progress line
     if (isPlaying && duration > 0) {
-      const progressX = (currentTime / duration) * canvas.width;
+      const progressX = (currentTime / duration) * canvasWidth;
       ctx.beginPath();
       ctx.strokeStyle = '#ff4444';
       ctx.lineWidth = 3;
       ctx.moveTo(progressX, 0);
-      ctx.lineTo(progressX, canvas.height);
+      ctx.lineTo(progressX, canvasHeight);
       ctx.stroke();
     }
   }, [audioBuffer, isPlaying, currentTime, duration]);
@@ -267,8 +295,6 @@ const WaveformViewer = ({
       </div>
       <canvas
         ref={canvasRef}
-        width={800}
-        height={200}
         className="w-full h-32 border border-gray-600 rounded bg-gray-900"
       />
     </div>
