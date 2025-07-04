@@ -283,14 +283,13 @@ export const GauntletPage = function () {
                         : "#fef3c7",
                     }}
                     whileHover={{ 
-                      scale: 1.02,
+                      scale: 1.05,
                       backgroundColor: "#fde68a"
                     }}
                     whileTap={{ scale: 0.98 }}
                     transition={{
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 25,
+                      duration: 0.1,
+                      ease: "easeOut"
                     }}
                   >
                     <span className="text-slate-800">{letter}</span>
