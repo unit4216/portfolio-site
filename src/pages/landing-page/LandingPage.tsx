@@ -8,6 +8,7 @@ import { TextField } from "@mui/material";
 import { motion } from "framer-motion";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import CheckIcon from "@mui/icons-material/Check";
 
 // Animation variants for staggered entrance animations
 const containerVariants = {
@@ -306,7 +307,7 @@ function ContactSection() {
             alt="Profile"
             className="h-32 w-32 object-cover rounded-xl shadow-lg"
             style={{ imageRendering: "pixelated" }}
-            whileHover={{ scale: 1.06, rotate: -2 }}
+            whileHover={{ scale: 1.06 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             variants={fadeSlide}
             initial="hidden"
@@ -332,11 +333,12 @@ function ContactSection() {
                   className="hover:text-blue-400 transition"
                   title="Copy email"
                 >
-                  <ContentCopyIcon fontSize="small" />
+                  {copied ? (
+                    <CheckIcon fontSize="small" className="text-black" />
+                  ) : (
+                    <ContentCopyIcon fontSize="small" />
+                  )}
                 </button>
-                {copied && (
-                  <span className="text-xs text-gray-500 ml-2">Copied!</span>
-                )}
               </div>
               {/* Animated HR */}
               <motion.hr
