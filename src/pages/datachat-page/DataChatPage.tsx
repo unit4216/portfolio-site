@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-// @ts-ignore
 import initSqlJs, { Database } from "sql.js";
 import { GoogleGenAI } from "@google/genai";
 
