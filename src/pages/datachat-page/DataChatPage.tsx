@@ -3,6 +3,7 @@ import initSqlJs, { Database } from "sql.js";
 import { GoogleGenAI } from "@google/genai";
 import { initializeDatabase } from "./databaseData";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
 
@@ -239,7 +240,7 @@ export default function DataChatPage() {
                     ? "bg-blue-100 text-blue-900 px-4 py-2 rounded-lg shadow"
                     : "bg-gray-100 text-gray-800 px-4 py-2 rounded-lg shadow"
                 }>
-                  <ReactMarkdown>{msg.text}</ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text}</ReactMarkdown>
                 </div>
               </div>
             ))}
