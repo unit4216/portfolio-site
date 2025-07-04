@@ -105,6 +105,7 @@ export default function DataChatPage() {
   async function handleSend() {
     if (!input.trim() || !db) return;
     setMessages((msgs) => [...msgs, { role: "user", text: input }]);
+    setInput(""); // Clear input immediately
     setLoading(true);
     const schemas = getTableSchemas(db);
     // 1. Ask LLM for SQL
@@ -120,14 +121,12 @@ export default function DataChatPage() {
     } catch (e) {
       setMessages((msgs) => [...msgs, { role: "bot", text: `SQL Error: ${String(e)}` }]);
       setLoading(false);
-      setInput("");
       return;
     }
     // 3. Summarize results
     const summary = await summarizeResults(input, results);
     setMessages((msgs) => [...msgs, { role: "bot", text: summary }]);
     setLoading(false);
-    setInput("");
   }
 
   return (
