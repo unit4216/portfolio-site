@@ -106,8 +106,8 @@ export default function DataChatPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-100 flex flex-col items-center py-12">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl p-8 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-100 flex flex-col items-center py-12 w-screen px-10">
+      <div className="bg-white rounded-xl shadow-xl w-full p-8 flex flex-col">
         <h1 className="text-3xl font-bold mb-2 text-blue-700">DataChat</h1>
         <p className="mb-6 text-gray-600">Ask questions about the car dealership database. (e.g. "Who made the most sales?" or "List all cars sold in 2023.")</p>
         <div className="flex-1 overflow-y-auto mb-4 max-h-[400px]">
@@ -128,7 +128,7 @@ export default function DataChatPage() {
         </div>
         <div className="flex gap-2 mt-2">
           <input
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-900"
             placeholder="Type your question..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
