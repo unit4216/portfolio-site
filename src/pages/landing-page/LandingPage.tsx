@@ -317,7 +317,7 @@ function ContactSection() {
           />
 
           {/* Contact Info */}
-          <div className="flex flex-col gap-6 flex-1">
+          <div className="flex flex-col gap-2 flex-1">
             {/* Email */}
             <motion.div
               variants={fadeSlide}
@@ -342,7 +342,7 @@ function ContactSection() {
               </div>
               {/* Animated HR */}
               <motion.hr
-                className="border-t border-gray-300 my-4"
+                className="border-t border-gray-300 my-2"
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
