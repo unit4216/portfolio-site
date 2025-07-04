@@ -306,9 +306,25 @@ export const GauntletPage = function () {
               </div>
 
               {/* Attempts Counter */}
-              <div className="text-center">
-                <div className="text-sm text-slate-500">
-                  Attempts: <span className="font-medium text-slate-700">{attempts}/3</span>
+              <div className="text-center space-y-2">
+                <div className="text-sm text-slate-500 mb-2">Attempts</div>
+                <div className="flex justify-center space-x-2">
+                  {[1, 2, 3].map((attemptNumber) => (
+                    <motion.div
+                      key={attemptNumber}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: attemptNumber * 0.1 }}
+                    >
+                      <Circle
+                        className={`w-4 h-4 transition-colors duration-300 ${
+                          attemptNumber <= attempts 
+                            ? "text-green-500 fill-current" 
+                            : "text-red-400 fill-current"
+                        }`}
+                      />
+                    </motion.div>
+                  ))}
                 </div>
               </div>
 
