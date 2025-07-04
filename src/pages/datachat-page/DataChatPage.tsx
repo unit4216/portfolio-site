@@ -27,7 +27,7 @@ Write a single SQLite SQL query (no explanation, just the SQL) to answer this qu
   `.trim();
   const sql = await callGemini(prompt);
   // Extract just the SQL (strip markdown, etc)
-  return sql.replace(/```sql|```/g, "").trim();
+  return sql.replace(/```sqlite|```sql|```/g, "").trim();
 }
 
 // LLM: Summarize SQL results
