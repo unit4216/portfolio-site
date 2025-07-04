@@ -1,3 +1,4 @@
+import React from "react";
 import "../../App.css";
 import { Circle, KeyboardArrowDown, OpenInNew } from "@mui/icons-material";
 import Accordion from "@mui/material/Accordion";
@@ -387,27 +388,27 @@ export const LandingPage = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
         >
-          {SKILLS.map((skill, index) => {
-            return (
+          {SKILLS.map((skill, index) => (
+            <React.Fragment key={skill}>
               <motion.div
-                key={skill}
+                className="text-[24px]"
                 variants={itemVariants}
                 whileHover={{ scale: 1.1, y: -5 }}
                 transition={{ duration: 0.2 }}
               >
-                <div className="text-[24px]">{skill}</div>
-                {index < SKILLS.length - 1 && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-                  >
-                    <Circle className="text-[#282828]" sx={{ fontSize: "6px" }} />
-                  </motion.div>
-                )}
+                {skill}
               </motion.div>
-            );
-          })}
+              {index < SKILLS.length - 1 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
+                >
+                  <Circle className="text-[#282828]" sx={{ fontSize: "6px" }} />
+                </motion.div>
+              )}
+            </React.Fragment>
+          ))}
         </motion.div>
       </section>
       
