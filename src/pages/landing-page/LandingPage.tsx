@@ -6,6 +6,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { TextField } from "@mui/material";
 import { motion } from "framer-motion";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 // Animation variants for staggered entrance animations
 const containerVariants = {
@@ -261,6 +263,73 @@ const scrollTo = (id: string) => {
   }
 };
 
+function ContactSection() {
+  const email = "pf.paliza@gmail.com";
+  const linkedin = "https://www.linkedin.com/in/pablo-paliza-carre-029676134/";
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1200);
+  };
+
+  return (
+    <div className="flex flex-row items-start gap-12 mx-auto w-full mb-32">
+      {/* Left Text */}
+      <div className="w-1/2 flex text-[30px]">
+        If you're interested in hiring me, please reach out.
+      </div>
+      {/* Contact Card */}
+      <div className="w-1/2 flex items-center">
+        <div className="flex items-center gap-8 w-1/2">
+          {/* Profile Image */}
+          <img
+            src="./src/assets/linked-pic-pxl-20.png"
+            alt="Profile"
+            className="h-32 w-32 object-cover rounded-xl shadow-lg"
+            style={{ imageRendering: "pixelated" }}
+          />
+
+          {/* Contact Info */}
+          <div className="flex flex-col gap-6 flex-1">
+            {/* Email */}
+            <div>
+              <div className="flex items-center gap-2 text-lg text-gray-800">
+                <span>{email}</span>
+                <button
+                  onClick={handleCopy}
+                  className="hover:text-blue-400 transition"
+                  title="Copy email"
+                >
+                  <ContentCopyIcon fontSize="small" />
+                </button>
+                {copied && (
+                  <span className="text-xs text-green-500 ml-2">Copied!</span>
+                )}
+              </div>
+              <div className="border-t border-gray-300 my-4" />
+            </div>
+
+            {/* LinkedIn */}
+            <div>
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-lg text-gray-800 font-semibold hover:text-blue-400 transition"
+              >
+                LinkedIn
+                <OpenInNewIcon fontSize="small" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export const LandingPage = () => {
   const sections = ["Work", "About", "Contact"];
   const SKILLS = ["TypeScript", "React", "Tailwind", "Google Cloud"];
@@ -442,26 +511,7 @@ export const LandingPage = () => {
         </motion.div>
         <CustomHR />
         <div className="mt-24" />
-        <div className="flex flex-row mb-32">
-          <motion.div 
-            className="w-1/2 text-[30px]"
-            variants={slideInLeft}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            If you're interested in hiring me, please reach out.
-          </motion.div>
-          <motion.div 
-            className="w-1/2"
-            variants={slideInRight}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <ContactForm />
-          </motion.div>
-        </div>
+        <ContactSection />
       </section>
       
       <CustomHR />
