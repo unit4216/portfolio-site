@@ -568,7 +568,7 @@ export const SamplerPage = function () {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-200 p-8"
+      className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-200 p-8 w-screen"
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
       {/* VST Header */}
