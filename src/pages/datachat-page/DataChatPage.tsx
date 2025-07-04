@@ -10,7 +10,7 @@ const gemini = new GoogleGenAI({apiKey: GEMINI_API_KEY});
 async function callGemini(prompt: string): Promise<string> {
     const response = await gemini.models.generateContent({
         model: 'gemini-2.0-flash-001',
-        contents: 'Why is the sky blue?',
+        contents: prompt,
       });
 
   return response.text || "No response from Gemini.";
