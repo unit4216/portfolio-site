@@ -23,6 +23,81 @@ const SAMPLES = [
   { src: openHat, key: "f" },
 ];
 
+// Waveform Viewer Component
+const WaveformViewer = ({ 
+  audioBuffer, 
+  isPlaying, 
+  currentTime, 
+  duration 
+}: { 
+  audioBuffer: AudioBuffer | null;
+  isPlaying: boolean;
+  currentTime: number;
+  duration: number;
+}) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (!canvasRef.current || !audioBuffer) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Get audio data
+    const channelData = audioBuffer.getChannelData(0);
+    const samples = channelData.length;
+    const step = Math.ceil(samples / canvas.width);
+    const amp = canvas.height / 2;
+
+    // Draw waveform
+    ctx.beginPath();
+    ctx.strokeStyle = '#282828';
+    ctx.lineWidth = 2;
+
+    for (let i = 0; i < canvas.width; i++) {
+      const dataIndex = step * i;
+      const x = i;
+      const y = (channelData[dataIndex] || 0) * amp + amp;
+      ctx.lineTo(x, y);
+    }
+
+    ctx.stroke();
+
+    // Draw progress line
+    if (isPlaying && duration > 0) {
+      const progressX = (currentTime / duration) * canvas.width;
+      ctx.beginPath();
+      ctx.strokeStyle = '#ff4444';
+      ctx.lineWidth = 3;
+      ctx.moveTo(progressX, 0);
+      ctx.lineTo(progressX, canvas.height);
+      ctx.stroke();
+    }
+  }, [audioBuffer, isPlaying, currentTime, duration]);
+
+  return (
+    <div className="w-full max-w-2xl bg-white rounded-lg p-4 shadow-md">
+      <h3 className="text-lg font-semibold mb-2">Waveform</h3>
+      <canvas
+        ref={canvasRef}
+        width={800}
+        height={200}
+        className="w-full h-32 border border-gray-300 rounded"
+      />
+      {isPlaying && (
+        <div className="mt-2 text-sm text-gray-600">
+          {Math.floor(currentTime * 1000)}ms / {Math.floor(duration * 1000)}ms
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const Metronome = function ({
   audioContext,
 }: {
@@ -31,7 +106,7 @@ export const Metronome = function ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMetronomeClick, setIsMetronomeClick] = useState(false);
   const [bpm, setBpm] = useState(120);
-  const intervalId = useRef<NodeJS.Timeout | null>(null);
+  const intervalId = useRef<number | null>(null);
   const dragging = useRef(false);
   const startY = useRef(0);
   const startBpm = useRef(120);
@@ -154,6 +229,10 @@ export const SamplerPage = function () {
   const [recordingStartTime, setRecordingStartTime] = useState<number | null>(
     null,
   );
+  const [currentPlayingBuffer, setCurrentPlayingBuffer] = useState<AudioBuffer | null>(null);
+  const [isSoundPlaying, setIsSoundPlaying] = useState(false);
+  const [playbackStartTime, setPlaybackStartTime] = useState<number | null>(null);
+  const [currentPlaybackTime, setCurrentPlaybackTime] = useState(0);
 
   const playSample = (key: string) => {
     if (!audioContext || !samples[key] || !dryGain || !wetGain || !convolver)
@@ -165,6 +244,17 @@ export const SamplerPage = function () {
     source.connect(dryGain);
     source.connect(convolver);
     convolver.connect(wetGain);
+
+    // Track the currently playing sound for waveform display
+    setCurrentPlayingBuffer(samples[key]);
+    setIsSoundPlaying(true);
+    setPlaybackStartTime(audioContext.currentTime);
+    setCurrentPlaybackTime(0);
+
+    source.onended = () => {
+      setIsSoundPlaying(false);
+      setCurrentPlayingBuffer(null);
+    };
 
     source.start(0);
   };
@@ -247,7 +337,27 @@ export const SamplerPage = function () {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [audioContext, dryGain, wetGain, convolver, activeKeys, playSample]);
+  }, [audioContext, dryGain, wetGain, convolver, activeKeys, isSoundPlaying, playbackStartTime]);
+
+  // Update playback time when sound is playing
+  useEffect(() => {
+    if (!isSoundPlaying || !audioContext || playbackStartTime === null) return;
+
+    const updateTime = () => {
+      const elapsed = audioContext.currentTime - playbackStartTime;
+      setCurrentPlaybackTime(elapsed);
+      
+      if (elapsed < (currentPlayingBuffer?.duration || 0)) {
+        requestAnimationFrame(updateTime);
+      } else {
+        setIsSoundPlaying(false);
+        setCurrentPlayingBuffer(null);
+      }
+    };
+
+    const animationId = requestAnimationFrame(updateTime);
+    return () => cancelAnimationFrame(animationId);
+  }, [isSoundPlaying, audioContext, playbackStartTime, currentPlayingBuffer]);
 
   const startRecording = () => {
     setRecordedEvents([]);
@@ -280,6 +390,15 @@ export const SamplerPage = function () {
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
       <Metronome audioContext={audioContext} />
+      
+      {/* Waveform Viewer */}
+      <WaveformViewer
+        audioBuffer={currentPlayingBuffer}
+        isPlaying={isSoundPlaying}
+        currentTime={currentPlaybackTime}
+        duration={currentPlayingBuffer?.duration || 0}
+      />
+      
       <div className="flex flex-col items-center mb-8">
         <label className="mb-2">
           Reverb Mix: {Math.round(reverbMix * 100)}%
