@@ -274,27 +274,57 @@ function ContactSection() {
     setTimeout(() => setCopied(false), 1200);
   };
 
+  // Animation variants for staggered entrance
+  const fadeSlide = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i = 0) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.15, duration: 0.7, ease: "easeOut" },
+    }),
+  };
+
   return (
-    <div className="flex flex-row items-start gap-12 mx-auto w-full mb-32">
+    <div className="flex flex-row items-stretch gap-12 mx-auto w-full mb-32">
       {/* Left Text */}
-      <div className="w-1/2 flex text-[30px]">
+      <motion.div
+        className="w-1/2 flex text-[30px]"
+        variants={fadeSlide}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        custom={0}
+      >
         If you're interested in hiring me, please reach out.
-      </div>
+      </motion.div>
       {/* Contact Card */}
       <div className="w-1/2 flex items-center">
         <div className="flex items-center gap-8 w-1/2">
           {/* Profile Image */}
-          <img
+          <motion.img
             src="./src/assets/linked-pic-pxl-20.png"
             alt="Profile"
             className="h-32 w-32 object-cover rounded-xl shadow-lg"
             style={{ imageRendering: "pixelated" }}
+            whileHover={{ scale: 1.06, rotate: -2 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            variants={fadeSlide}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            custom={1}
           />
 
           {/* Contact Info */}
           <div className="flex flex-col gap-6 flex-1">
             {/* Email */}
-            <div>
+            <motion.div
+              variants={fadeSlide}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              custom={2}
+            >
               <div className="flex items-center gap-2 text-lg text-gray-800">
                 <span>{email}</span>
                 <button
@@ -305,24 +335,54 @@ function ContactSection() {
                   <ContentCopyIcon fontSize="small" />
                 </button>
                 {copied && (
-                  <span className="text-xs text-green-500 ml-2">Copied!</span>
+                  <span className="text-xs text-gray-500 ml-2">Copied!</span>
                 )}
               </div>
-              <div className="border-t border-gray-300 my-4" />
-            </div>
+              {/* Animated HR */}
+              <motion.hr
+                className="border-t border-gray-300 my-4"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                viewport={{ once: true }}
+                style={{ transformOrigin: "left" }}
+              />
+            </motion.div>
 
             {/* LinkedIn */}
-            <div>
-              <a
+            <motion.div
+              variants={fadeSlide}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              custom={3}
+            >
+              <motion.a
                 href={linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-lg text-gray-800 font-semibold hover:text-blue-400 transition"
+                className="flex items-center gap-2 text-lg text-gray-800 font-semibold hover:text-blue-400 transition relative"
+                whileHover="hover"
+                initial="rest"
+                animate="rest"
               >
-                LinkedIn
+                <span
+                  className="relative"
+                  style={{ display: "inline-block" }}
+                >
+                  LinkedIn
+                  <motion.span
+                    className="absolute left-0 -bottom-1 w-full h-0.5 bg-blue-400 origin-left scale-x-0"
+                    variants={{
+                      rest: { scaleX: 0 },
+                      hover: { scaleX: 1 },
+                    }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                  />
+                </span>
                 <OpenInNewIcon fontSize="small" />
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
           </div>
         </div>
       </div>
