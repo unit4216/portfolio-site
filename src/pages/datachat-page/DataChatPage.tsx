@@ -1,23 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 // @ts-ignore
 import initSqlJs, { Database } from "sql.js";
+import { GoogleGenAI } from "@google/genai";
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
 
-// Helper to call Gemini API for text generation
+const gemini = new GoogleGenAI({apiKey: GEMINI_API_KEY});
+
 async function callGemini(prompt: string): Promise<string> {
-  const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + GEMINI_API_KEY;
-  const body = {
-    contents: [{ parts: [{ text: prompt }] }]
-  };
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  });
-  if (!res.ok) throw new Error("Gemini API error");
-  const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response from Gemini.";
+    const response = await gemini.models.generateContent({
+        model: 'gemini-2.0-flash-001',
+        contents: 'Why is the sky blue?',
+      });
+
+  return response.text || "No response from Gemini.";
 }
 
 // LLM: Generate SQL from question and schema
