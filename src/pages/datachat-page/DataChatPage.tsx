@@ -167,21 +167,45 @@ export default function DataChatPage() {
     setInput(""); // Clear input immediately
     setLoading(true);
     const schemas = getTableSchemas(db);
-    // 1. Ask LLM for SQL
-    const sql = await askLLMForSQL(input, schemas);
-    // 2. Execute SQL
+    
+    // Retry SQL generation up to 3 times
+    let sql = "";
     let results: any[] = [];
-    try {
-      const res = db.exec(sql);
-      if (res[0]) {
-        const cols = res[0].columns;
-        results = res[0].values.map((row: any[]) => Object.fromEntries(row.map((v: any, i: number) => [cols[i], v])));
+    let lastError = "";
+    
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        // 1. Ask LLM for SQL
+        sql = await askLLMForSQL(input, schemas);
+        
+        // 2. Execute SQL
+        const res = db.exec(sql);
+        if (res[0]) {
+          const cols = res[0].columns;
+          results = res[0].values.map((row: any[]) => Object.fromEntries(row.map((v: any, i: number) => [cols[i], v])));
+        }
+        
+        // If we get here, SQL executed successfully
+        break;
+        
+      } catch (e) {
+        lastError = String(e);
+        
+        // If this is the last attempt, show the error
+        if (attempt === 3) {
+          setMessages((msgs) => [...msgs, { 
+            role: "bot", 
+            text: `Failed to generate valid SQL after 3 attempts. Last error: ${lastError}` 
+          }]);
+          setLoading(false);
+          return;
+        }
+        
+        // For debugging, you could log the failed SQL here
+        console.log(`SQL attempt ${attempt} failed:`, sql);
       }
-    } catch (e) {
-      setMessages((msgs) => [...msgs, { role: "bot", text: `SQL Error: ${String(e)}` }]);
-      setLoading(false);
-      return;
     }
+    
     // 3. Summarize results
     const summary = await summarizeResults(input, results);
     setMessages((msgs) => [...msgs, { role: "bot", text: summary }]);
