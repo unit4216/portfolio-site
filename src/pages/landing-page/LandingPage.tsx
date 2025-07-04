@@ -425,6 +425,7 @@ export const LandingPage = () => {
             return (
               <motion.button 
                 key={section}
+                className="cursor-pointer"
                 onClick={() => scrollTo(section)}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
