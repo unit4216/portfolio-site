@@ -20,7 +20,9 @@ async function callGemini(prompt: string): Promise<string> {
 async function askLLMForSQL(question: string, schemas: string): Promise<string> {
   const prompt = `
 You are an expert SQL assistant. Given the following database schema:
+<Schemas>
 ${schemas}
+</Schemas>
 
 Write a single SQLite SQL query (no explanation, just the SQL) to answer this question:
 "${question}"
