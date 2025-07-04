@@ -64,7 +64,7 @@ const getWordScore = (word: string) => {
 };
 
 const getAnswerList = (letters: string[], round: number) => {
-  const wordList: string[] = dictionary.replaceAll("\r", "").split("\n");
+  const wordList: string[] = dictionary.replace(/\r/g, "").split("\n");
   const validWords = wordList.filter((word) => word.length > 2);
 
   const validAnswers = validWords.filter((word) => {
@@ -191,7 +191,7 @@ export const GauntletPage = function () {
 
   return (
     <div
-      className="text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5] h-full"
+      className="min-h-screen w-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800"
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
       <Snackbar
@@ -204,90 +204,161 @@ export const GauntletPage = function () {
           {showAlert?.text}
         </Alert>
       </Snackbar>
-      <div className="flex flex-row justify-center">
-        <div className="flex flex-col gap-y-4">
-          <div className="text-4xl text-center">gauntlet</div>
-          {won && <div>You won!</div>}
+      
+      <div className="w-full px-6 py-12">
+        <div className="text-center space-y-8 w-full">
+          {/* Header */}
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-2"
+          >
+            <h1 className="text-5xl font-light tracking-tight text-slate-900">
+              gauntlet
+            </h1>
+            <p className="text-slate-600 text-lg font-light">
+              Form words from the letters below
+            </p>
+          </motion.div>
+
+          {/* Win State */}
+          {won && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center space-y-4"
+            >
+              <div className="text-4xl font-light text-emerald-600">You won!</div>
+              <p className="text-slate-600">Congratulations on completing the gauntlet!</p>
+            </motion.div>
+          )}
+
           {!won && (
-            <>
-              <div className="flex flex-row justify-between">
-                {[0, 1, 2, 3, 4].map((roundNumber) => {
-                  return (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="space-y-8"
+            >
+              {/* Progress Indicators */}
+              <div className="flex justify-center space-x-3">
+                {[0, 1, 2, 3, 4].map((roundNumber) => (
+                  <motion.div
+                    key={roundNumber}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: roundNumber * 0.1 }}
+                  >
                     <Circle
-                      className={`${roundNumber <= round ? "text-blue-400" : "text-gray-200"}`}
+                      className={`w-6 h-6 transition-colors duration-300 ${
+                        roundNumber <= round 
+                          ? "text-blue-500 fill-current" 
+                          : "text-slate-300"
+                      }`}
                     />
-                  );
-                })}
-              </div>
-              <div className="flex flex-row justify-between">
-                <div className="text-4xl">{sequence}</div>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {letters.map((letter) => {
-                  return (
-                    <motion.button
-                      className="relative rounded-lg px-10 py-8 text-4xl"
-                      // todo make buttons expand on click as well
-                      onClick={() => setSequence(sequence + letter)}
-                      animate={{
-                        scale: activeKeys.includes(letter.toLowerCase())
-                          ? 1.1
-                          : 1,
-                        backgroundColor: activeKeys.includes(
-                          letter.toLowerCase(),
-                        )
-                          ? "#ffd230"
-                          : "#fee685",
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 20,
-                        backgroundColor: { duration: 0.2 },
-                      }}
-                    >
-                      {letter}
-                      <span className="absolute bottom-2 right-2 text-xs">
-                        {LETTER_POINTS[letter]}
-                      </span>
-                    </motion.button>
-                  );
-                })}
+                  </motion.div>
+                ))}
               </div>
 
-              <div className="flex flex-row gap-4 items-center mt-4">
-                <button
-                  className="rounded-full"
+              {/* Current Word Display */}
+              <motion.div 
+                className="min-h-[4rem] flex items-center justify-center"
+                layout
+              >
+                <div className="text-6xl font-light tracking-wider text-slate-900">
+                  {sequence || "..."}
+                </div>
+              </motion.div>
+
+              {/* Letter Grid */}
+              <div className="grid grid-cols-3 gap-3 w-full max-w-xl mx-auto">
+                {letters.map((letter, index) => (
+                  <motion.button
+                    key={index}
+                    className="relative aspect-square rounded-2xl text-2xl font-medium transition-all duration-200 hover:shadow-lg"
+                    onClick={() => setSequence(sequence + letter)}
+                    animate={{
+                      scale: activeKeys.includes(letter.toLowerCase()) ? 1.05 : 1,
+                      backgroundColor: activeKeys.includes(letter.toLowerCase())
+                        ? "#fbbf24"
+                        : "#fef3c7",
+                    }}
+                    whileHover={{ 
+                      scale: 1.02,
+                      backgroundColor: "#fde68a"
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 25,
+                    }}
+                  >
+                    <span className="text-slate-800">{letter}</span>
+                    <span className="absolute bottom-2 right-2 text-xs font-medium text-slate-500">
+                      {LETTER_POINTS[letter]}
+                    </span>
+                  </motion.button>
+                ))}
+              </div>
+
+              {/* Control Buttons */}
+              <div className="flex items-center gap-4 w-full max-w-2xl mx-auto">
+                <motion.button
+                  className="p-3 rounded-full bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
                   onClick={() => setSequence(sequence.slice(0, -1))}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <Backspace />
-                </button>
-                <button
+                  <Backspace className="text-slate-600" />
+                </motion.button>
+
+                <motion.button
                   onClick={submitAnswer}
-                  className="relative flex-1"
+                  className="relative flex-1 h-14 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
                   disabled={scoreTooLow}
+                  whileHover={{ scale: scoreTooLow ? 1 : 1.02 }}
+                  whileTap={{ scale: scoreTooLow ? 1 : 0.98 }}
                 >
                   <LinearProgress
                     variant="determinate"
                     value={progress}
-                    sx={{
-                      height: 50,
-                      borderRadius: 5,
-                      backgroundColor: scoreTooLow ? "#d1d5db" : "#60a5fa",
-                      "& .MuiLinearProgress-bar": {
-                        backgroundColor: scoreTooLow ? "#9ca3af" : "#3b82f6",
-                      },
-                    }}
+                                          sx={{
+                        height: 56,
+                        borderRadius: "16px",
+                        backgroundColor: scoreTooLow ? "#e2e8f0" : "#dbeafe",
+                        "& .MuiLinearProgress-bar": {
+                          backgroundColor: scoreTooLow ? "#94a3b8" : "#3b82f6",
+                          borderRadius: "16px",
+                        },
+                      }}
                   />
-                  <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white">
-                    Submit
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-white font-medium text-lg">
+                      Submit
+                    </span>
                   </div>
-                </button>
-                <button className="rounded-full" onClick={shuffleSequence}>
-                  <Shuffle />
-                </button>
+                </motion.button>
+
+                <motion.button 
+                  className="p-3 rounded-full bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+                  onClick={shuffleSequence}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Shuffle className="text-slate-600" />
+                </motion.button>
               </div>
-            </>
+
+              {/* Score Indicator */}
+              <div className="text-center space-y-2">
+                <div className="text-sm text-slate-500">
+                  Current Score: <span className="font-medium text-slate-700">{score}</span>
+                </div>
+                <div className="text-sm text-slate-500">
+                  Target: <span className="font-medium text-slate-700">{thresholdScore}</span>
+                </div>
+              </div>
+            </motion.div>
           )}
         </div>
       </div>
