@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../../App.css";
 import { Circle, KeyboardArrowDown, OpenInNew } from "@mui/icons-material";
 import Accordion from "@mui/material/Accordion";
@@ -259,8 +259,18 @@ const scrollTo = (id: string) => {
 
 export const LandingPage = () => {
   const sections = ["Work", "About", "Contact"];
-
   const SKILLS = ["TypeScript", "React", "Tailwind", "Google Cloud"];
+  
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div
@@ -268,7 +278,9 @@ export const LandingPage = () => {
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
       <motion.div 
-        className="fixed z-50 top-0 left-0 w-full bg-[#F5F5F5] px-40 py-4"
+        className={`fixed z-50 top-0 left-0 w-full bg-[#F5F5F5] px-40 py-4 transition-shadow duration-300 ${
+          isScrolled ? 'shadow-sm' : 'shadow-none'
+        }`}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
