@@ -104,10 +104,16 @@ export const GauntletPage = function () {
     text: string;
   } | null>(null);
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
+  const [lastAddedLetter, setLastAddedLetter] = useState<string | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
+      if (letters.includes(event.key)) {
+        setLastAddedLetter(key);
+        // Clear the animation after a short delay
+        setTimeout(() => setLastAddedLetter(null), 150);
+      }
       setActiveKeys((prev) => {
         if (!prev.includes(key)) return [...prev, key];
         return prev;
@@ -126,7 +132,7 @@ export const GauntletPage = function () {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [activeKeys]);
+  }, [activeKeys, letters]);
 
   function shuffleSequence() {
     const lettersRef = [...letters];
@@ -277,9 +283,9 @@ export const GauntletPage = function () {
                     className="relative aspect-square rounded-xl text-xl font-medium transition-all duration-200 hover:shadow-lg"
                     onClick={() => setSequence(sequence + letter)}
                     animate={{
-                      scale: activeKeys.includes(letter.toLowerCase()) ? 1.05 : 1,
-                      backgroundColor: activeKeys.includes(letter.toLowerCase())
-                        ? "#fbbf24"
+                      scale: (activeKeys.includes(letter.toLowerCase()) || lastAddedLetter === letter.toLowerCase()) ? 1.05 : 1,
+                      backgroundColor: (activeKeys.includes(letter.toLowerCase()) || lastAddedLetter === letter.toLowerCase())
+                        ? "#fde68a"
                         : "#fef3c7",
                     }}
                     whileHover={{ 
