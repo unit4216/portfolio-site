@@ -4,6 +4,8 @@ import dictionary from "../../assets/12dicts-6.0.2/American/2of12.txt?raw";
 import { Alert, LinearProgress, Snackbar } from "@mui/material";
 import { motion } from "framer-motion";
 
+const MAX_WORD_LENGTH = 20;
+
 const LETTER_POINTS: Record<string, number> = {
   a: 1,
   b: 2,
@@ -109,7 +111,7 @@ export const GauntletPage = function () {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
-      if (letters.includes(event.key)) {
+      if (letters.includes(event.key) && sequence.length < MAX_WORD_LENGTH) {
         setLastAddedLetter(key);
         // Clear the animation after a short delay
         setTimeout(() => setLastAddedLetter(null), 150);
@@ -132,7 +134,7 @@ export const GauntletPage = function () {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [activeKeys, letters]);
+  }, [activeKeys, letters, sequence]);
 
   function shuffleSequence() {
     const lettersRef = [...letters];
@@ -173,7 +175,7 @@ export const GauntletPage = function () {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (letters.includes(event.key)) {
+      if (letters.includes(event.key) && sequence.length < MAX_WORD_LENGTH) {
         setSequence(sequence + event.key);
       }
 
@@ -281,7 +283,11 @@ export const GauntletPage = function () {
                   <motion.button
                     key={index}
                     className="relative aspect-square rounded-xl text-xl font-medium transition-all duration-200 hover:shadow-lg"
-                    onClick={() => setSequence(sequence + letter)}
+                    onClick={() => {
+                      if (sequence.length < MAX_WORD_LENGTH) {
+                        setSequence(sequence + letter);
+                      }
+                    }}
                     animate={{
                       scale: (activeKeys.includes(letter.toLowerCase()) || lastAddedLetter === letter.toLowerCase()) ? 1.05 : 1,
                       backgroundColor: (activeKeys.includes(letter.toLowerCase()) || lastAddedLetter === letter.toLowerCase())
