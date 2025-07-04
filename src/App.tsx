@@ -11,7 +11,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/gauntlet" element={<GauntletPage />} />
         <Route path="/sampler" element={<SamplerPage />} />
-        <Route path="/dataChat" element={<DataChatPage />} />
+        <Route path="/data-chat" element={<DataChatPage />} />
       </Routes>
     </Router>
   );
