@@ -9,19 +9,175 @@ import openHat from "../../assets/808-samples/Roland TR-808/OH/OH00.wav";
 
 import { useEffect, useRef, useState } from "react";
 import metronomeClick from "../../assets/808-samples/Roland TR-808/RS/RS.wav";
-import { Circle, PlayArrow, Stop } from "@mui/icons-material";
+import { Circle, PlayArrow, Stop, VolumeUp, Settings, Mic, PlayCircle } from "@mui/icons-material";
 import { motion } from "framer-motion";
 
 const SAMPLES = [
-  { src: cowbell, key: "q" },
-  { src: bass, key: "w" },
-  { src: snare, key: "e" },
-  { src: closedHat, key: "r" },
-  { src: hiTom, key: "a" },
-  { src: cymbal, key: "s" },
-  { src: clap, key: "d" },
-  { src: openHat, key: "f" },
+  { src: cowbell, key: "q", name: "Cowbell" },
+  { src: bass, key: "w", name: "Bass" },
+  { src: snare, key: "e", name: "Snare" },
+  { src: closedHat, key: "r", name: "Closed Hat" },
+  { src: hiTom, key: "a", name: "Hi Tom" },
+  { src: cymbal, key: "s", name: "Cymbal" },
+  { src: clap, key: "d", name: "Clap" },
+  { src: openHat, key: "f", name: "Open Hat" },
 ];
+
+// VST-style Knob Component
+const VSTKnob = ({ 
+  value, 
+  onChange, 
+  label, 
+  min = 0, 
+  max = 100, 
+  size = 60 
+}: { 
+  value: number; 
+  onChange: (value: number) => void; 
+  label: string; 
+  min?: number; 
+  max?: number; 
+  size?: number;
+}) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const knobRef = useRef<HTMLDivElement>(null);
+  const startY = useRef(0);
+  const startValue = useRef(0);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    startY.current = e.clientY;
+    startValue.current = value;
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging) return;
+    const deltaY = startY.current - e.clientY;
+    const sensitivity = (max - min) / 200;
+    const newValue = Math.max(min, Math.min(max, startValue.current + deltaY * sensitivity));
+    onChange(newValue);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  const rotation = ((value - min) / (max - min)) * 270 - 135;
+
+  return (
+    <div className="flex flex-col items-center">
+      <div 
+        ref={knobRef}
+        className="relative cursor-pointer select-none"
+        onMouseDown={handleMouseDown}
+        style={{ width: size, height: size }}
+      >
+        <div 
+          className="absolute inset-0 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-gray-600 shadow-inner"
+          style={{ width: size, height: size }}
+        />
+        <div 
+          className="absolute inset-0 rounded-full bg-gradient-to-br from-gray-600 to-gray-800 border border-gray-500"
+          style={{ 
+            width: size - 8, 
+            height: size - 8, 
+            top: 4, 
+            left: 4,
+            transform: `rotate(${rotation}deg)`
+          }}
+        />
+        <div 
+          className="absolute w-1 h-3 bg-red-500 rounded-full"
+          style={{ 
+            left: '50%', 
+            top: '50%', 
+            transform: `translate(-50%, -50%) rotate(${rotation}deg) translateY(-${size/2 - 8}px)`,
+            transformOrigin: 'center'
+          }}
+        />
+        <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-300 font-mono">
+          {Math.round(value)}
+        </div>
+      </div>
+      <div className="text-xs text-gray-400 mt-2 text-center">{label}</div>
+    </div>
+  );
+};
+
+// VST-style Meter Component
+const VSTMeter = ({ value, label }: { value: number; label: string }) => {
+  const height = 80;
+  const segments = 20;
+  const segmentHeight = height / segments;
+  
+  return (
+    <div className="flex flex-col items-center">
+      <div className="text-xs text-gray-400 mb-1">{label}</div>
+      <div className="relative w-4 h-20 bg-gray-900 border border-gray-700 rounded">
+        {Array.from({ length: segments }, (_, i) => {
+          const segmentValue = (i + 1) / segments;
+          const isActive = value >= segmentValue;
+          const isPeak = i === segments - 1 && value >= 0.95;
+          
+          return (
+            <div
+              key={i}
+              className={`w-full border-b border-gray-800 ${
+                isPeak ? 'bg-red-500' : 
+                isActive ? 'bg-green-400' : 'bg-gray-800'
+              }`}
+              style={{ height: segmentHeight }}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// VST-style Button Component
+const VSTButton = ({ 
+  children, 
+  onClick, 
+  variant = "primary", 
+  size = "medium",
+  disabled = false,
+  className = ""
+}: { 
+  children: React.ReactNode; 
+  onClick: () => void; 
+  variant?: "primary" | "secondary" | "danger";
+  size?: "small" | "medium" | "large";
+  disabled?: boolean;
+  className?: string;
+}) => {
+  const baseClasses = "font-mono font-bold border-2 rounded transition-all duration-200 select-none";
+  const sizeClasses = {
+    small: "px-3 py-1 text-xs",
+    medium: "px-4 py-2 text-sm",
+    large: "px-6 py-3 text-base"
+  };
+  const variantClasses = {
+    primary: "bg-blue-600 hover:bg-blue-700 border-blue-500 text-white",
+    secondary: "bg-gray-700 hover:bg-gray-600 border-gray-600 text-gray-200",
+    danger: "bg-red-600 hover:bg-red-700 border-red-500 text-white"
+  };
+  const disabledClasses = "opacity-50 cursor-not-allowed";
+
+  return (
+    <button
+      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${disabled ? disabledClasses : ''} ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {children}
+    </button>
+  );
+};
 
 // Waveform Viewer Component
 const WaveformViewer = ({ 
@@ -36,7 +192,6 @@ const WaveformViewer = ({
   duration: number;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     if (!canvasRef.current || !audioBuffer) return;
@@ -54,9 +209,29 @@ const WaveformViewer = ({
     const step = Math.ceil(samples / canvas.width);
     const amp = canvas.height / 2;
 
+    // Draw background
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw grid
+    ctx.strokeStyle = '#333333';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < canvas.width; i += 20) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i, canvas.height);
+      ctx.stroke();
+    }
+    for (let i = 0; i < canvas.height; i += 20) {
+      ctx.beginPath();
+      ctx.moveTo(0, i);
+      ctx.lineTo(canvas.width, i);
+      ctx.stroke();
+    }
+
     // Draw waveform
     ctx.beginPath();
-    ctx.strokeStyle = '#282828';
+    ctx.strokeStyle = '#00ff88';
     ctx.lineWidth = 2;
 
     for (let i = 0; i < canvas.width; i++) {
@@ -81,19 +256,21 @@ const WaveformViewer = ({
   }, [audioBuffer, isPlaying, currentTime, duration]);
 
   return (
-    <div className="w-full max-w-2xl bg-white rounded-lg p-4 shadow-md">
-      <h3 className="text-lg font-semibold mb-2">Waveform</h3>
+    <div className="w-full bg-gray-900 border border-gray-700 rounded-lg p-4">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-mono text-gray-300">WAVEFORM</h3>
+        {isPlaying && (
+          <div className="text-xs text-gray-400 font-mono">
+            {Math.floor(currentTime * 1000)}ms / {Math.floor(duration * 1000)}ms
+          </div>
+        )}
+      </div>
       <canvas
         ref={canvasRef}
         width={800}
         height={200}
-        className="w-full h-32 border border-gray-300 rounded"
+        className="w-full h-32 border border-gray-600 rounded bg-gray-900"
       />
-      {isPlaying && (
-        <div className="mt-2 text-sm text-gray-600">
-          {Math.floor(currentTime * 1000)}ms / {Math.floor(duration * 1000)}ms
-        </div>
-      )}
     </div>
   );
 };
@@ -197,19 +374,24 @@ export const Metronome = function ({
   };
 
   return (
-    <div className="flex flex-row items-center gap-4">
-      <button onClick={toggleMetronome}>
-        {isPlaying ? <Stop /> : <PlayArrow />}
-      </button>
-      <input
-        type="text"
-        value={bpm}
-        readOnly
-        onMouseDown={handleMouseDown}
-        className="text-4xl w-24 text-center border border-gray-300 rounded-lg p-2 cursor-ns-resize select-none"
-      />
-      <div className="text-lg">BPM</div>
-      <Circle sx={{ color: isMetronomeClick ? "red" : "gray" }} />
+    <div className="flex items-center gap-4 bg-gray-800 border border-gray-700 rounded-lg p-4">
+      <VSTButton onClick={toggleMetronome} size="small">
+        {isPlaying ? <Stop fontSize="small" /> : <PlayArrow fontSize="small" />}
+      </VSTButton>
+      <div className="flex flex-col items-center">
+        <input
+          type="text"
+          value={bpm}
+          readOnly
+          onMouseDown={handleMouseDown}
+          className="text-2xl w-16 text-center bg-gray-900 border border-gray-600 rounded font-mono text-white cursor-ns-resize select-none"
+        />
+        <div className="text-xs text-gray-400 mt-1">BPM</div>
+      </div>
+      <div className="flex items-center gap-2">
+        <Circle sx={{ color: isMetronomeClick ? "#ff4444" : "#666666", fontSize: 16 }} />
+        <span className="text-xs text-gray-400">CLICK</span>
+      </div>
     </div>
   );
 };
@@ -386,91 +568,161 @@ export const SamplerPage = function () {
 
   return (
     <div
-      className="text-[#282828] px-40 py-4 w-[100vw] bg-[#F5F5F5] flex flex-col items-center gap-y-8 h-full"
+      className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-200 p-8"
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
-      <Metronome audioContext={audioContext} />
-      
-      {/* Waveform Viewer */}
-      <WaveformViewer
-        audioBuffer={currentPlayingBuffer}
-        isPlaying={isSoundPlaying}
-        currentTime={currentPlaybackTime}
-        duration={currentPlayingBuffer?.duration || 0}
-      />
-      
-      <div className="flex flex-col items-center mb-8">
-        <label className="mb-2">
-          Reverb Mix: {Math.round(reverbMix * 100)}%
-        </label>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={reverbMix}
-          onChange={(e) => {
-            const mix = parseFloat(e.target.value);
-            setReverbMix(mix);
+      {/* VST Header */}
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-gray-800 border border-gray-700 rounded-t-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+                <PlayCircle className="text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-mono font-bold text-white">TR-808 SAMPLER</h1>
+                <p className="text-xs text-gray-400">Professional Drum Machine VST</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <VSTMeter value={isSoundPlaying ? 0.8 : 0.1} label="OUT" />
+              <VSTMeter value={isSoundPlaying ? 0.6 : 0.05} label="IN" />
+            </div>
+          </div>
+        </div>
 
-            if (dryGain && wetGain) {
-              dryGain.gain.value = 1 - mix;
-              wetGain.gain.value = mix;
-            }
-          }}
-          className="w-64"
-        />
-      </div>
+        {/* Main VST Interface */}
+        <div className="bg-gray-900 border-x border-b border-gray-700 rounded-b-lg p-6">
+          <div className="grid grid-cols-12 gap-6">
+            {/* Left Panel - Controls */}
+            <div className="col-span-3 space-y-6">
+              {/* Metronome Section */}
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                <h3 className="text-sm font-mono text-gray-300 mb-3">METRONOME</h3>
+                <Metronome audioContext={audioContext} />
+              </div>
 
-      <div className="grid grid-cols-4 w-fit gap-4 mx-auto">
-        {SAMPLES.map((sample) => {
-          return (
-            <motion.button
-              className={`relative bg-gray-200 hover:bg-gray-300 rounded-lg h-44 w-44`}
-              onClick={() => {
-                playSample(sample.key);
-              }}
-              // todo this should animate on mouse click as well...
-              animate={{
-                scale: activeKeys.includes(sample.key) ? 1.1 : 1,
-                backgroundColor: activeKeys.includes(sample.key)
-                  ? "#d1d5db"
-                  : "#e5e7eb",
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 20,
-                backgroundColor: { duration: 0.2 },
-              }}
-            />
-          );
-        })}
-      </div>
-      <div className="flex flex-row gap-4 mb-8">
-        {!isRecording ? (
-          <button
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-            onClick={startRecording}
-          >
-            Record
-          </button>
-        ) : (
-          <button
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-            onClick={stopRecording}
-          >
-            Stop
-          </button>
-        )}
+              {/* Effects Section */}
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                <h3 className="text-sm font-mono text-gray-300 mb-3">EFFECTS</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-400">REVERB MIX</span>
+                    <span className="text-xs text-gray-300 font-mono">{Math.round(reverbMix * 100)}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={reverbMix}
+                    onChange={(e) => {
+                      const mix = parseFloat(e.target.value);
+                      setReverbMix(mix);
 
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-          onClick={playRecording}
-          disabled={recordedEvents.length === 0}
-        >
-          Play
-        </button>
+                      if (dryGain && wetGain) {
+                        dryGain.gain.value = 1 - mix;
+                        wetGain.gain.value = mix;
+                      }
+                    }}
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                    style={{
+                      background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${reverbMix * 100}%, #374151 ${reverbMix * 100}%, #374151 100%)`
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Recording Section */}
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                <h3 className="text-sm font-mono text-gray-300 mb-3">RECORDING</h3>
+                <div className="space-y-2">
+                  {!isRecording ? (
+                    <VSTButton onClick={startRecording} variant="primary" size="small" className="w-full">
+                      <Mic fontSize="small" className="mr-2" />
+                      RECORD
+                    </VSTButton>
+                  ) : (
+                    <VSTButton onClick={stopRecording} variant="danger" size="small" className="w-full">
+                      <Stop fontSize="small" className="mr-2" />
+                      STOP
+                    </VSTButton>
+                  )}
+
+                  <VSTButton 
+                    onClick={playRecording} 
+                    variant="secondary" 
+                    size="small" 
+                    disabled={recordedEvents.length === 0}
+                    className="w-full"
+                  >
+                    <PlayArrow fontSize="small" className="mr-2" />
+                    PLAY
+                  </VSTButton>
+                </div>
+              </div>
+            </div>
+
+            {/* Center Panel - Waveform and Pads */}
+            <div className="col-span-9 space-y-6">
+              {/* Waveform Viewer */}
+              <WaveformViewer
+                audioBuffer={currentPlayingBuffer}
+                isPlaying={isSoundPlaying}
+                currentTime={currentPlaybackTime}
+                duration={currentPlayingBuffer?.duration || 0}
+              />
+
+              {/* Drum Pads */}
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <h3 className="text-sm font-mono text-gray-300 mb-4">DRUM PADS</h3>
+                <div className="grid grid-cols-4 gap-4">
+                  {SAMPLES.map((sample) => (
+                    <motion.div
+                      key={sample.key}
+                      className="relative"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <motion.button
+                        className={`w-full h-24 bg-gradient-to-br from-gray-700 to-gray-800 border-2 border-gray-600 rounded-lg shadow-lg relative overflow-hidden`}
+                        onClick={() => playSample(sample.key)}
+                        animate={{
+                          scale: activeKeys.includes(sample.key) ? 1.05 : 1,
+                          borderColor: activeKeys.includes(sample.key) ? "#3b82f6" : "#4b5563",
+                          backgroundColor: activeKeys.includes(sample.key) 
+                            ? "rgb(59, 130, 246, 0.3)" 
+                            : "rgb(55, 65, 81)"
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20,
+                        }}
+                      >
+                        {/* Pad Label */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <div className="text-xs text-gray-400 font-mono">{sample.name}</div>
+                          <div className="text-lg font-mono font-bold text-white">{sample.key.toUpperCase()}</div>
+                        </div>
+
+                        {/* Active Indicator */}
+                        {activeKeys.includes(sample.key) && (
+                          <motion.div
+                            className="absolute inset-0 bg-blue-500 opacity-20"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.2 }}
+                            exit={{ opacity: 0 }}
+                          />
+                        )}
+                      </motion.button>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
