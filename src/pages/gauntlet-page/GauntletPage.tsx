@@ -100,6 +100,8 @@ export const GauntletPage = function () {
   const [answerList, setAnswerList] = useState<string[]>([]);
   const [round, setRound] = useState<number>(0);
   const [won, setWon] = useState<boolean>(false);
+  const [lost, setLost] = useState<boolean>(false);
+  const [attempts, setAttempts] = useState<number>(3);
   const [thresholdScore, setThresholdScore] = useState<number>(0);
   const [showAlert, setShowAlert] = useState<{
     type: "error" | "success";
@@ -165,11 +167,20 @@ export const GauntletPage = function () {
         setRound(round + 1);
         setLetters(getRandomLetters());
         setSequence("");
+        setAttempts(3); // Reset attempts for new round
         setShowAlert({ type: "success", text: "Nice one!" });
       }
     } else {
       setSequence("");
-      setShowAlert({ type: "error", text: "Not a valid word!" });
+      const newAttempts = attempts - 1;
+      setAttempts(newAttempts);
+      
+      if (newAttempts <= 0) {
+        setLost(true);
+        setShowAlert({ type: "error", text: "Game Over! You ran out of attempts." });
+      } else {
+        setShowAlert({ type: "error", text: `Not a valid word! ${newAttempts} attempts remaining.` });
+      }
     }
   };
 
@@ -241,7 +252,34 @@ export const GauntletPage = function () {
             </motion.div>
           )}
 
-          {!won && (
+          {/* Lose State */}
+          {lost && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center space-y-4"
+            >
+              <div className="text-4xl font-light text-red-600">Game Over!</div>
+              <p className="text-slate-600">You ran out of attempts. Try again!</p>
+              <motion.button
+                onClick={() => {
+                  setRound(0);
+                  setLetters(getRandomLetters());
+                  setSequence("");
+                  setAttempts(3);
+                  setWon(false);
+                  setLost(false);
+                }}
+                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Play Again
+              </motion.button>
+            </motion.div>
+          )}
+
+                      {!won && !lost && (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -265,6 +303,13 @@ export const GauntletPage = function () {
                     />
                   </motion.div>
                 ))}
+              </div>
+
+              {/* Attempts Counter */}
+              <div className="text-center">
+                <div className="text-sm text-slate-500">
+                  Attempts: <span className="font-medium text-slate-700">{attempts}/3</span>
+                </div>
               </div>
 
               {/* Current Word Display */}
