@@ -335,7 +335,7 @@ export const LandingPage = () => {
             className="text-[25px]"
             transition={{ duration: 0.2 }}
           >
-            *Full stack software engineer
+            * full stack software engineer
           </motion.div>
 
           <motion.div
