@@ -85,33 +85,37 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl p-6 relative flex flex-col max-h-[80vh]">
-        <button className="absolute top-4 right-4 text-gray-500 hover:text-blue-600 text-2xl" onClick={onClose}>&times;</button>
-        <h2 className="text-2xl font-bold mb-4 text-blue-700">Database Browser</h2>
-        <div className="flex gap-6">
-          <div className="w-48">
+    <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col">
+        <div className="flex items-center justify-between p-6 border-b">
+          <h2 className="text-2xl font-bold text-blue-700">Database Browser</h2>
+          <button className="text-gray-500 hover:text-blue-600 text-2xl" onClick={onClose}>&times;</button>
+        </div>
+        <div className="flex flex-1 overflow-hidden p-6">
+          <div className="w-48 flex-shrink-0">
             <div className="font-semibold mb-2 text-gray-700">Tables</div>
-            <ul className="space-y-1">
-              {tables.map((t) => (
-                <li key={t}>
-                  <button
-                    className={`w-full text-left px-3 py-1 rounded hover:bg-blue-100 text-gray-800 ${selected === t ? 'bg-blue-200 font-bold' : ''}`}
-                    onClick={() => setSelected(t)}
-                  >
-                    {t}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <div className="overflow-y-auto max-h-full">
+              <ul className="space-y-1">
+                {tables.map((t) => (
+                  <li key={t}>
+                    <button
+                      className={`w-full text-left px-3 py-1 rounded hover:bg-blue-100 text-gray-800 ${selected === t ? 'bg-blue-200 font-bold' : ''}`}
+                      onClick={() => setSelected(t)}
+                    >
+                      {t}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className="flex-1 overflow-x-auto">
+          <div className="flex-1 ml-6 overflow-hidden">
             {selected ? (
-              <div>
+              <div className="h-full flex flex-col">
                 <div className="font-semibold mb-2 text-gray-700">{selected} Table</div>
-                <div className="overflow-auto border rounded">
+                <div className="flex-1 overflow-auto border rounded">
                   <table className="min-w-full text-sm text-gray-800">
-                    <thead>
+                    <thead className="sticky top-0 bg-white">
                       <tr>
                         {columns.map((col) => (
                           <th key={col} className="px-3 py-2 bg-blue-50 text-blue-700 font-semibold border-b">{col}</th>
