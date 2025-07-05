@@ -94,7 +94,7 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
         <div className="flex flex-1 overflow-hidden p-6">
           <div className="w-48 flex-shrink-0">
             <div className="font-semibold mb-2 text-gray-700">Tables</div>
-            <div className="overflow-y-auto max-h-full">
+            <div className="overflow-y-auto max-h-full custom-scrollbar">
               <ul className="space-y-1">
                 {tables.map((t) => (
                   <li key={t}>
@@ -113,7 +113,7 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
             {selected ? (
               <div className="h-full flex flex-col">
                 <div className="font-semibold mb-2 text-gray-700">{selected} Table</div>
-                <div className="flex-1 overflow-auto border rounded">
+                <div className="flex-1 overflow-auto border rounded custom-scrollbar">
                   <table className="min-w-full text-sm text-gray-800">
                     <thead className="sticky top-0 bg-white">
                       <tr>
@@ -235,7 +235,7 @@ export default function DataChatPage() {
       <div className="bg-white rounded-xl shadow-xl w-full p-8 flex flex-col">
         <h1 className="text-3xl font-bold mb-2 text-blue-700">DataChat</h1>
         <p className="mb-6 text-gray-600">Ask questions about the car dealership database. (e.g. "Who made the most sales?" or "List all cars sold in 2023.")</p>
-        <div className="flex-1 overflow-y-auto mb-4 max-h-[400px]">
+        <div className="flex-1 overflow-y-auto mb-4 max-h-[400px] custom-scrollbar">
           <div className="flex flex-col gap-4">
             {messages.map((msg, i) => (
               <div key={i} className={msg.role === "user" ? "self-end" : "self-start"}>
