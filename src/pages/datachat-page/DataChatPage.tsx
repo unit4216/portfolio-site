@@ -85,15 +85,15 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-[2px] flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-4xl h-[90vh] flex flex-col font-inter">
-        <div className="flex items-center justify-between p-6 border-b border-slate-100">
-          <h2 className="text-2xl font-medium text-slate-800">Database Browser</h2>
-          <button className="text-slate-400 hover:text-slate-600 text-2xl transition-colors" onClick={onClose}>&times;</button>
+    <div className="fixed inset-0 z-50 bg-black/10 backdrop-blur-[2px] flex items-center justify-center p-4">
+      <div className="bg-[#fbfbf2] rounded-2xl shadow-lg w-full max-w-4xl h-[90vh] flex flex-col font-inter">
+        <div className="flex items-center justify-between p-6 border-b border-[#e5e6e4]">
+          <h2 className="text-2xl font-medium text-[#847577]">Database Browser</h2>
+          <button className="text-[#a6a2a2] hover:text-[#847577] text-2xl transition-colors" onClick={onClose}>&times;</button>
         </div>
         <div className="flex flex-1 overflow-hidden p-6 gap-6">
           <div className="w-48 flex-shrink-0">
-            <div className="font-medium mb-3 text-slate-600">Tables</div>
+            <div className="font-medium mb-3 text-[#847577]">Tables</div>
             <div className="overflow-y-auto max-h-full">
               <ul className="space-y-1">
                 {tables.map((t) => (
@@ -101,8 +101,8 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
                     <button
                       className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
                         selected === t 
-                          ? 'bg-slate-100 text-slate-900 font-medium' 
-                          : 'text-slate-600 hover:bg-slate-50'
+                          ? 'bg-[#e5e6e4] text-[#847577] font-medium' 
+                          : 'text-[#a6a2a2] hover:bg-[#fbfbf2] hover:text-[#847577]'
                       }`}
                       onClick={() => setSelected(t)}
                     >
@@ -116,21 +116,21 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
           <div className="flex-1 overflow-hidden">
             {selected ? (
               <div className="h-full flex flex-col">
-                <div className="font-medium mb-3 text-slate-600">{selected} Table</div>
-                <div className="flex-1 overflow-auto rounded-lg border border-slate-100">
-                  <table className="min-w-full text-sm divide-y divide-slate-100">
-                    <thead className="sticky top-0 bg-white">
+                <div className="font-medium mb-3 text-[#847577]">{selected} Table</div>
+                <div className="flex-1 overflow-auto rounded-lg border border-[#e5e6e4]">
+                  <table className="min-w-full text-sm divide-y divide-[#e5e6e4]">
+                    <thead className="sticky top-0 bg-[#fbfbf2]">
                       <tr>
                         {columns.map((col) => (
-                          <th key={col} className="px-4 py-3 text-left font-medium text-slate-600 bg-slate-50">{col}</th>
+                          <th key={col} className="px-4 py-3 text-left font-medium text-[#847577] bg-[#e5e6e4]">{col}</th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#e5e6e4]">
                       {rows.map((row, i) => (
                         <tr key={i}>
                           {row.map((cell: any, j: number) => (
-                            <td key={j} className="px-4 py-3 text-slate-600">{String(cell)}</td>
+                            <td key={j} className="px-4 py-3 text-[#847577]">{String(cell)}</td>
                           ))}
                         </tr>
                       ))}
@@ -139,7 +139,7 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
                 </div>
               </div>
             ) : (
-              <div className="text-slate-400 mt-8 text-center">Select a table to view its data</div>
+              <div className="text-[#a6a2a2] mt-8 text-center">Select a table to view its data</div>
             )}
           </div>
         </div>
@@ -225,26 +225,26 @@ export default function DataChatPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center py-12 w-screen px-4 sm:px-6 lg:px-8 font-inter">
+    <div className="min-h-screen bg-[#fbfbf2] flex flex-col items-center py-12 w-screen px-4 sm:px-6 lg:px-8 font-inter">
       <div className="w-full max-w-3xl flex justify-end mb-6">
         <button
-          className="bg-white text-slate-600 px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow transition-all border border-slate-200"
+          className="bg-[#e5e6e4] text-[#847577] px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-[#cfd2cd] transition-all border border-[#cfd2cd]"
           onClick={() => setBrowserOpen(true)}
         >
           Browse Database
         </button>
       </div>
       <DatabaseBrowser db={db} open={browserOpen} onClose={() => setBrowserOpen(false)} />
-      <div className="bg-white rounded-2xl shadow-sm w-full max-w-3xl p-6 flex flex-col border border-slate-100">
-        <h1 className="text-3xl font-medium mb-2 text-slate-800">DataChat</h1>
-        <p className="mb-8 text-slate-500">Ask questions about the car dealership database. (e.g. "Who made the most sales?" or "List all cars sold in 2023.")</p>
+      <div className="bg-[#fbfbf2] rounded-2xl shadow-sm w-full max-w-3xl p-6 flex flex-col border border-[#e5e6e4]">
+        <h1 className="text-3xl font-medium mb-2 text-[#847577]">DataChat</h1>
+        <p className="mb-8 text-[#a6a2a2]">Ask questions about the car dealership database. (e.g. "Who made the most sales?" or "List all cars sold in 2023.")</p>
         <div className="flex-1 overflow-y-auto mb-6 max-h-[500px] space-y-4">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
               <div className={`max-w-[80%] px-4 py-3 rounded-2xl shadow-sm ${
                 msg.role === "user"
-                  ? "bg-slate-800 text-white"
-                  : "bg-slate-50 text-slate-800 border border-slate-100"
+                  ? "bg-[#847577] text-[#fbfbf2]"
+                  : "bg-[#e5e6e4] text-[#847577] border border-[#cfd2cd]"
               }`}>
                 <div className="prose prose-sm max-w-none">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -256,10 +256,10 @@ export default function DataChatPage() {
           ))}
           {loading && (
             <div className="flex justify-start">
-              <div className="bg-slate-50 px-4 py-3 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-1">
-                <span className="w-2 h-2 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                <span className="w-2 h-2 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                <span className="w-2 h-2 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+              <div className="bg-[#e5e6e4] px-4 py-3 rounded-2xl shadow-sm border border-[#cfd2cd] flex items-center gap-1">
+                <span className="w-2 h-2 bg-[#a6a2a2] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                <span className="w-2 h-2 bg-[#a6a2a2] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                <span className="w-2 h-2 bg-[#a6a2a2] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
               </div>
             </div>
           )}
@@ -267,7 +267,7 @@ export default function DataChatPage() {
         </div>
         <div className="flex gap-3">
           <input
-            className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 transition-shadow"
+            className="flex-1 bg-[#e5e6e4] border border-[#cfd2cd] rounded-lg px-4 py-2.5 text-[#847577] placeholder-[#a6a2a2] focus:outline-none focus:ring-2 focus:ring-[#cfd2cd] transition-shadow"
             placeholder="Type your question..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -275,7 +275,7 @@ export default function DataChatPage() {
             disabled={loading}
           />
           <button
-            className="bg-slate-800 text-white px-6 py-2.5 rounded-lg font-medium shadow-sm hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:hover:bg-slate-800"
+            className="bg-[#847577] text-[#fbfbf2] px-6 py-2.5 rounded-lg font-medium shadow-sm hover:bg-[#a6a2a2] transition-colors disabled:opacity-50 disabled:hover:bg-[#847577]"
             onClick={handleSend}
             disabled={loading || !input.trim()}
           >
