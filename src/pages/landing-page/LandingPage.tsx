@@ -393,7 +393,7 @@ function ContactSection() {
 }
 
 export const LandingPage = () => {
-  const sections = ["Work", "About", "Contact"];
+  const sections = ["projects", "about", "contact"];
   const SKILLS = ["TypeScript", "React", "Tailwind", "Google Cloud"];
   
   const [isScrolled, setIsScrolled] = useState(false);
@@ -482,7 +482,7 @@ export const LandingPage = () => {
         </motion.div>
       </section>
       
-      <section className=" scroll-mt-16" id={"Work"}>
+      <section className=" scroll-mt-16" id={"projects"}>
         <motion.div 
           className="text-[45px] mt-44"
           variants={fadeInUp}
@@ -498,7 +498,7 @@ export const LandingPage = () => {
         </div>
       </section>
       
-      <section className="scroll-mt-16" id={"About"}>
+      <section className="scroll-mt-16" id={"about"}>
         <motion.div 
           className="text-[45px] mt-44"
           variants={fadeInUp}
@@ -562,7 +562,7 @@ export const LandingPage = () => {
         </motion.div>
       </section>
       
-      <section className="scroll-mt-16" id={"Contact"}>
+      <section className="scroll-mt-16" id={"contact"}>
         <motion.div 
           className="text-[45px] mt-44"
           variants={fadeInUp}
