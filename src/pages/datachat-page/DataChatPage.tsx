@@ -85,21 +85,25 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col">
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-2xl font-bold text-blue-700">Database Browser</h2>
-          <button className="text-gray-500 hover:text-blue-600 text-2xl" onClick={onClose}>&times;</button>
+    <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-[2px] flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-lg w-full max-w-4xl h-[90vh] flex flex-col font-inter">
+        <div className="flex items-center justify-between p-6 border-b border-slate-100">
+          <h2 className="text-2xl font-medium text-slate-800">Database Browser</h2>
+          <button className="text-slate-400 hover:text-slate-600 text-2xl transition-colors" onClick={onClose}>&times;</button>
         </div>
-        <div className="flex flex-1 overflow-hidden p-6">
+        <div className="flex flex-1 overflow-hidden p-6 gap-6">
           <div className="w-48 flex-shrink-0">
-            <div className="font-semibold mb-2 text-gray-700">Tables</div>
-            <div className="overflow-y-auto max-h-full custom-scrollbar">
+            <div className="font-medium mb-3 text-slate-600">Tables</div>
+            <div className="overflow-y-auto max-h-full">
               <ul className="space-y-1">
                 {tables.map((t) => (
                   <li key={t}>
                     <button
-                      className={`w-full text-left px-3 py-1 rounded hover:bg-blue-100 text-gray-800 ${selected === t ? 'bg-blue-200 font-bold' : ''}`}
+                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                        selected === t 
+                          ? 'bg-slate-100 text-slate-900 font-medium' 
+                          : 'text-slate-600 hover:bg-slate-50'
+                      }`}
                       onClick={() => setSelected(t)}
                     >
                       {t}
@@ -109,24 +113,24 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
               </ul>
             </div>
           </div>
-          <div className="flex-1 ml-6 overflow-hidden">
+          <div className="flex-1 overflow-hidden">
             {selected ? (
               <div className="h-full flex flex-col">
-                <div className="font-semibold mb-2 text-gray-700">{selected} Table</div>
-                <div className="flex-1 overflow-auto border rounded custom-scrollbar">
-                  <table className="min-w-full text-sm text-gray-800">
+                <div className="font-medium mb-3 text-slate-600">{selected} Table</div>
+                <div className="flex-1 overflow-auto rounded-lg border border-slate-100">
+                  <table className="min-w-full text-sm divide-y divide-slate-100">
                     <thead className="sticky top-0 bg-white">
                       <tr>
                         {columns.map((col) => (
-                          <th key={col} className="px-3 py-2 bg-blue-50 text-blue-700 font-semibold border-b">{col}</th>
+                          <th key={col} className="px-4 py-3 text-left font-medium text-slate-600 bg-slate-50">{col}</th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-y divide-slate-100">
                       {rows.map((row, i) => (
-                        <tr key={i} className="even:bg-gray-50">
+                        <tr key={i}>
                           {row.map((cell: any, j: number) => (
-                            <td key={j} className="px-3 py-2 border-b text-gray-800">{String(cell)}</td>
+                            <td key={j} className="px-4 py-3 text-slate-600">{String(cell)}</td>
                           ))}
                         </tr>
                       ))}
@@ -135,7 +139,7 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
                 </div>
               </div>
             ) : (
-              <div className="text-gray-500 mt-8">Select a table to view its data.</div>
+              <div className="text-slate-400 mt-8 text-center">Select a table to view its data</div>
             )}
           </div>
         </div>
@@ -221,49 +225,49 @@ export default function DataChatPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-100 flex flex-col items-center py-12 w-screen px-10">
-      {/* Database Browser Button */}
-      <div className="w-full max-w-2xl flex justify-end mb-4">
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center py-12 w-screen px-4 sm:px-6 lg:px-8 font-inter">
+      <div className="w-full max-w-3xl flex justify-end mb-6">
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 transition"
+          className="bg-white text-slate-600 px-4 py-2 rounded-lg font-medium shadow-sm hover:shadow transition-all border border-slate-200"
           onClick={() => setBrowserOpen(true)}
         >
           Browse Database
         </button>
       </div>
       <DatabaseBrowser db={db} open={browserOpen} onClose={() => setBrowserOpen(false)} />
-      <div className="bg-white rounded-xl shadow-xl w-full p-8 flex flex-col">
-        <h1 className="text-3xl font-bold mb-2 text-blue-700">DataChat</h1>
-        <p className="mb-6 text-gray-600">Ask questions about the car dealership database. (e.g. "Who made the most sales?" or "List all cars sold in 2023.")</p>
-        <div className="flex-1 overflow-y-auto mb-4 max-h-[400px] custom-scrollbar">
-          <div className="flex flex-col gap-4">
-            {messages.map((msg, i) => (
-              <div key={i} className={msg.role === "user" ? "self-end" : "self-start"}>
-                <div className={
-                  msg.role === "user"
-                    ? "bg-blue-100 text-blue-900 px-4 py-2 rounded-lg shadow"
-                    : "bg-gray-100 text-gray-800 px-4 py-2 rounded-lg shadow"
-                }>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text}</ReactMarkdown>
+      <div className="bg-white rounded-2xl shadow-sm w-full max-w-3xl p-6 flex flex-col border border-slate-100">
+        <h1 className="text-3xl font-medium mb-2 text-slate-800">DataChat</h1>
+        <p className="mb-8 text-slate-500">Ask questions about the car dealership database. (e.g. "Who made the most sales?" or "List all cars sold in 2023.")</p>
+        <div className="flex-1 overflow-y-auto mb-6 max-h-[500px] space-y-4">
+          {messages.map((msg, i) => (
+            <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+              <div className={`max-w-[80%] px-4 py-3 rounded-2xl shadow-sm ${
+                msg.role === "user"
+                  ? "bg-slate-800 text-white"
+                  : "bg-slate-50 text-slate-800 border border-slate-100"
+              }`}>
+                <div className="prose prose-sm max-w-none">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {msg.text}
+                  </ReactMarkdown>
                 </div>
               </div>
-            ))}
-            {/* Loading chat bubble */}
-            {loading && (
-              <div className="self-start">
-                <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg shadow flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                  <span className="inline-block w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                  <span className="inline-block w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                </div>
+            </div>
+          ))}
+          {loading && (
+            <div className="flex justify-start">
+              <div className="bg-slate-50 px-4 py-3 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-1">
+                <span className="w-2 h-2 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                <span className="w-2 h-2 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                <span className="w-2 h-2 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
               </div>
-            )}
-            <div ref={chatEndRef} />
-          </div>
+            </div>
+          )}
+          <div ref={chatEndRef} />
         </div>
-        <div className="flex gap-2 mt-2">
+        <div className="flex gap-3">
           <input
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-900"
+            className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 transition-shadow"
             placeholder="Type your question..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -271,7 +275,7 @@ export default function DataChatPage() {
             disabled={loading}
           />
           <button
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 transition disabled:opacity-50"
+            className="bg-slate-800 text-white px-6 py-2.5 rounded-lg font-medium shadow-sm hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:hover:bg-slate-800"
             onClick={handleSend}
             disabled={loading || !input.trim()}
           >
