@@ -235,61 +235,87 @@ const WaveformViewer = ({
     const canvasWidth = rect.width;
     const canvasHeight = rect.height;
     
-    // Improved sampling for better resolution
-    const step = samples / canvasWidth;
-    const amp = canvasHeight / 2;
-
     // Draw background
-    ctx.fillStyle = '#1a1a1a';
+    ctx.fillStyle = '#edede9'; // Light cream background
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-    // Draw grid
-    ctx.strokeStyle = '#333333';
+    // Draw subtle grid
+    ctx.strokeStyle = 'rgba(213, 189, 175, 0.3)'; // Warm border color with opacity
     ctx.lineWidth = 1;
-    for (let i = 0; i < canvasWidth; i += 20) {
+    
+    // Vertical grid lines
+    for (let i = 0; i < canvasWidth; i += 40) {
       ctx.beginPath();
       ctx.moveTo(i, 0);
       ctx.lineTo(i, canvasHeight);
       ctx.stroke();
     }
-    for (let i = 0; i < canvasHeight; i += 20) {
+    
+    // Horizontal grid lines
+    for (let i = 0; i < canvasHeight; i += 40) {
       ctx.beginPath();
       ctx.moveTo(0, i);
       ctx.lineTo(canvasWidth, i);
       ctx.stroke();
     }
 
-    // Draw waveform with improved resolution
+    // Draw waveform
+    const step = Math.ceil(samples / canvasWidth);
+    const amp = (canvasHeight / 2) * 0.9; // Slightly smaller amplitude for aesthetics
+    
     ctx.beginPath();
-    ctx.strokeStyle = '#00ff88';
-    ctx.lineWidth = 2;
-
+    ctx.moveTo(0, canvasHeight / 2);
+    
+    // Draw the waveform
     for (let i = 0; i < canvasWidth; i++) {
-      const dataIndex = Math.floor(i * step);
-      const x = i;
-      
-      // Average multiple samples for smoother waveform
-      let sum = 0;
-      const samplesToAverage = Math.max(1, Math.floor(step));
-      for (let j = 0; j < samplesToAverage && dataIndex + j < samples; j++) {
-        sum += channelData[dataIndex + j] || 0;
+      let min = 1.0;
+      let max = -1.0;
+      for (let j = 0; j < step; j++) {
+        const datum = channelData[i * step + j];
+        if (datum < min) min = datum;
+        if (datum > max) max = datum;
       }
-      const average = sum / samplesToAverage;
       
-      const y = average * amp + amp;
-      ctx.lineTo(x, y);
+      // Create gradient for waveform using warm colors
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
+      gradient.addColorStop(0, 'rgba(139, 69, 19, 0.8)'); // Saddle brown with opacity
+      gradient.addColorStop(1, 'rgba(160, 82, 45, 0.6)'); // Sienna with opacity
+      
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = 2;
+      
+      const x = i;
+      const y = (1 + min) * amp;
+      const y2 = (1 + max) * amp;
+      
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
     }
-
+    
+    // Complete the waveform path
     ctx.stroke();
 
-    // Draw progress line
+    // Draw playhead if playing
     if (isPlaying && duration > 0) {
-      const progressX = (currentTime / duration) * canvasWidth;
+      const playheadX = (currentTime / duration) * canvasWidth;
+      
+      // Draw playhead line
       ctx.beginPath();
-      ctx.strokeStyle = '#ff4444';
-      ctx.lineWidth = 3;
-      ctx.moveTo(progressX, 0);
-      ctx.lineTo(progressX, canvasHeight);
+      ctx.strokeStyle = 'rgba(139, 69, 19, 0.8)'; // Saddle brown with opacity
+      ctx.lineWidth = 2;
+      ctx.moveTo(playheadX, 0);
+      ctx.lineTo(playheadX, canvasHeight);
+      ctx.stroke();
+      
+      // Draw playhead glow
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(139, 69, 19, 0.2)';
+      ctx.lineWidth = 6;
+      ctx.moveTo(playheadX, 0);
+      ctx.lineTo(playheadX, canvasHeight);
       ctx.stroke();
     }
   }, [audioBuffer, isPlaying, currentTime, duration]);
