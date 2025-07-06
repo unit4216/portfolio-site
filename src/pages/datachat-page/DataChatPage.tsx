@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import initSqlJs, { Database } from "sql.js";
 import { GoogleGenAI } from "@google/genai";
 import { initializeDatabase } from "./databaseData";
