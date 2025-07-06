@@ -150,7 +150,12 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
 
 export default function DataChatPage() {
   const [db, setDb] = useState<Database | null>(null);
-  const [messages, setMessages] = useState<{ role: "user" | "bot"; text: string }[]>([]);
+  const [messages, setMessages] = useState<{ 
+    role: "user" | "bot"; 
+    text: string;
+    sql?: string; // Optional SQL query for bot messages
+    showSql?: boolean; // Toggle for SQL visibility
+  }[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -207,7 +212,9 @@ export default function DataChatPage() {
         if (attempt === 3) {
           setMessages((msgs) => [...msgs, { 
             role: "bot", 
-            text: `Failed to generate valid SQL after 3 attempts. Last error: ${lastError}` 
+            text: `Failed to generate valid SQL after 3 attempts. Last error: ${lastError}`,
+            sql: sql,
+            showSql: false
           }]);
           setLoading(false);
           return;
@@ -220,9 +227,21 @@ export default function DataChatPage() {
     
     // 3. Summarize results
     const summary = await summarizeResults(input, results);
-    setMessages((msgs) => [...msgs, { role: "bot", text: summary }]);
+    setMessages((msgs) => [...msgs, { 
+      role: "bot", 
+      text: summary,
+      sql: sql,
+      showSql: false
+    }]);
     setLoading(false);
   }
+
+  // Toggle SQL visibility for a message
+  const toggleSql = (index: number) => {
+    setMessages(msgs => msgs.map((msg, i) => 
+      i === index ? { ...msg, showSql: !msg.showSql } : msg
+    ));
+  };
 
   return (
     <div className="min-h-screen bg-[#fbfbf2] flex flex-col items-center py-12 w-screen px-4 sm:px-6 lg:px-8 font-inter">
@@ -241,15 +260,32 @@ export default function DataChatPage() {
         <div className="flex-1 overflow-y-auto mb-6 max-h-[500px] space-y-4">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[80%] px-4 py-3 rounded-2xl shadow-sm ${
+              <div className={`max-w-[80%] rounded-2xl shadow-sm ${
                 msg.role === "user"
-                  ? "bg-[#847577] text-[#fbfbf2]"
+                  ? "bg-[#847577] text-[#fbfbf2] px-4 py-3"
                   : "bg-[#e5e6e4] text-[#847577] border border-[#cfd2cd]"
               }`}>
-                <div className="prose prose-sm max-w-none">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {msg.text}
-                  </ReactMarkdown>
+                <div className="px-4 py-3">
+                  <div className="prose prose-sm max-w-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {msg.text}
+                    </ReactMarkdown>
+                  </div>
+                  {msg.role === "bot" && msg.sql && (
+                    <div className="mt-2">
+                      <button
+                        onClick={() => toggleSql(i)}
+                        className="text-[#847577] text-sm hover:text-[#a6a2a2] transition-colors flex items-center gap-1"
+                      >
+                        {msg.showSql ? "Hide" : "View"} SQL Query
+                      </button>
+                      {msg.showSql && (
+                        <div className="mt-2 p-2 bg-[#fbfbf2] rounded-lg text-sm font-mono text-[#847577] whitespace-pre-wrap">
+                          {msg.sql}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
