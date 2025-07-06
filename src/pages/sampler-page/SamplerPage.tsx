@@ -77,11 +77,7 @@ const VSTKnob = ({
         style={{ width: size, height: size }}
       >
         <div 
-          className="absolute inset-0 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-gray-600 shadow-inner"
-          style={{ width: size, height: size }}
-        />
-        <div 
-          className="absolute inset-0 rounded-full bg-gradient-to-br from-gray-600 to-gray-800 border border-gray-500"
+          className="absolute inset-0 rounded-full bg-gray-700 border border-gray-500"
           style={{ 
             width: size - 8, 
             height: size - 8, 
@@ -594,7 +590,7 @@ export const SamplerPage = function () {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-200 p-8 w-screen"
+      className="min-h-screen bg-gray-900 text-gray-200 p-8 w-screen"
       style={{ fontFamily: "Neue Haas Grotesk" }}
     >
       {/* VST Header */}
@@ -653,7 +649,7 @@ export const SamplerPage = function () {
                     }}
                     className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
                     style={{
-                      background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${reverbMix * 100}%, #374151 ${reverbMix * 100}%, #374151 100%)`
+                      background: `#374151`
                     }}
                   />
                 </div>
@@ -711,7 +707,7 @@ export const SamplerPage = function () {
                       whileTap={{ scale: 0.98 }}
                     >
                       <motion.button
-                        className={`w-full h-24 bg-gradient-to-br from-gray-700 to-gray-800 border-2 border-gray-600 rounded-lg shadow-lg relative overflow-hidden`}
+                        className={`w-full h-24 bg-gray-700 border-2 border-gray-600 rounded-lg shadow-lg relative overflow-hidden`}
                         onClick={() => playSample(sample.key)}
                         animate={{
                           scale: activeKeys.includes(sample.key) ? 1.05 : 1,
