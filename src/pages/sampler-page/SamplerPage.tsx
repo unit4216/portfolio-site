@@ -77,29 +77,36 @@ const VSTKnob = ({
         style={{ width: size, height: size }}
       >
         <div 
-          className="absolute inset-0 rounded-full bg-gray-700 border border-gray-500"
+          className="absolute inset-0 rounded-full border-2 shadow-inner"
+          style={{ width: size, height: size, backgroundColor: "#d6ccc2", borderColor: "#d5bdaf" }}
+        />
+        <div 
+          className="absolute inset-0 rounded-full border"
           style={{ 
             width: size - 8, 
             height: size - 8, 
             top: 4, 
             left: 4,
-            transform: `rotate(${rotation}deg)`
+            transform: `rotate(${rotation}deg)`,
+            backgroundColor: "#e3d5ca",
+            borderColor: "#d5bdaf"
           }}
         />
         <div 
-          className="absolute w-1 h-3 bg-red-500 rounded-full"
+          className="absolute w-1 h-3 rounded-full"
           style={{ 
             left: '50%', 
             top: '50%', 
             transform: `translate(-50%, -50%) rotate(${rotation}deg) translateY(-${size/2 - 8}px)`,
-            transformOrigin: 'center'
+            transformOrigin: 'center',
+            backgroundColor: "#8b4513"
           }}
         />
-        <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-300 font-mono">
+        <div className="absolute inset-0 flex items-center justify-center text-xs font-mono" style={{ color: "#8b4513" }}>
           {Math.round(value)}
         </div>
       </div>
-      <div className="text-xs text-gray-400 mt-2 text-center">{label}</div>
+      <div className="text-xs mt-2 text-center" style={{ color: "#a0522d" }}>{label}</div>
     </div>
   );
 };
@@ -112,8 +119,8 @@ const VSTMeter = ({ value, label }: { value: number; label: string }) => {
   
   return (
     <div className="flex flex-col items-center">
-      <div className="text-xs text-gray-400 mb-1">{label}</div>
-      <div className="relative w-4 h-20 bg-gray-900 border border-gray-700 rounded">
+      <div className="text-xs mb-1" style={{ color: "#a0522d" }}>{label}</div>
+      <div className="relative w-4 h-20 border rounded" style={{ backgroundColor: "#f5ebe0", borderColor: "#d5bdaf" }}>
         {Array.from({ length: segments }, (_, i) => {
           const segmentValue = (i + 1) / segments;
           const isActive = value >= segmentValue;
@@ -122,11 +129,13 @@ const VSTMeter = ({ value, label }: { value: number; label: string }) => {
           return (
             <div
               key={i}
-              className={`w-full border-b border-gray-800 ${
-                isPeak ? 'bg-red-500' : 
-                isActive ? 'bg-green-400' : 'bg-gray-800'
-              }`}
-              style={{ height: segmentHeight }}
+              className={`w-full border-b`}
+              style={{ 
+                height: segmentHeight,
+                borderColor: "#d5bdaf",
+                backgroundColor: isPeak ? "#8b4513" : 
+                isActive ? "#d5bdaf" : "#e3d5ca"
+              }}
             />
           );
         })}
@@ -158,15 +167,21 @@ const VSTButton = ({
     large: "px-6 py-3 text-base"
   };
   const variantClasses = {
-    primary: "bg-blue-600 hover:bg-blue-700 border-blue-500 text-white",
-    secondary: "bg-gray-700 hover:bg-gray-600 border-gray-600 text-gray-200",
-    danger: "bg-red-600 hover:bg-red-700 border-red-500 text-white"
+    primary: "hover:bg-opacity-80 text-white",
+    secondary: "hover:bg-opacity-80 text-gray-800",
+    danger: "hover:bg-opacity-80 text-white"
   };
   const disabledClasses = "opacity-50 cursor-not-allowed";
 
   return (
     <button
       className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${disabled ? disabledClasses : ''} ${className}`}
+      style={{
+        backgroundColor: variant === "primary" ? "#8b4513" : 
+                       variant === "danger" ? "#a0522d" : "#d5bdaf",
+        borderColor: variant === "primary" ? "#8b4513" : 
+                    variant === "danger" ? "#a0522d" : "#d5bdaf"
+      }}
       onClick={onClick}
       disabled={disabled}
     >
@@ -280,18 +295,19 @@ const WaveformViewer = ({
   }, [audioBuffer, isPlaying, currentTime, duration]);
 
   return (
-    <div className="w-full bg-gray-900 border border-gray-700 rounded-lg p-4">
+    <div className="w-full border rounded-lg p-4" style={{ backgroundColor: "#f5ebe0", borderColor: "#d5bdaf" }}>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-mono text-gray-300">WAVEFORM</h3>
+        <h3 className="text-sm font-mono" style={{ color: "#8b4513" }}>WAVEFORM</h3>
         {isPlaying && (
-          <div className="text-xs text-gray-400 font-mono">
+          <div className="text-xs font-mono" style={{ color: "#a0522d" }}>
             {Math.floor(currentTime * 1000)}ms / {Math.floor(duration * 1000)}ms
           </div>
         )}
       </div>
       <canvas
         ref={canvasRef}
-        className="w-full h-32 border border-gray-600 rounded bg-gray-900"
+        className="w-full h-32 border rounded"
+        style={{ backgroundColor: "#edede9", borderColor: "#d5bdaf" }}
       />
     </div>
   );
@@ -396,7 +412,7 @@ export const Metronome = function ({
   };
 
   return (
-    <div className="flex items-center gap-4 bg-gray-800 border border-gray-700 rounded-lg p-4">
+    <div className="flex items-center gap-4 border rounded-lg p-4" style={{ backgroundColor: "#e3d5ca", borderColor: "#d5bdaf" }}>
       <VSTButton onClick={toggleMetronome} size="small">
         {isPlaying ? <Stop fontSize="small" /> : <PlayArrow fontSize="small" />}
       </VSTButton>
@@ -406,13 +422,14 @@ export const Metronome = function ({
           value={bpm}
           readOnly
           onMouseDown={handleMouseDown}
-          className="text-2xl w-16 text-center bg-gray-900 border border-gray-600 rounded font-mono text-white cursor-ns-resize select-none"
+          className="text-2xl w-16 text-center rounded font-mono cursor-ns-resize select-none"
+          style={{ backgroundColor: "#f5ebe0", color: "#8b4513", borderColor: "#d5bdaf" }}
         />
-        <div className="text-xs text-gray-400 mt-1">BPM</div>
+        <div className="text-xs mt-1" style={{ color: "#a0522d" }}>BPM</div>
       </div>
       <div className="flex items-center gap-2">
-        <Circle sx={{ color: isMetronomeClick ? "#ff4444" : "#666666", fontSize: 16 }} />
-        <span className="text-xs text-gray-400">CLICK</span>
+        <Circle sx={{ color: isMetronomeClick ? "#8b4513" : "#d5bdaf", fontSize: 16 }} />
+        <span className="text-xs" style={{ color: "#a0522d" }}>CLICK</span>
       </div>
     </div>
   );
@@ -590,20 +607,20 @@ export const SamplerPage = function () {
 
   return (
     <div
-      className="min-h-screen bg-gray-900 text-gray-200 p-8 w-screen"
-      style={{ fontFamily: "Neue Haas Grotesk" }}
+      className="min-h-screen text-gray-800 p-8 w-screen"
+      style={{ fontFamily: "Neue Haas Grotesk", backgroundColor: "#edede9" }}
     >
       {/* VST Header */}
       <div className="max-w-6xl mx-auto">
-        <div className="bg-gray-800 border border-gray-700 rounded-t-lg p-4">
+        <div className="bg-gray-800 border border-gray-700 rounded-t-lg p-4" style={{ backgroundColor: "#d6ccc2", borderColor: "#d5bdaf" }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+              <div className="w-8 h-8 rounded flex items-center justify-center" style={{ backgroundColor: "#d5bdaf" }}>
                 <PlayCircle className="text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-mono font-bold text-white">TR-808 SAMPLER</h1>
-                <p className="text-xs text-gray-400">Professional Drum Machine VST</p>
+                <h1 className="text-xl font-mono font-bold" style={{ color: "#8b4513" }}>TR-808 SAMPLER</h1>
+                <p className="text-xs" style={{ color: "#a0522d" }}>Professional Drum Machine VST</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -614,23 +631,23 @@ export const SamplerPage = function () {
         </div>
 
         {/* Main VST Interface */}
-        <div className="bg-gray-900 border-x border-b border-gray-700 rounded-b-lg p-6">
+        <div className="bg-gray-900 border-x border-b border-gray-700 rounded-b-lg p-6" style={{ backgroundColor: "#f5ebe0", borderColor: "#d5bdaf" }}>
           <div className="grid grid-cols-12 gap-6">
             {/* Left Panel - Controls */}
             <div className="col-span-3 space-y-6">
               {/* Metronome Section */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                <h3 className="text-sm font-mono text-gray-300 mb-3">METRONOME</h3>
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4" style={{ backgroundColor: "#e3d5ca", borderColor: "#d5bdaf" }}>
+                <h3 className="text-sm font-mono mb-3" style={{ color: "#8b4513" }}>METRONOME</h3>
                 <Metronome audioContext={audioContext} />
               </div>
 
               {/* Effects Section */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                <h3 className="text-sm font-mono text-gray-300 mb-3">EFFECTS</h3>
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4" style={{ backgroundColor: "#e3d5ca", borderColor: "#d5bdaf" }}>
+                <h3 className="text-sm font-mono mb-3" style={{ color: "#8b4513" }}>EFFECTS</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-400">REVERB MIX</span>
-                    <span className="text-xs text-gray-300 font-mono">{Math.round(reverbMix * 100)}%</span>
+                    <span className="text-xs" style={{ color: "#a0522d" }}>REVERB MIX</span>
+                    <span className="text-xs font-mono" style={{ color: "#8b4513" }}>{Math.round(reverbMix * 100)}%</span>
                   </div>
                   <input
                     type="range"
@@ -647,17 +664,17 @@ export const SamplerPage = function () {
                         wetGain.gain.value = mix;
                       }
                     }}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                    className="w-full h-2 rounded-lg appearance-none cursor-pointer slider"
                     style={{
-                      background: `#374151`
+                      background: `#d5bdaf`
                     }}
                   />
                 </div>
               </div>
 
               {/* Recording Section */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                <h3 className="text-sm font-mono text-gray-300 mb-3">RECORDING</h3>
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4" style={{ backgroundColor: "#e3d5ca", borderColor: "#d5bdaf" }}>
+                <h3 className="text-sm font-mono mb-3" style={{ color: "#8b4513" }}>RECORDING</h3>
                 <div className="space-y-2">
                   {!isRecording ? (
                     <VSTButton onClick={startRecording} variant="primary" size="small" className="w-full">
@@ -696,8 +713,8 @@ export const SamplerPage = function () {
               />
 
               {/* Drum Pads */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                <h3 className="text-sm font-mono text-gray-300 mb-4">DRUM PADS</h3>
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6" style={{ backgroundColor: "#e3d5ca", borderColor: "#d5bdaf" }}>
+                <h3 className="text-sm font-mono mb-4" style={{ color: "#8b4513" }}>DRUM PADS</h3>
                 <div className="grid grid-cols-4 gap-4">
                   {SAMPLES.map((sample) => (
                     <motion.div
@@ -707,14 +724,15 @@ export const SamplerPage = function () {
                       whileTap={{ scale: 0.98 }}
                     >
                       <motion.button
-                        className={`w-full h-24 bg-gray-700 border-2 border-gray-600 rounded-lg shadow-lg relative overflow-hidden`}
+                        className={`w-full h-24 border-2 rounded-lg shadow-lg relative overflow-hidden`}
+                        style={{ backgroundColor: "#d6ccc2", borderColor: "#d5bdaf" }}
                         onClick={() => playSample(sample.key)}
                         animate={{
                           scale: activeKeys.includes(sample.key) ? 1.05 : 1,
-                          borderColor: activeKeys.includes(sample.key) ? "#3b82f6" : "#4b5563",
+                          borderColor: activeKeys.includes(sample.key) ? "#8b4513" : "#d5bdaf",
                           backgroundColor: activeKeys.includes(sample.key) 
-                            ? "rgb(59, 130, 246, 0.3)" 
-                            : "rgb(55, 65, 81)"
+                            ? "#d5bdaf" 
+                            : "#d6ccc2"
                         }}
                         transition={{
                           type: "spring",
@@ -724,14 +742,15 @@ export const SamplerPage = function () {
                       >
                         {/* Pad Label */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <div className="text-xs text-gray-400 font-mono">{sample.name}</div>
-                          <div className="text-lg font-mono font-bold text-white">{sample.key.toUpperCase()}</div>
+                          <div className="text-xs font-mono" style={{ color: "#a0522d" }}>{sample.name}</div>
+                          <div className="text-lg font-mono font-bold" style={{ color: "#8b4513" }}>{sample.key.toUpperCase()}</div>
                         </div>
 
                         {/* Active Indicator */}
                         {activeKeys.includes(sample.key) && (
                           <motion.div
-                            className="absolute inset-0 bg-blue-500 opacity-20"
+                            className="absolute inset-0 opacity-20"
+                            style={{ backgroundColor: "#8b4513" }}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 0.2 }}
                             exit={{ opacity: 0 }}
