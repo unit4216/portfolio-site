@@ -324,7 +324,7 @@ export default function DataChatPage() {
                     <div className="mt-2">
                       <button
                         onClick={() => toggleSql(i)}
-                        className="text-[#847577] text-sm hover:text-[#a6a2a2] transition-colors flex items-center gap-1"
+                        className="text-[#a6a2a2] text-sm hover:text-[#c4c0c0] transition-colors flex items-center gap-1"
                       >
                         {msg.showSql ? "Hide" : "View"} SQL Query
                       </button>
