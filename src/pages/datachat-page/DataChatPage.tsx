@@ -256,7 +256,7 @@ export default function DataChatPage() {
             <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
               <div className={`max-w-[80%] rounded-2xl shadow-sm ${
                 msg.role === "user"
-                  ? "bg-[#847577] text-[#fbfbf2] px-4 py-3"
+                  ? "bg-[#847577] text-[#fbfbf2] px-4"
                   : "bg-[#e5e6e4] text-[#847577] border border-[#cfd2cd]"
               }`}>
                 <div className="px-4 py-3">
