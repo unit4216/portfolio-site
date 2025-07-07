@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { DATABASE_SCHEMA } from "./databaseData";
 import { format as formatSQL } from "sql-formatter";
+import StorageIcon from "@mui/icons-material/Storage";
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
 
@@ -239,12 +240,17 @@ export default function DataChatPage() {
 
   return (
     <div className="min-h-screen bg-[#f5ebe0] flex flex-col items-center py-12 w-screen px-4 sm:px-6 lg:px-8 font-inter">
-      <div className="w-full max-w-3xl flex justify-end mb-6">
+      {/* Floating Database Button with Tooltip */}
+      <div className="fixed bottom-8 right-8 z-50 flex flex-col items-center group">
+        <div className="mb-2 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-200 pointer-events-none select-none px-3 py-1 rounded-md bg-[#847577] text-[#fdf6ee] text-xs shadow-lg whitespace-nowrap">
+          View Databases
+        </div>
         <button
-          className="bg-[#e5e6e4] text-[#847577] px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-[#cfd2cd] transition-all border border-[#cfd2cd]"
+          className="w-14 h-14 rounded-full bg-[#e5e6e4] border border-[#cfd2cd] shadow-lg flex items-center justify-center hover:bg-[#d5bdaf] transition-colors focus:outline-none focus:ring-2 focus:ring-[#e7c385] focus:ring-offset-2"
           onClick={() => setBrowserOpen(true)}
+          aria-label="Open Database Browser"
         >
-          Browse Database
+          <StorageIcon style={{ color: "#847577", fontSize: 32 }} />
         </button>
       </div>
       <DatabaseBrowser db={db} open={browserOpen} onClose={() => setBrowserOpen(false)} />
