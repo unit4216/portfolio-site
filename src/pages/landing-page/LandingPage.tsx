@@ -80,7 +80,12 @@ export function MasonryGrid() {
       url: '/sampler'
     },
     { id: 2, text: "DataChat", height: "h-96", img: './src/assets/data-chat-gif.gif', url: '/data-chat' },
-    { id: 3, text: "project3", height: "h-80", img: null },
+    { id: 3, 
+      text: "SurvivalGame",
+      height: "h-80",
+      img: './src/assets/game-gif.gif',
+      url: 'https://pfpaliza.itch.io/tiny-survival' 
+      },
     {
       id: 4,
       text: "Cancer Detection Using Neural Networks",
