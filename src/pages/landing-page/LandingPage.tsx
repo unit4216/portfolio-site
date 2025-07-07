@@ -72,8 +72,13 @@ const slideInRight = {
 
 export function MasonryGrid() {
   const items = [
-    { id: 1, text: "project1", height: "h-48", img: null },
-    { id: 2, text: "project2", height: "h-96", img: null },
+    { 
+      id: 1, 
+      text: "project1", 
+      height: "h-48", 
+      img: null
+    },
+    { id: 2, text: "DataChat", height: "h-96", img: './src/assets/data-chat-gif.gif', url: '/data-chat' },
     { id: 3, text: "project3", height: "h-80", img: null },
     {
       id: 4,
@@ -95,7 +100,7 @@ export function MasonryGrid() {
       {items.map((item, index) => (
         <motion.a 
           href={item.url} 
-          target="_blank" 
+          target={item.url?.startsWith('/') ? undefined : "_blank"}
           className="block mb-4"
           variants={itemVariants}
           whileHover={{ scale: 1.02 }}
