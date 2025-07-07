@@ -81,7 +81,7 @@ export function MasonryGrid() {
       url: '/sampler'
     },
     { id: 3, 
-      text: "SurvivalGame",
+      text: "Tiny Survival",
       height: "h-80",
       img: './src/assets/game-gif.gif',
       url: 'https://pfpaliza.itch.io/tiny-survival' 
