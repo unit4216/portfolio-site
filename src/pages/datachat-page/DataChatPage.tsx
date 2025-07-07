@@ -5,6 +5,7 @@ import { initializeDatabase } from "./databaseData";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { DATABASE_SCHEMA } from "./databaseData";
+import { format as formatSQL } from "sql-formatter";
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
 
@@ -274,7 +275,7 @@ export default function DataChatPage() {
                       </button>
                       {msg.showSql && (
                         <div className="mt-2 p-2 bg-[#fbfbf2] rounded-lg text-sm font-mono text-[#847577] whitespace-pre-wrap">
-                          {msg.sql}
+                          {formatSQL(msg.sql, { language: "sqlite" })}
                         </div>
                       )}
                     </div>
