@@ -238,7 +238,7 @@ export default function DataChatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fbfbf2] flex flex-col items-center py-12 w-screen px-4 sm:px-6 lg:px-8 font-inter">
+    <div className="min-h-screen bg-[#f5ebe0] flex flex-col items-center py-12 w-screen px-4 sm:px-6 lg:px-8 font-inter">
       <div className="w-full max-w-3xl flex justify-end mb-6">
         <button
           className="bg-[#e5e6e4] text-[#847577] px-4 py-2 rounded-lg font-medium shadow-sm hover:bg-[#cfd2cd] transition-all border border-[#cfd2cd]"
@@ -248,7 +248,7 @@ export default function DataChatPage() {
         </button>
       </div>
       <DatabaseBrowser db={db} open={browserOpen} onClose={() => setBrowserOpen(false)} />
-      <div className="bg-[#fbfbf2] rounded-2xl shadow-sm w-full max-w-3xl p-6 flex flex-col border border-[#e5e6e4]">
+      <div className="bg-[#fdf6ee] rounded-2xl shadow-sm w-full max-w-3xl p-6 flex flex-col border border-[#e5e6e4]">
         <h1 className="text-3xl font-medium mb-2 text-[#847577]">DataChat</h1>
         <p className="mb-8 text-[#a6a2a2]">Ask questions about the car dealership database. (e.g. "Who made the most sales?" or "List all cars sold in 2023.")</p>
         <div className="flex-1 overflow-y-auto mb-6 max-h-[500px] space-y-4">
