@@ -77,19 +77,19 @@ const VSTKnob = ({
         style={{ width: size, height: size }}
       >
         <div 
-          className="absolute inset-0 rounded-full border-2 shadow-inner"
-          style={{ width: size, height: size, backgroundColor: "#d6ccc2", borderColor: "#d5bdaf" }}
+          className="absolute inset-0 rounded-full shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]"
+          style={{ width: size, height: size, backgroundColor: "#e0e5ec" }}
         />
         <div 
-          className="absolute inset-0 rounded-full border"
+          className="absolute inset-0 rounded-full"
           style={{ 
             width: size - 8, 
             height: size - 8, 
             top: 4, 
             left: 4,
             transform: `rotate(${rotation}deg)`,
-            backgroundColor: "#e3d5ca",
-            borderColor: "#d5bdaf"
+            backgroundColor: "#e0e5ec",
+            boxShadow: 'inset 2px 2px 5px rgba(163,177,198,0.6), inset -2px -2px 5px rgba(255,255,255,0.8)'
           }}
         />
         <div 
@@ -99,14 +99,14 @@ const VSTKnob = ({
             top: '50%', 
             transform: `translate(-50%, -50%) rotate(${rotation}deg) translateY(-${size/2 - 8}px)`,
             transformOrigin: 'center',
-            backgroundColor: "#8b4513"
+            backgroundColor: "#2d3748"
           }}
         />
-        <div className="absolute inset-0 flex items-center justify-center text-xs" style={{ color: "#8b4513", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
+        <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
           {Math.round(value)}
         </div>
       </div>
-      <div className="text-xs mt-2 text-center" style={{ color: "#a0522d", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{label}</div>
+      <div className="text-xs mt-2 text-center font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{label}</div>
     </div>
   );
 };
@@ -119,8 +119,8 @@ const VSTMeter = ({ value, label }: { value: number; label: string }) => {
   
   return (
     <div className="flex flex-col items-center">
-      <div className="text-xs mb-1" style={{ color: "#a0522d", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{label}</div>
-      <div className="relative w-4 h-20 border rounded" style={{ backgroundColor: "#f5ebe0", borderColor: "#d5bdaf" }}>
+      <div className="text-xs mb-1 font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{label}</div>
+      <div className="relative w-4 h-20 rounded-lg shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
         {Array.from({ length: segments }, (_, i) => {
           const segmentValue = (i + 1) / segments;
           const isActive = value >= segmentValue;
@@ -129,12 +129,11 @@ const VSTMeter = ({ value, label }: { value: number; label: string }) => {
           return (
             <div
               key={i}
-              className={`w-full border-b`}
+              className={`w-full border-b border-gray-300`}
               style={{ 
                 height: segmentHeight,
-                borderColor: "#d5bdaf",
-                backgroundColor: isPeak ? "#8b4513" : 
-                isActive ? "#d5bdaf" : "#e3d5ca"
+                backgroundColor: isPeak ? "#2d3748" : 
+                isActive ? "#a0aec0" : "#e0e5ec"
               }}
             />
           );
@@ -175,12 +174,14 @@ const VSTButton = ({
 
   return (
     <button
-      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${disabled ? disabledClasses : ''} ${className}`}
+      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${disabled ? disabledClasses : ''} ${className} rounded-xl shadow-[2px_2px_5px_rgba(163,177,198,0.6),-2px_-2px_5px_rgba(255,255,255,0.8)]`}
       style={{
-        backgroundColor: variant === "primary" ? "#8b4513" : 
-                       variant === "danger" ? "#a0522d" : "#d5bdaf",
-        borderColor: variant === "primary" ? "#8b4513" : 
-                    variant === "danger" ? "#a0522d" : "#d5bdaf"
+        backgroundColor: variant === "primary" ? "#2d3748" : 
+                       variant === "danger" ? "#e53e3e" : "#e0e5ec",
+        borderColor: variant === "primary" ? "#2d3748" : 
+                    variant === "danger" ? "#e53e3e" : "#e0e5ec",
+        color: variant === "primary" ? "#ffffff" : 
+               variant === "danger" ? "#ffffff" : "#2d3748"
       }}
       onClick={onClick}
       disabled={disabled}
@@ -236,11 +237,11 @@ const WaveformViewer = ({
     const canvasHeight = rect.height;
     
     // Draw background
-    ctx.fillStyle = '#edede9'; // Light cream background
+    ctx.fillStyle = '#e0e5ec'; // Neumorphic background
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
     // Draw subtle grid
-    ctx.strokeStyle = 'rgba(213, 189, 175, 0.3)'; // Warm border color with opacity
+    ctx.strokeStyle = 'rgba(160, 174, 192, 0.2)'; // Modern gray with opacity
     ctx.lineWidth = 1;
     
     // Vertical grid lines
@@ -276,10 +277,10 @@ const WaveformViewer = ({
         if (datum > max) max = datum;
       }
       
-      // Create gradient for waveform using warm colors
+      // Create gradient for waveform using modern colors
       const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
-      gradient.addColorStop(0, 'rgba(139, 69, 19, 0.8)'); // Saddle brown with opacity
-      gradient.addColorStop(1, 'rgba(160, 82, 45, 0.6)'); // Sienna with opacity
+      gradient.addColorStop(0, 'rgba(45, 55, 72, 0.8)'); // Dark gray with opacity
+      gradient.addColorStop(1, 'rgba(74, 85, 104, 0.6)'); // Medium gray with opacity
       
       ctx.strokeStyle = gradient;
       ctx.lineWidth = 2;
@@ -304,7 +305,7 @@ const WaveformViewer = ({
       
       // Draw playhead line
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(139, 69, 19, 0.8)'; // Saddle brown with opacity
+      ctx.strokeStyle = 'rgba(45, 55, 72, 0.8)'; // Dark gray with opacity
       ctx.lineWidth = 2;
       ctx.moveTo(playheadX, 0);
       ctx.lineTo(playheadX, canvasHeight);
@@ -312,7 +313,7 @@ const WaveformViewer = ({
       
       // Draw playhead glow
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(139, 69, 19, 0.2)';
+      ctx.strokeStyle = 'rgba(45, 55, 72, 0.2)';
       ctx.lineWidth = 6;
       ctx.moveTo(playheadX, 0);
       ctx.lineTo(playheadX, canvasHeight);
@@ -321,19 +322,19 @@ const WaveformViewer = ({
   }, [audioBuffer, isPlaying, currentTime, duration]);
 
   return (
-    <div className="w-full border rounded-lg p-4" style={{ backgroundColor: "#f5ebe0", borderColor: "#d5bdaf" }}>
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm" style={{ color: "#8b4513", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>WAVEFORM</h3>
+    <div className="w-full">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>WAVEFORM</h3>
         {isPlaying && (
-          <div className="text-xs" style={{ color: "#a0522d", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
+          <div className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
             {Math.floor(currentTime * 1000)}ms / {Math.floor(duration * 1000)}ms
           </div>
         )}
       </div>
       <canvas
         ref={canvasRef}
-        className="w-full h-32 border rounded"
-        style={{ backgroundColor: "#edede9", borderColor: "#d5bdaf" }}
+        className="w-full h-32 rounded-xl shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]"
+        style={{ backgroundColor: "#e0e5ec" }}
       />
     </div>
   );
@@ -438,7 +439,7 @@ export const Metronome = function ({
   };
 
   return (
-    <div className="flex items-center gap-4 border rounded-lg p-4" style={{ backgroundColor: "#e3d5ca", borderColor: "#d5bdaf" }}>
+    <div className="flex items-center gap-6">
       <VSTButton onClick={toggleMetronome} size="small">
         {isPlaying ? <Stop fontSize="small" /> : <PlayArrow fontSize="small" />}
       </VSTButton>
@@ -448,14 +449,14 @@ export const Metronome = function ({
           value={bpm}
           readOnly
           onMouseDown={handleMouseDown}
-          className="text-2xl w-16 text-center rounded cursor-ns-resize select-none"
-          style={{ backgroundColor: "#f5ebe0", color: "#8b4513", borderColor: "#d5bdaf", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}
+          className="text-2xl w-16 text-center rounded-xl cursor-ns-resize select-none shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]"
+          style={{ backgroundColor: "#e0e5ec", color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}
         />
-        <div className="text-xs mt-1" style={{ color: "#a0522d", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>BPM</div>
+        <div className="text-xs mt-2 font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>BPM</div>
       </div>
       <div className="flex items-center gap-2">
-        <Circle sx={{ color: isMetronomeClick ? "#8b4513" : "#d5bdaf", fontSize: 16 }} />
-        <span className="text-xs" style={{ color: "#a0522d", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>CLICK</span>
+        <Circle sx={{ color: isMetronomeClick ? "#2d3748" : "#a0aec0", fontSize: 16 }} />
+        <span className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>CLICK</span>
       </div>
     </div>
   );
@@ -634,114 +635,117 @@ export const SamplerPage = function () {
   return (
     <div
       className="min-h-screen text-gray-800 p-8 w-screen"
-      style={{ fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif", backgroundColor: "#edede9" }}
+      style={{ fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif", backgroundColor: "#e0e5ec" }}
     >
-      {/* VST Header */}
+      {/* Neumorphic Header */}
       <div className="max-w-6xl mx-auto">
-        <div className="bg-gray-800 border border-gray-700 rounded-t-lg p-4" style={{ backgroundColor: "#d6ccc2", borderColor: "#d5bdaf" }}>
+        <div className="rounded-3xl p-6 mb-8 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-8 rounded flex items-center justify-center" style={{ backgroundColor: "#d5bdaf" }}>
-                <PlayCircle className="text-white" />
+            <div className="flex items-center gap-6">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-[2px_2px_5px_rgba(163,177,198,0.6),-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
+                <PlayCircle className="text-[#4a5568]" />
               </div>
               <div>
-                <h1 className="text-xl font-bold" style={{ color: "#8b4513", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>TR-808 SAMPLER</h1>
-                <p className="text-xs" style={{ color: "#a0522d", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>Professional Drum Machine VST</p>
+                <h1 className="text-2xl font-bold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>TR-808 SAMPLER</h1>
+                <p className="text-sm" style={{ color: "#718096", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>Professional Drum Machine VST</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <VSTMeter value={isSoundPlaying ? 0.8 : 0.1} label="OUT" />
               <VSTMeter value={isSoundPlaying ? 0.6 : 0.05} label="IN" />
             </div>
           </div>
         </div>
 
-        {/* Main VST Interface */}
-        <div className="bg-gray-900 border-x border-b border-gray-700 rounded-b-lg p-6" style={{ backgroundColor: "#f5ebe0", borderColor: "#d5bdaf" }}>
-          <div className="grid grid-cols-12 gap-6">
-            {/* Left Panel - Controls */}
-            <div className="col-span-3 space-y-6">
-              {/* Metronome Section */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4" style={{ backgroundColor: "#e3d5ca", borderColor: "#d5bdaf" }}>
-                <h3 className="text-sm mb-3" style={{ color: "#8b4513", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>METRONOME</h3>
-                <Metronome audioContext={audioContext} />
-              </div>
+        {/* Main Neumorphic Interface */}
+        <div className="rounded-3xl p-8 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
+                      <div className="grid grid-cols-12 gap-8">
+              {/* Left Panel - Controls */}
+              <div className="col-span-3 space-y-8">
+                {/* Metronome Section */}
+                <div className="rounded-2xl p-6 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
+                  <h3 className="text-sm mb-4 font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>METRONOME</h3>
+                  <Metronome audioContext={audioContext} />
+                </div>
 
-              {/* Effects Section */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4" style={{ backgroundColor: "#e3d5ca", borderColor: "#d5bdaf" }}>
-                <h3 className="text-sm mb-3" style={{ color: "#8b4513", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>EFFECTS</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs" style={{ color: "#a0522d", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>REVERB MIX</span>
-                    <span className="text-xs" style={{ color: "#8b4513", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{Math.round(reverbMix * 100)}%</span>
+                {/* Effects Section */}
+                <div className="rounded-2xl p-6 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
+                  <h3 className="text-sm mb-4 font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>EFFECTS</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>REVERB MIX</span>
+                      <span className="text-xs font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{Math.round(reverbMix * 100)}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value={reverbMix}
+                      onChange={(e) => {
+                        const mix = parseFloat(e.target.value);
+                        setReverbMix(mix);
+
+                        if (dryGain && wetGain) {
+                          dryGain.gain.value = 1 - mix;
+                          wetGain.gain.value = mix;
+                        }
+                      }}
+                      className="w-full h-3 rounded-xl appearance-none cursor-pointer slider"
+                      style={{
+                        background: `linear-gradient(to right, #a0aec0 0%, #a0aec0 ${reverbMix * 100}%, #e0e5ec ${reverbMix * 100}%, #e0e5ec 100%)`,
+                        boxShadow: 'inset 2px 2px 5px rgba(163,177,198,0.6), inset -2px -2px 5px rgba(255,255,255,0.8)'
+                      }}
+                    />
                   </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={reverbMix}
-                    onChange={(e) => {
-                      const mix = parseFloat(e.target.value);
-                      setReverbMix(mix);
+                </div>
 
-                      if (dryGain && wetGain) {
-                        dryGain.gain.value = 1 - mix;
-                        wetGain.gain.value = mix;
-                      }
-                    }}
-                    className="w-full h-2 rounded-lg appearance-none cursor-pointer slider"
-                    style={{
-                      background: `#d5bdaf`
-                    }}
-                  />
+                {/* Recording Section */}
+                <div className="rounded-2xl p-6 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
+                  <h3 className="text-sm mb-4 font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>RECORDING</h3>
+                  <div className="space-y-3">
+                    {!isRecording ? (
+                      <VSTButton onClick={startRecording} variant="primary" size="small" className="w-full">
+                        <Mic fontSize="small" className="mr-2" />
+                        RECORD
+                      </VSTButton>
+                    ) : (
+                      <VSTButton onClick={stopRecording} variant="danger" size="small" className="w-full">
+                        <Stop fontSize="small" className="mr-2" />
+                        STOP
+                      </VSTButton>
+                    )}
+                    
+                    <VSTButton 
+                      onClick={playRecording} 
+                      variant="secondary" 
+                      size="small" 
+                      disabled={recordedEvents.length === 0}
+                      className="w-full"
+                    >
+                      <PlayArrow fontSize="small" className="mr-2" />
+                      PLAY
+                    </VSTButton>
+                  </div>
                 </div>
               </div>
-
-              {/* Recording Section */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-4" style={{ backgroundColor: "#e3d5ca", borderColor: "#d5bdaf" }}>
-                <h3 className="text-sm mb-3" style={{ color: "#8b4513", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>RECORDING</h3>
-                <div className="space-y-2">
-                  {!isRecording ? (
-                    <VSTButton onClick={startRecording} variant="primary" size="small" className="w-full">
-                      <Mic fontSize="small" className="mr-2" />
-                      RECORD
-                    </VSTButton>
-                  ) : (
-                    <VSTButton onClick={stopRecording} variant="danger" size="small" className="w-full">
-                      <Stop fontSize="small" className="mr-2" />
-                      STOP
-                    </VSTButton>
-                  )}
-                  
-                  <VSTButton 
-                    onClick={playRecording} 
-                    variant="secondary" 
-                    size="small" 
-                    disabled={recordedEvents.length === 0}
-                    className="w-full"
-                  >
-                    <PlayArrow fontSize="small" className="mr-2" />
-                    PLAY
-                  </VSTButton>
-                </div>
-              </div>
-            </div>
 
             {/* Center Panel - Waveform and Pads */}
-            <div className="col-span-9 space-y-6">
+            <div className="col-span-9 space-y-8">
               {/* Waveform Viewer */}
-              <WaveformViewer
-                audioBuffer={currentPlayingBuffer}
-                isPlaying={isSoundPlaying}
-                currentTime={currentPlaybackTime}
-                duration={currentPlayingBuffer?.duration || 0}
-              />
+              <div className="rounded-2xl p-6 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
+                <WaveformViewer
+                  audioBuffer={currentPlayingBuffer}
+                  isPlaying={isSoundPlaying}
+                  currentTime={currentPlaybackTime}
+                  duration={currentPlayingBuffer?.duration || 0}
+                />
+              </div>
 
               {/* Drum Pads */}
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6" style={{ backgroundColor: "#e3d5ca", borderColor: "#d5bdaf" }}>
-                <h3 className="text-sm mb-4" style={{ color: "#8b4513", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>DRUM PADS</h3>
-                <div className="grid grid-cols-4 gap-4">
+              <div className="rounded-2xl p-8 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
+                <h3 className="text-sm mb-6 font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>DRUM PADS</h3>
+                <div className="grid grid-cols-4 gap-6">
                   {SAMPLES.map((sample) => (
                     <motion.div
                       key={sample.key}
@@ -750,15 +754,14 @@ export const SamplerPage = function () {
                       whileTap={{ scale: 0.98 }}
                     >
                       <motion.button
-                        className={`w-full h-24 border-2 rounded-lg shadow-lg relative overflow-hidden`}
-                        style={{ backgroundColor: "#d6ccc2", borderColor: "#d5bdaf" }}
+                        className={`w-full h-28 rounded-2xl relative overflow-hidden shadow-[2px_2px_5px_rgba(163,177,198,0.6),-2px_-2px_5px_rgba(255,255,255,0.8)]`}
+                        style={{ backgroundColor: "#e0e5ec" }}
                         onClick={() => playSample(sample.key)}
                         animate={{
                           scale: activeKeys.includes(sample.key) ? 1.05 : 1,
-                          borderColor: activeKeys.includes(sample.key) ? "#8b4513" : "#d5bdaf",
-                          backgroundColor: activeKeys.includes(sample.key) 
-                            ? "#d5bdaf" 
-                            : "#d6ccc2"
+                          boxShadow: activeKeys.includes(sample.key) 
+                            ? 'inset 2px 2px 5px rgba(163,177,198,0.6), inset -2px -2px 5px rgba(255,255,255,0.8)'
+                            : '2px 2px 5px rgba(163,177,198,0.6), -2px -2px 5px rgba(255,255,255,0.8)'
                         }}
                         transition={{
                           type: "spring",
@@ -768,17 +771,17 @@ export const SamplerPage = function () {
                       >
                         {/* Pad Label */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <div className="text-xs" style={{ color: "#a0522d", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{sample.name}</div>
-                          <div className="text-lg font-bold" style={{ color: "#8b4513", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{sample.key.toUpperCase()}</div>
+                          <div className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{sample.name}</div>
+                          <div className="text-lg font-bold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{sample.key.toUpperCase()}</div>
                         </div>
 
                         {/* Active Indicator */}
                         {activeKeys.includes(sample.key) && (
                           <motion.div
-                            className="absolute inset-0 opacity-20"
-                            style={{ backgroundColor: "#8b4513" }}
+                            className="absolute inset-0 opacity-10"
+                            style={{ backgroundColor: "#2d3748" }}
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: 0.2 }}
+                            animate={{ opacity: 0.1 }}
                             exit={{ opacity: 0 }}
                           />
                         )}
