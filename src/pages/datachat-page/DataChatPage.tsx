@@ -116,7 +116,6 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
           <div className="flex-1 overflow-hidden">
             {selected ? (
               <div className="h-full flex flex-col">
-                <div className="font-medium mb-3 text-[#847577]">{selected} Table</div>
                 <div className="flex-1 overflow-auto rounded-lg border border-[#e5e6e4]">
                   <table className="min-w-full text-sm divide-y divide-[#e5e6e4]">
                     <thead className="sticky top-0 bg-[#fbfbf2]">
