@@ -88,14 +88,14 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 bg-black/10 backdrop-blur-[2px] flex items-center justify-center p-4">
-      <div className="bg-[#fbfbf2] rounded-2xl shadow-lg w-full max-w-4xl h-[90vh] flex flex-col font-inter">
+      <div className="bg-[#fbfbf2] rounded-2xl shadow-lg w-full max-w-4xl h-[90vh] flex flex-col" style={{ fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
         <div className="flex items-center justify-between p-6 border-b border-[#e5e6e4]">
-          <h2 className="text-2xl font-medium text-[#847577]">Database Browser</h2>
+          <h2 className="text-2xl font-medium text-[#847577]" style={{ fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>Database Browser</h2>
           <button className="text-[#a6a2a2] hover:text-[#847577] text-2xl transition-colors" onClick={onClose}>&times;</button>
         </div>
         <div className="flex flex-1 overflow-hidden p-6 gap-6">
           <div className="w-48 flex-shrink-0">
-            <div className="font-medium mb-3 text-[#847577]">Tables</div>
+            <div className="font-medium mb-3 text-[#847577]" style={{ fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>Tables</div>
             <div className="overflow-y-auto max-h-full">
               <ul className="space-y-1">
                 {tables.map((t) => (
@@ -140,7 +140,7 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
                 </div>
               </div>
             ) : (
-              <div className="text-[#a6a2a2] mt-8 text-center">Select a table to view its data</div>
+              <div className="text-[#a6a2a2] mt-8 text-center" style={{ fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>Select a table to view its data</div>
             )}
           </div>
         </div>
@@ -281,7 +281,7 @@ export default function DataChatPage() {
   const handleClearChat = () => setMessages([]);
 
   return (
-    <div className="min-h-screen bg-[#f5ebe0] flex flex-col items-center py-12 w-screen px-4 sm:px-6 lg:px-8 font-inter">
+    <div className="min-h-screen bg-[#f5ebe0] flex flex-col items-center py-12 w-screen px-4 sm:px-6 lg:px-8" style={{ fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
       {/* MUI SpeedDial Floating Button */}
       <WarmSpeedDial
         ariaLabel="View Databases"
@@ -304,8 +304,8 @@ export default function DataChatPage() {
       </WarmSpeedDial>
       <DatabaseBrowser db={db} open={browserOpen} onClose={() => setBrowserOpen(false)} />
       <div className="bg-[#fdf6ee] rounded-2xl shadow-sm w-full max-w-3xl p-6 flex flex-col border border-[#e5e6e4]">
-        <h1 className="text-3xl font-medium mb-2 text-[#847577]">DataChat</h1>
-        <p className="mb-8 text-[#a6a2a2]">Ask questions about the car dealership database. (e.g. "Who made the most sales?" or "List all cars sold in 2023.")</p>
+        <h1 className="text-3xl font-medium mb-2 text-[#847577]" style={{ fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>DataChat</h1>
+        <p className="mb-8 text-[#a6a2a2]" style={{ fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>Ask questions about the car dealership database. (e.g. "Who made the most sales?" or "List all cars sold in 2023.")</p>
         <div className="flex-1 overflow-y-auto mb-6 max-h-[500px] space-y-4">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -358,11 +358,13 @@ export default function DataChatPage() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") handleSend(); }}
             disabled={loading}
+            style={{ fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}
           />
           <button
             className="bg-[#847577] text-[#fbfbf2] px-6 py-2.5 rounded-lg font-medium shadow-sm hover:bg-[#a6a2a2] transition-colors disabled:opacity-50 disabled:hover:bg-[#847577]"
             onClick={handleSend}
             disabled={loading || !input.trim()}
+            style={{ fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}
           >
             {loading ? "..." : "Send"}
           </button>
