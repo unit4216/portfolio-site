@@ -161,8 +161,8 @@ const WarmSpeedDial = styled(SpeedDial)(({ theme }) => ({
     border: '1.5px solid #cfd2cd',
     boxShadow: '0 4px 16px 0 rgba(132, 117, 119, 0.10)',
     '&:hover': {
-      backgroundColor: '#d5bdaf',
-      color: '#6b4f36',
+      backgroundColor: '#dbdad6',
+      color: '#847577',
     },
   },
   '& .MuiSpeedDialAction-fab': {
@@ -170,8 +170,8 @@ const WarmSpeedDial = styled(SpeedDial)(({ theme }) => ({
     color: '#847577',
     border: '1.5px solid #cfd2cd',
     '&:hover': {
-      backgroundColor: '#d5bdaf',
-      color: '#6b4f36',
+      backgroundColor: '#dbdad6',
+      color: '#847577',
     },
   },
   '& .MuiSpeedDialAction-staticTooltipLabel': {
