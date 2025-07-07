@@ -72,14 +72,14 @@ const slideInRight = {
 
 export function MasonryGrid() {
   const items = [
+    { id: 1, text: "DataChat", height: "h-48", img: './src/assets/data-chat-gif.gif', url: '/data-chat' },
     { 
-      id: 1, 
+      id: 2, 
       text: "Drum Machine", 
-      height: "h-48", 
+      height: "h-96", 
       img: './src/assets/sampler-gif.gif',
       url: '/sampler'
     },
-    { id: 2, text: "DataChat", height: "h-96", img: './src/assets/data-chat-gif.gif', url: '/data-chat' },
     { id: 3, 
       text: "SurvivalGame",
       height: "h-80",
@@ -118,9 +118,10 @@ export function MasonryGrid() {
             transition={{ duration: 0.2, ease: "easeInOut" }}
           >
             <motion.div
-              className="absolute inset-0 bg-cover bg-center z-0 group-hover:brightness-50 transition-brightness duration-300"
+              className="absolute inset-0 bg-cover z-0 group-hover:brightness-50 transition-brightness duration-300"
               style={{
                 backgroundImage: item.img ? `url(${item.img})` : undefined,
+                backgroundPosition: item.img ? 'top center' : 'center',
               }}
             />
             <div className="relative z-10 flex flex-col justify-center items-center h-full">
