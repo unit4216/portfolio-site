@@ -7,6 +7,11 @@ import remarkGfm from "remark-gfm";
 import { DATABASE_SCHEMA } from "./databaseData";
 import { format as formatSQL } from "sql-formatter";
 import StorageIcon from "@mui/icons-material/Storage";
+import AddIcon from "@mui/icons-material/Add";
+import ForumIcon from "@mui/icons-material/Forum";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { styled } from "@mui/material/styles";
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
 
@@ -144,6 +149,40 @@ function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boo
   );
 }
 
+// Custom styled SpeedDial to match warm, neutral palette
+const WarmSpeedDial = styled(SpeedDial)(({ theme }) => ({
+  position: 'fixed',
+  bottom: theme.spacing(8),
+  right: theme.spacing(8),
+  zIndex: 1300,
+  '& .MuiFab-primary': {
+    backgroundColor: '#e5e6e4',
+    color: '#847577',
+    border: '1.5px solid #cfd2cd',
+    boxShadow: '0 4px 16px 0 rgba(132, 117, 119, 0.10)',
+    '&:hover': {
+      backgroundColor: '#d5bdaf',
+      color: '#6b4f36',
+    },
+  },
+  '& .MuiSpeedDialAction-fab': {
+    backgroundColor: '#e5e6e4',
+    color: '#847577',
+    border: '1.5px solid #cfd2cd',
+    '&:hover': {
+      backgroundColor: '#d5bdaf',
+      color: '#6b4f36',
+    },
+  },
+  '& .MuiSpeedDialAction-staticTooltipLabel': {
+    background: '#847577',
+    color: '#fdf6ee',
+    fontSize: '0.85rem',
+    borderRadius: 6,
+    boxShadow: '0 2px 8px 0 rgba(132, 117, 119, 0.10)',
+  },
+}));
+
 export default function DataChatPage() {
   const [db, setDb] = useState<Database | null>(null);
   const [messages, setMessages] = useState<{ 
@@ -238,21 +277,31 @@ export default function DataChatPage() {
     ));
   };
 
+  // Handler to clear chat
+  const handleClearChat = () => setMessages([]);
+
   return (
     <div className="min-h-screen bg-[#f5ebe0] flex flex-col items-center py-12 w-screen px-4 sm:px-6 lg:px-8 font-inter">
-      {/* Floating Database Button with Tooltip */}
-      <div className="fixed bottom-8 right-8 z-50 flex flex-col items-center group">
-        <div className="mb-2 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-200 pointer-events-none select-none px-3 py-1 rounded-md bg-[#847577] text-[#fdf6ee] text-xs shadow-lg whitespace-nowrap">
-          View Databases
-        </div>
-        <button
-          className="w-14 h-14 rounded-full bg-[#e5e6e4] border border-[#cfd2cd] shadow-lg flex items-center justify-center hover:bg-[#d5bdaf] transition-colors focus:outline-none focus:ring-2 focus:ring-[#e7c385] focus:ring-offset-2"
+      {/* MUI SpeedDial Floating Button */}
+      <WarmSpeedDial
+        ariaLabel="View Databases"
+        icon={<AddIcon sx={{ fontSize: 32 }} />}
+        direction="up"
+        FabProps={{
+          size: 'large',
+        }}
+      >
+        <SpeedDialAction
+          icon={<ForumIcon sx={{ fontSize: 24 }} />}
+          tooltipTitle="New Chat"
+          onClick={handleClearChat}
+        />
+        <SpeedDialAction
+          icon={<StorageIcon sx={{ fontSize: 24 }} />}
+          tooltipTitle="View Databases"
           onClick={() => setBrowserOpen(true)}
-          aria-label="Open Database Browser"
-        >
-          <StorageIcon style={{ color: "#847577", fontSize: 32 }} />
-        </button>
-      </div>
+        />
+      </WarmSpeedDial>
       <DatabaseBrowser db={db} open={browserOpen} onClose={() => setBrowserOpen(false)} />
       <div className="bg-[#fdf6ee] rounded-2xl shadow-sm w-full max-w-3xl p-6 flex flex-col border border-[#e5e6e4]">
         <h1 className="text-3xl font-medium mb-2 text-[#847577]">DataChat</h1>
