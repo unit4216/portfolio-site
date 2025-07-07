@@ -74,9 +74,10 @@ export function MasonryGrid() {
   const items = [
     { 
       id: 1, 
-      text: "project1", 
+      text: "Drum Machine", 
       height: "h-48", 
-      img: null
+      img: './src/assets/sampler-gif.gif',
+      url: '/sampler'
     },
     { id: 2, text: "DataChat", height: "h-96", img: './src/assets/data-chat-gif.gif', url: '/data-chat' },
     { id: 3, text: "project3", height: "h-80", img: null },
