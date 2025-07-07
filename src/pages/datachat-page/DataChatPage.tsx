@@ -4,6 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 import { initializeDatabase } from "./databaseData";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { DATABASE_SCHEMA } from "./databaseData";
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
 
@@ -47,12 +48,6 @@ Answer:
   return await callGemini(prompt);
 }
 
-// Helper to get table schemas as a string
-function getTableSchemas(db: Database): string {
-  const res = db.exec("SELECT name, sql FROM sqlite_master WHERE type='table'");
-  if (!res[0]) return "";
-  return res[0].values.map((row) => String(row[1])).join("\n");
-}
 
 function DatabaseBrowser({ db, open, onClose }: { db: Database | null, open: boolean, onClose: () => void }) {
   const [tables, setTables] = useState<string[]>([]);
@@ -182,7 +177,6 @@ export default function DataChatPage() {
     setMessages((msgs) => [...msgs, { role: "user", text: input }]);
     setInput(""); // Clear input immediately
     setLoading(true);
-    const schemas = getTableSchemas(db);
     
     // Retry SQL generation up to 3 times
     let sql = "";
@@ -192,7 +186,7 @@ export default function DataChatPage() {
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
         // 1. Ask LLM for SQL
-        sql = await askLLMForSQL(input, schemas);
+        sql = await askLLMForSQL(input, DATABASE_SCHEMA);
         
         // 2. Execute SQL
         const res = db.exec(sql);
