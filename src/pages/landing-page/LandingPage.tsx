@@ -84,7 +84,7 @@ export function MasonryGrid() {
       id: 4,
       text: "Cancer Detection Using Neural Networks",
       height: "h-64",
-      img: "./src/assets/cancer-pixel.png",
+      img: './src/assets/cancer-gif.gif',
       url: "https://github.com/unit4216/cancer-cnn/blob/main/cnn-cancer-detection.ipynb",
     },
   ];
