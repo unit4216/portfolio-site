@@ -102,11 +102,11 @@ const VSTKnob = ({
             backgroundColor: "#2d3748"
           }}
         />
-        <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
+        <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold" style={{ color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
           {Math.round(value)}
         </div>
       </div>
-      <div className="text-xs mt-2 text-center font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{label}</div>
+      <div className="text-xs mt-2 text-center font-medium" style={{ color: "#4a5568", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{label}</div>
     </div>
   );
 };
@@ -119,7 +119,7 @@ const VSTMeter = ({ value, label }: { value: number; label: string }) => {
   
   return (
     <div className="flex flex-col items-center">
-      <div className="text-xs mb-1 font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{label}</div>
+      <div className="text-xs mb-1 font-medium" style={{ color: "#4a5568", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{label}</div>
       <div className="relative w-4 h-20 rounded-lg shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
         {Array.from({ length: segments }, (_, i) => {
           const segmentValue = (i + 1) / segments;
@@ -324,9 +324,9 @@ const WaveformViewer = ({
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>WAVEFORM</h3>
+        <h3 className="text-sm font-semibold" style={{ color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>WAVEFORM</h3>
         {isPlaying && (
-          <div className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
+          <div className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
             {Math.floor(currentTime * 1000)}ms / {Math.floor(duration * 1000)}ms
           </div>
         )}
@@ -450,13 +450,13 @@ export const Metronome = function ({
           readOnly
           onMouseDown={handleMouseDown}
           className="text-2xl w-16 text-center rounded-xl cursor-ns-resize select-none shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]"
-          style={{ backgroundColor: "#e0e5ec", color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}
+          style={{ backgroundColor: "#e0e5ec", color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}
         />
-        <div className="text-xs mt-2 font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>BPM</div>
+        <div className="text-xs mt-2 font-medium" style={{ color: "#4a5568", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>BPM</div>
       </div>
       <div className="flex items-center gap-2">
         <Circle sx={{ color: isMetronomeClick ? "#2d3748" : "#a0aec0", fontSize: 16 }} />
-        <span className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>CLICK</span>
+        <span className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>CLICK</span>
       </div>
     </div>
   );
@@ -635,7 +635,7 @@ export const SamplerPage = function () {
   return (
     <div
       className="min-h-screen text-gray-800 p-8 w-screen"
-      style={{ fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif", backgroundColor: "#e0e5ec" }}
+      style={{ fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif", backgroundColor: "#e0e5ec" }}
     >
       {/* Neumorphic Header */}
       <div className="max-w-6xl mx-auto">
@@ -646,8 +646,8 @@ export const SamplerPage = function () {
                 <PlayCircle className="text-[#4a5568]" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>TR-808 SAMPLER</h1>
-                <p className="text-sm" style={{ color: "#718096", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>Professional Drum Machine VST</p>
+                <h1 className="text-2xl font-bold" style={{ color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>TR-808 SAMPLER</h1>
+                <p className="text-sm" style={{ color: "#718096", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>Professional Drum Machine VST</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -664,17 +664,17 @@ export const SamplerPage = function () {
               <div className="col-span-3 space-y-8">
                 {/* Metronome Section */}
                 <div className="rounded-2xl p-6 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
-                  <h3 className="text-sm mb-4 font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>METRONOME</h3>
+                  <h3 className="text-sm mb-4 font-semibold" style={{ color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>METRONOME</h3>
                   <Metronome audioContext={audioContext} />
                 </div>
 
                 {/* Effects Section */}
                 <div className="rounded-2xl p-6 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
-                  <h3 className="text-sm mb-4 font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>EFFECTS</h3>
+                  <h3 className="text-sm mb-4 font-semibold" style={{ color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>EFFECTS</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>REVERB MIX</span>
-                      <span className="text-xs font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{Math.round(reverbMix * 100)}%</span>
+                      <span className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>REVERB MIX</span>
+                      <span className="text-xs font-semibold" style={{ color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{Math.round(reverbMix * 100)}%</span>
                     </div>
                     <input
                       type="range"
@@ -702,7 +702,7 @@ export const SamplerPage = function () {
 
                 {/* Recording Section */}
                 <div className="rounded-2xl p-6 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
-                  <h3 className="text-sm mb-4 font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>RECORDING</h3>
+                  <h3 className="text-sm mb-4 font-semibold" style={{ color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>RECORDING</h3>
                   <div className="space-y-3">
                     {!isRecording ? (
                       <VSTButton onClick={startRecording} variant="primary" size="small" className="w-full">
@@ -744,7 +744,7 @@ export const SamplerPage = function () {
 
               {/* Drum Pads */}
               <div className="rounded-2xl p-8 shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]" style={{ backgroundColor: "#e0e5ec" }}>
-                <h3 className="text-sm mb-6 font-semibold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>DRUM PADS</h3>
+                <h3 className="text-sm mb-6 font-semibold" style={{ color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>DRUM PADS</h3>
                 <div className="grid grid-cols-4 gap-6">
                   {SAMPLES.map((sample) => (
                     <motion.div
@@ -771,8 +771,8 @@ export const SamplerPage = function () {
                       >
                         {/* Pad Label */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <div className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{sample.name}</div>
-                          <div className="text-lg font-bold" style={{ color: "#2d3748", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{sample.key.toUpperCase()}</div>
+                          <div className="text-xs font-medium" style={{ color: "#4a5568", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{sample.name}</div>
+                          <div className="text-lg font-bold" style={{ color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{sample.key.toUpperCase()}</div>
                         </div>
 
                         {/* Active Indicator */}
