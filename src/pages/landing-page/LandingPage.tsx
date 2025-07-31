@@ -182,7 +182,7 @@ const ResumeAccordion = () => {
               <div className="text-[30px]">{experience.title}</div>
             </AccordionSummary>
             <AccordionDetails>
-              <div className="text-[16px] text-[#666] mb-2" style={{ fontStyle: 'italic' }}>{experience.jobTitle}</div>
+              <div className="text-[16px] text-[#666] mb-2" style={{ fontStyle: 'italic', fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{experience.jobTitle}</div>
               <div className="text-[20px]">{experience.description}</div>
             </AccordionDetails>
           </Accordion>
