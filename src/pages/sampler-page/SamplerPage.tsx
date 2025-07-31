@@ -1,4 +1,3 @@
-import React from "react";
 import { SamplerHeader } from "../../components/Sampler/SamplerHeader";
 import { ControlsPanel } from "../../components/Sampler/ControlsPanel";
 import { MainPanel } from "../../components/Sampler/MainPanel";

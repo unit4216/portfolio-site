@@ -1,4 +1,3 @@
-import React from "react";
 import { DrumPad } from "./DrumPad";
 import { SAMPLES } from "../../constants/samplerConstants";
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { WaveformViewer } from "./WaveformViewer";
 import { DrumPadsGrid } from "./DrumPadsGrid";
 

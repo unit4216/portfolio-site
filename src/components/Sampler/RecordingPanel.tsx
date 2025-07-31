@@ -1,4 +1,3 @@
-import React from "react";
 import { Mic, PlayArrow, Stop } from "@mui/icons-material";
 import { VSTButton } from "./VSTButton";
 
