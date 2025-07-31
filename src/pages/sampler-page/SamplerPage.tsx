@@ -9,7 +9,7 @@ import openHat from "../../assets/808-samples/Roland TR-808/OH/OH00.wav";
 
 import { useEffect, useRef, useState } from "react";
 import metronomeClick from "../../assets/808-samples/Roland TR-808/RS/RS.wav";
-import { Circle, PlayArrow, Stop, VolumeUp, Settings, Mic, PlayCircle } from "@mui/icons-material";
+import { Circle, PlayArrow, Stop, Mic, PlayCircle } from "@mui/icons-material";
 import { motion } from "framer-motion";
 
 const SAMPLES = [
@@ -23,93 +23,6 @@ const SAMPLES = [
   { src: openHat, key: "f", name: "Open Hat" },
 ];
 
-// VST-style Knob Component
-const VSTKnob = ({ 
-  value, 
-  onChange, 
-  label, 
-  min = 0, 
-  max = 100, 
-  size = 60 
-}: { 
-  value: number; 
-  onChange: (value: number) => void; 
-  label: string; 
-  min?: number; 
-  max?: number; 
-  size?: number;
-}) => {
-  const [isDragging, setIsDragging] = useState(false);
-  const knobRef = useRef<HTMLDivElement>(null);
-  const startY = useRef(0);
-  const startValue = useRef(0);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    startY.current = e.clientY;
-    startValue.current = value;
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging) return;
-    const deltaY = startY.current - e.clientY;
-    const sensitivity = (max - min) / 200;
-    const newValue = Math.max(min, Math.min(max, startValue.current + deltaY * sensitivity));
-    onChange(newValue);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-  };
-
-  const rotation = ((value - min) / (max - min)) * 270 - 135;
-
-  return (
-    <div className="flex flex-col items-center">
-      <div 
-        ref={knobRef}
-        className="relative cursor-pointer select-none"
-        onMouseDown={handleMouseDown}
-        style={{ width: size, height: size }}
-      >
-        <div 
-          className="absolute inset-0 rounded-full shadow-[inset_2px_2px_5px_rgba(163,177,198,0.6),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]"
-          style={{ width: size, height: size, backgroundColor: "#e0e5ec" }}
-        />
-        <div 
-          className="absolute inset-0 rounded-full"
-          style={{ 
-            width: size - 8, 
-            height: size - 8, 
-            top: 4, 
-            left: 4,
-            transform: `rotate(${rotation}deg)`,
-            backgroundColor: "#e0e5ec",
-            boxShadow: 'inset 2px 2px 5px rgba(163,177,198,0.6), inset -2px -2px 5px rgba(255,255,255,0.8)'
-          }}
-        />
-        <div 
-          className="absolute w-1 h-3 rounded-full"
-          style={{ 
-            left: '50%', 
-            top: '50%', 
-            transform: `translate(-50%, -50%) rotate(${rotation}deg) translateY(-${size/2 - 8}px)`,
-            transformOrigin: 'center',
-            backgroundColor: "#2d3748"
-          }}
-        />
-        <div className="absolute inset-0 flex items-center justify-center text-xs font-semibold" style={{ color: "#2d3748", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
-          {Math.round(value)}
-        </div>
-      </div>
-      <div className="text-xs mt-2 text-center font-medium" style={{ color: "#4a5568", fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{label}</div>
-    </div>
-  );
-};
 
 // VST-style Meter Component
 const VSTMeter = ({ value, label }: { value: number; label: string }) => {
@@ -287,7 +200,7 @@ const WaveformViewer = ({
       
       const x = i;
       const y = (1 + min) * amp;
-      const y2 = (1 + max) * amp;
+      // const y2 = (1 + max) * amp;
       
       if (i === 0) {
         ctx.moveTo(x, y);
@@ -374,7 +287,7 @@ export const Metronome = function ({
   const startMetronome = () => {
     const interval = (60 / bpm) * 1000;
 
-    intervalId.current = setInterval(() => {
+    intervalId.current = window.setInterval(() => {
       playClick();
 
       setIsMetronomeClick(true);
