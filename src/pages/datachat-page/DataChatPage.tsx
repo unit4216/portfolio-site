@@ -15,9 +15,17 @@ import { styled } from "@mui/material/styles";
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
 
-const gemini = new GoogleGenAI({apiKey: GEMINI_API_KEY});
+let gemini: GoogleGenAI | null = null;
+
+if (GEMINI_API_KEY) {
+  gemini = new GoogleGenAI({apiKey: GEMINI_API_KEY});
+}
 
 async function callGemini(prompt: string): Promise<string> {
+    if (!gemini) {
+        return "API key not configured. Please set VITE_GEMINI_API_KEY environment variable.";
+    }
+    
     const response = await gemini.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
