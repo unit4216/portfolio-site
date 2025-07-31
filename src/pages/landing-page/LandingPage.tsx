@@ -148,21 +148,21 @@ const ResumeAccordion = () => {
         "Software Developer (2023-2024)", 
         "Junior Software Developer (2022-2023)"
       ],
-      description: "Worked at Westland." 
+      description: "Lead a team of 2 developers while owning technical decisions across multiple systems. Cut cloud costs by 50% ($20K/year) through VM audits and serverless migration. Launched Westland AI chatbot and refactored key internal applications including Datalink, Investment Management, and BankRec."
     },
     { 
       title: "Paliza Consulting", 
       jobTitle: [
         "Software Development Consultant"
       ],
-      description: "Worked at Paliza Consulting." 
+      description: "Built and maintained Python ETL tools for parsing and visualizing energy industry data, providing consulting services for data processing and visualization projects."
     },
     { 
       title: "Synergy", 
       jobTitle: [
         "IT Engineer"
       ],
-      description: "Worked at Synergy IT." 
+      description: "Provided on-site IT support and remote monitoring for global clients, managing technical infrastructure and troubleshooting for diverse client environments."
     },
   ];
 
@@ -195,7 +195,7 @@ const ResumeAccordion = () => {
                   <div key={index} className="mb-1 last:mb-0">{title}</div>
                 ))}
               </div>
-              <div className="text-[20px]">{experience.description}</div>
+              <div className="text-[18px] mt-4 leading-relaxed">{experience.description}</div>
             </AccordionDetails>
           </Accordion>
         </motion.div>
