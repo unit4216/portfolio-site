@@ -103,7 +103,7 @@ export function MasonryGrid() {
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
     >
-      {items.map((item, index) => (
+      {items.map((item) => (
         <motion.a 
           href={item.url} 
           target={item.url?.startsWith('/') ? undefined : "_blank"}
@@ -433,7 +433,7 @@ export const LandingPage = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div className="flex flex-row justify-end gap-x-10 text-[25px]">
-          {sections.map((section, index) => {
+          {sections.map((section) => {
             return (
               <motion.button 
                 key={section}
