@@ -1,6 +1,4 @@
-/**
- * VST-style button component with different variants and sizes
- */
+
 interface VSTButtonProps {
   children: React.ReactNode;
   onClick: () => void;
@@ -10,6 +8,9 @@ interface VSTButtonProps {
   className?: string;
 }
 
+/**
+ * VST-style button component with different variants and sizes
+ */
 export const VSTButton = ({ 
   children, 
   onClick, 

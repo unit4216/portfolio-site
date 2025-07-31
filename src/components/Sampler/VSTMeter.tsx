@@ -1,11 +1,12 @@
-/**
- * VST-style meter component for displaying audio levels
- */
+
 interface VSTMeterProps {
   value: number;
   label: string;
 }
 
+/**
+ * VST-style meter component for displaying audio levels
+ */
 export const VSTMeter = ({ value, label }: VSTMeterProps) => {
   const height = 80;
   const segments = 20;
