@@ -4,68 +4,68 @@ import dictionary from "../../assets/12dicts-6.0.2/American/2of12.txt?raw";
 import { Alert, LinearProgress, Snackbar } from "@mui/material";
 import { motion } from "framer-motion";
 
+/**
+ * Maximum length for words in the game
+ */
 const MAX_WORD_LENGTH = 20;
 
+/**
+ * Letter point values for scoring
+ */
 const LETTER_POINTS: Record<string, number> = {
-  a: 1,
-  b: 2,
-  c: 3,
-  d: 2,
-  e: 1,
-  f: 4,
-  g: 2,
-  h: 4,
-  i: 1,
-  j: 8,
-  k: 5,
-  l: 1,
-  m: 3,
-  n: 1,
-  o: 1,
-  p: 3,
-  q: 10,
-  r: 1,
-  s: 1,
-  t: 1,
-  u: 1,
-  v: 4,
-  w: 4,
-  x: 8,
-  y: 4,
-  z: 10,
+  a: 1, b: 2, c: 3, d: 2, e: 1, f: 4, g: 2, h: 4, i: 1, j: 8, k: 5, l: 1,
+  m: 3, n: 1, o: 1, p: 3, q: 10, r: 1, s: 1, t: 1, u: 1, v: 4, w: 4, x: 8,
+  y: 4, z: 10,
 };
 
-function getRandomLetters(count = 9): string[] {
-  let consonants = "bcdfghjklmnpqrstvwxyz";
-  let vowels = "aeiou";
+/**
+ * Generate random letters with a balanced mix of vowels and consonants
+ * @param count - Number of letters to generate (default: 9)
+ * @returns Array of random letters
+ */
+function generateRandomLetters(count = 9): string[] {
+  const consonants = "bcdfghjklmnpqrstvwxyz";
+  const vowels = "aeiou";
   const result: string[] = [];
 
   const numVowels = Math.round(count * 0.4);
   const numConsonants = count - numVowels;
 
+  // Add consonants
   for (let i = 0; i < numConsonants; i++) {
-    const randomLetter =
-      consonants[Math.floor(Math.random() * consonants.length)];
+    const randomLetter = consonants[Math.floor(Math.random() * consonants.length)];
     result.push(randomLetter);
-    consonants = consonants.replace(randomLetter, "");
+    consonants.replace(randomLetter, "");
   }
 
+  // Add vowels
   for (let i = 0; i < numVowels; i++) {
     const randomLetter = vowels[Math.floor(Math.random() * vowels.length)];
     result.push(randomLetter);
-    vowels = vowels.replace(randomLetter, "");
+    vowels.replace(randomLetter, "");
   }
 
   return result;
 }
 
-const getWordScore = (word: string) => {
+/**
+ * Calculate the score for a given word
+ * @param word - The word to score
+ * @returns The total score
+ */
+const calculateWordScore = (word: string): number => {
   return word
     .split("")
-    .reduce((acc, letter) => (acc += LETTER_POINTS[letter]), 0);
+    .reduce((total, letter) => total + LETTER_POINTS[letter], 0);
 };
 
-const getAnswerList = (letters: string[], round: number) => {
+/**
+ * Get valid answers for the current letters and round
+ * @param letters - Available letters
+ * @param round - Current round number
+ * @returns Object containing valid answers and threshold score
+ */
+const getValidAnswers = (letters: string[], round: number) => {
   const wordList: string[] = dictionary.replace(/\r/g, "").split("\n");
   const validWords = wordList.filter((word) => word.length > 2);
 
@@ -77,43 +77,48 @@ const getAnswerList = (letters: string[], round: number) => {
 
   const scoredAnswers = validAnswers.map((word) => ({
     word,
-    score: getWordScore(word),
+    score: calculateWordScore(word),
   }));
 
   scoredAnswers.sort((a, b) => b.score - a.score);
 
+  // Difficulty increases with each round
   const difficulties = [0.7, 0.55, 0.4, 0.25, 0.1];
-
   const thresholdIndex = Math.floor(scoredAnswers.length * difficulties[round]);
-  const topAnswersScoreThreshold = scoredAnswers[thresholdIndex].score;
+  const thresholdScore = scoredAnswers[thresholdIndex]?.score || 0;
+  
   return {
     answers: scoredAnswers
-      .filter((answer) => answer.score >= topAnswersScoreThreshold)
+      .filter((answer) => answer.score >= thresholdScore)
       .map((answer) => answer.word),
-    thresholdScore: topAnswersScoreThreshold,
+    thresholdScore,
   };
 };
 
-export const GauntletPage = function () {
-  const [letters, setLetters] = useState<string[]>(getRandomLetters());
-  const [sequence, setSequence] = useState<string>("");
-  const [answerList, setAnswerList] = useState<string[]>([]);
-  const [round, setRound] = useState<number>(0);
-  const [won, setWon] = useState<boolean>(false);
-  const [lost, setLost] = useState<boolean>(false);
-  const [attempts, setAttempts] = useState<number>(3);
+/**
+ * Main Gauntlet game component
+ */
+export const GauntletPage = () => {
+  const [availableLetters, setAvailableLetters] = useState<string[]>(generateRandomLetters());
+  const [currentWord, setCurrentWord] = useState<string>("");
+  const [validAnswers, setValidAnswers] = useState<string[]>([]);
+  const [currentRound, setCurrentRound] = useState<number>(0);
+  const [hasWon, setHasWon] = useState<boolean>(false);
+  const [hasLost, setHasLost] = useState<boolean>(false);
+  const [remainingAttempts, setRemainingAttempts] = useState<number>(3);
   const [thresholdScore, setThresholdScore] = useState<number>(0);
-  const [showAlert, setShowAlert] = useState<{
+  const [alertMessage, setAlertMessage] = useState<{
     type: "error" | "success";
     text: string;
   } | null>(null);
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
   const [lastAddedLetter, setLastAddedLetter] = useState<string | null>(null);
 
+  // Handle keyboard input for letter selection
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
-      if (letters.includes(event.key) && sequence.length < MAX_WORD_LENGTH) {
+      if (availableLetters.includes(event.key) && currentWord.length < MAX_WORD_LENGTH) {
         setLastAddedLetter(key);
         // Clear the animation after a short delay
         setTimeout(() => setLastAddedLetter(null), 150);
@@ -136,62 +141,71 @@ export const GauntletPage = function () {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [activeKeys, letters, sequence]);
+  }, [activeKeys, availableLetters, currentWord]);
 
-  function shuffleSequence() {
-    const lettersRef = [...letters];
-    for (let i = lettersRef.length - 1; i > 0; i--) {
+  /**
+   * Shuffle the available letters
+   */
+  const shuffleLetters = () => {
+    const shuffledLetters = [...availableLetters];
+    for (let i = shuffledLetters.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [lettersRef[i], lettersRef[j]] = [lettersRef[j], lettersRef[i]];
+      [shuffledLetters[i], shuffledLetters[j]] = [shuffledLetters[j], shuffledLetters[i]];
     }
-    setLetters(lettersRef);
-  }
+    setAvailableLetters(shuffledLetters);
+  };
 
+  // Update valid answers when letters change
   useEffect(() => {
-    const res = getAnswerList(letters, round);
-    setAnswerList(res.answers);
-    setThresholdScore(res.thresholdScore);
-  }, [letters]);
+    const result = getValidAnswers(availableLetters, currentRound);
+    setValidAnswers(result.answers);
+    setThresholdScore(result.thresholdScore);
+  }, [availableLetters, currentRound]);
 
-  const score = getWordScore(sequence);
+  const currentScore = calculateWordScore(currentWord);
+  const isScoreTooLow = currentScore < thresholdScore;
 
-  const scoreTooLow = score < thresholdScore;
-
+  /**
+   * Submit the current word as an answer
+   */
   const submitAnswer = () => {
-    if (scoreTooLow) return;
-    const answerInAnswerSet = answerList.includes(sequence);
-    if (answerInAnswerSet) {
-      if (round == 4) {
-        setWon(true);
+    if (isScoreTooLow) return;
+    
+    const isAnswerValid = validAnswers.includes(currentWord);
+    
+    if (isAnswerValid) {
+      if (currentRound === 4) {
+        setHasWon(true);
       } else {
-        setRound(round + 1);
-        setLetters(getRandomLetters());
-        setSequence("");
-        setAttempts(3); // Reset attempts for new round
-        setShowAlert({ type: "success", text: "Nice one!" });
+        setCurrentRound(currentRound + 1);
+        setAvailableLetters(generateRandomLetters());
+        setCurrentWord("");
+        setRemainingAttempts(3); // Reset attempts for new round
+        setAlertMessage({ type: "success", text: "Nice one!" });
       }
     } else {
-      setSequence("");
-      const newAttempts = attempts - 1;
-      setAttempts(newAttempts);
+      setCurrentWord("");
+      const newAttempts = remainingAttempts - 1;
+      setRemainingAttempts(newAttempts);
       
       if (newAttempts <= 0) {
-        setLost(true);
-        setShowAlert({ type: "error", text: "Game Over! You ran out of attempts." });
+        setHasLost(true);
+        setAlertMessage({ type: "error", text: "Game Over! You ran out of attempts." });
       } else {
-        setShowAlert({ type: "error", text: `Not a valid word! ${newAttempts} attempts remaining.` });
+        setAlertMessage({ type: "error", text: `Not a valid word! ${newAttempts} attempts remaining.` });
       }
     }
   };
 
+  // Handle keyboard input for word building and submission
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (letters.includes(event.key) && sequence.length < MAX_WORD_LENGTH) {
-        setSequence(sequence + event.key);
+      if (availableLetters.includes(event.key) && currentWord.length < MAX_WORD_LENGTH) {
+        setCurrentWord(currentWord + event.key);
       }
 
       if (event.key === "Backspace") {
-        setSequence(sequence.slice(0, -1));
+        setCurrentWord(currentWord.slice(0, -1));
       }
 
       if (event.key === "Enter") {
@@ -204,28 +218,40 @@ export const GauntletPage = function () {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [letters, sequence]);
+  }, [availableLetters, currentWord]);
 
-  const progress = Math.min((score / thresholdScore) * 100, 100);
+  const progressPercentage = Math.min((currentScore / thresholdScore) * 100, 100);
+
+  /**
+   * Reset the game to start over
+   */
+  const resetGame = () => {
+    setCurrentRound(0);
+    setAvailableLetters(generateRandomLetters());
+    setCurrentWord("");
+    setRemainingAttempts(3);
+    setHasWon(false);
+    setHasLost(false);
+  };
 
   return (
-    <div
-      className="min-h-screen w-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800"
-      style={{ fontFamily: "Neue Haas Grotesk" }}
-    >
+    <div className="min-h-screen w-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800"
+         style={{ fontFamily: "Neue Haas Grotesk" }}>
+      
       <Snackbar
-        open={!!showAlert}
+        open={!!alertMessage}
         autoHideDuration={3000}
-        onClose={() => setShowAlert(null)}
+        onClose={() => setAlertMessage(null)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert severity={showAlert?.type} onClose={() => setShowAlert(null)}>
-          {showAlert?.text}
+        <Alert severity={alertMessage?.type} onClose={() => setAlertMessage(null)}>
+          {alertMessage?.text}
         </Alert>
       </Snackbar>
       
       <div className="w-full px-6 py-12">
         <div className="text-center space-y-8 w-full">
+          
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -241,7 +267,7 @@ export const GauntletPage = function () {
           </motion.div>
 
           {/* Win State */}
-          {won && (
+          {hasWon && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -253,7 +279,7 @@ export const GauntletPage = function () {
           )}
 
           {/* Lose State */}
-          {lost && (
+          {hasLost && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -262,14 +288,7 @@ export const GauntletPage = function () {
               <div className="text-4xl font-light text-red-600">Game Over!</div>
               <p className="text-slate-600">You ran out of attempts. Try again!</p>
               <motion.button
-                onClick={() => {
-                  setRound(0);
-                  setLetters(getRandomLetters());
-                  setSequence("");
-                  setAttempts(3);
-                  setWon(false);
-                  setLost(false);
-                }}
+                onClick={resetGame}
                 className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -279,12 +298,14 @@ export const GauntletPage = function () {
             </motion.div>
           )}
 
-                      {!won && !lost && (
+          {/* Game Interface */}
+          {!hasWon && !hasLost && (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="space-y-8"
             >
+              
               {/* Progress Indicators */}
               <div className="flex justify-center space-x-3">
                 {[0, 1, 2, 3, 4].map((roundNumber) => (
@@ -296,7 +317,7 @@ export const GauntletPage = function () {
                   >
                     <Circle
                       className={`w-6 h-6 transition-colors duration-300 ${
-                        roundNumber <= round 
+                        roundNumber <= currentRound 
                           ? "text-blue-500 fill-current" 
                           : "text-slate-300"
                       }`}
@@ -318,7 +339,7 @@ export const GauntletPage = function () {
                     >
                       <Circle
                         className={`w-4 h-4 transition-colors duration-300 ${
-                          attemptNumber <= attempts 
+                          attemptNumber <= remainingAttempts 
                             ? "text-green-500 fill-current" 
                             : "text-red-400 fill-current"
                         }`}
@@ -334,19 +355,19 @@ export const GauntletPage = function () {
                 layout
               >
                 <div className="text-6xl font-light tracking-wider text-slate-900">
-                  {sequence || "..."}
+                  {currentWord || "..."}
                 </div>
               </motion.div>
 
               {/* Letter Grid */}
               <div className="grid grid-cols-3 gap-2 w-full max-w-lg mx-auto">
-                {letters.map((letter, index) => (
+                {availableLetters.map((letter, index) => (
                   <motion.button
                     key={index}
                     className="relative aspect-square rounded-xl text-xl font-medium transition-all duration-200 hover:shadow-lg"
                     onClick={() => {
-                      if (sequence.length < MAX_WORD_LENGTH) {
-                        setSequence(sequence + letter);
+                      if (currentWord.length < MAX_WORD_LENGTH) {
+                        setCurrentWord(currentWord + letter);
                       }
                     }}
                     animate={{
@@ -377,7 +398,7 @@ export const GauntletPage = function () {
               <div className="flex items-center gap-4 w-full max-w-2xl mx-auto">
                 <motion.button
                   className="p-3 rounded-full bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
-                  onClick={() => setSequence(sequence.slice(0, -1))}
+                  onClick={() => setCurrentWord(currentWord.slice(0, -1))}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -387,22 +408,22 @@ export const GauntletPage = function () {
                 <motion.button
                   onClick={submitAnswer}
                   className="relative flex-1 h-14 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
-                  disabled={scoreTooLow}
-                  whileHover={{ scale: scoreTooLow ? 1 : 1.02 }}
-                  whileTap={{ scale: scoreTooLow ? 1 : 0.98 }}
+                  disabled={isScoreTooLow}
+                  whileHover={{ scale: isScoreTooLow ? 1 : 1.02 }}
+                  whileTap={{ scale: isScoreTooLow ? 1 : 0.98 }}
                 >
                   <LinearProgress
                     variant="determinate"
-                    value={progress}
-                                          sx={{
-                        height: 56,
+                    value={progressPercentage}
+                    sx={{
+                      height: 56,
+                      borderRadius: "24px",
+                      backgroundColor: isScoreTooLow ? "#e2e8f0" : "#dbeafe",
+                      "& .MuiLinearProgress-bar": {
+                        backgroundColor: isScoreTooLow ? "#94a3b8" : "#3b82f6",
                         borderRadius: "24px",
-                        backgroundColor: scoreTooLow ? "#e2e8f0" : "#dbeafe",
-                        "& .MuiLinearProgress-bar": {
-                          backgroundColor: scoreTooLow ? "#94a3b8" : "#3b82f6",
-                          borderRadius: "24px",
-                        },
-                      }}
+                      },
+                    }}
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-white font-medium text-lg">
@@ -413,7 +434,7 @@ export const GauntletPage = function () {
 
                 <motion.button 
                   className="p-3 rounded-full bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
-                  onClick={shuffleSequence}
+                  onClick={shuffleLetters}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -424,7 +445,7 @@ export const GauntletPage = function () {
               {/* Score Indicator */}
               <div className="text-center space-y-2">
                 <div className="text-sm text-slate-500">
-                  Current Score: <span className="font-medium text-slate-700">{score}</span>
+                  Current Score: <span className="font-medium text-slate-700">{currentScore}</span>
                 </div>
                 <div className="text-sm text-slate-500">
                   Target: <span className="font-medium text-slate-700">{thresholdScore}</span>

@@ -5,6 +5,9 @@ import { SamplerPage } from "./pages/sampler-page/SamplerPage.tsx";
 import DataChatPage from "./pages/datachat-page/DataChatPage.tsx";
 import { Analytics } from "@vercel/analytics/react"
 
+/**
+ * Main application component that handles routing between different pages
+ */
 function App() {
   return (
     <>

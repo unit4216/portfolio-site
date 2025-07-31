@@ -1,5 +1,13 @@
-// Car Dealership Database Schema and Sample Data
+/**
+ * Car Dealership Database Schema and Sample Data
+ * 
+ * This file contains the SQL schema and sample data for a car dealership database.
+ * The database includes tables for employees, cars, sales, customers, and service records.
+ */
 
+/**
+ * SQL schema for creating the car dealership database tables
+ */
 export const DATABASE_SCHEMA = `
   CREATE TABLE employees (id INTEGER PRIMARY KEY, name TEXT, role TEXT, hire_date TEXT, salary INTEGER);
   CREATE TABLE cars (id INTEGER PRIMARY KEY, make TEXT, model TEXT, year INTEGER, price INTEGER, color TEXT, mileage INTEGER);
@@ -8,6 +16,9 @@ export const DATABASE_SCHEMA = `
   CREATE TABLE service_records (id INTEGER PRIMARY KEY, car_id INTEGER, service_date TEXT, service_type TEXT, cost INTEGER, description TEXT);
 `;
 
+/**
+ * Sample employee data for the dealership
+ */
 export const SAMPLE_EMPLOYEES = `
   INSERT INTO employees (name, role, hire_date, salary) VALUES
     ('Alice Johnson', 'Sales Manager', '2020-03-15', 65000),
@@ -22,6 +33,9 @@ export const SAMPLE_EMPLOYEES = `
     ('Jack Anderson', 'Sales Representative', '2022-04-12', 41000);
 `;
 
+/**
+ * Sample car inventory data
+ */
 export const SAMPLE_CARS = `
   INSERT INTO cars (make, model, year, price, color, mileage) VALUES
     ('Toyota', 'Camry', 2020, 22000, 'Silver', 45000),
@@ -46,6 +60,9 @@ export const SAMPLE_CARS = `
     ('Volvo', 'XC60', 2020, 34000, 'Gray', 36000);
 `;
 
+/**
+ * Sample customer data
+ */
 export const SAMPLE_CUSTOMERS = `
   INSERT INTO customers (name, email, phone, address) VALUES
     ('John Doe', 'john.doe@email.com', '555-0101', '123 Main St, Anytown, USA'),
@@ -65,6 +82,9 @@ export const SAMPLE_CUSTOMERS = `
     ('Matthew Jackson', 'matthew.jackson@email.com', '555-0115', '468 Hickory Ln, Anywhere, USA');
 `;
 
+/**
+ * Sample sales transaction data
+ */
 export const SAMPLE_SALES = `
   INSERT INTO sales (car_id, employee_id, customer_name, sale_date, price, commission) VALUES
     (1, 1, 'John Doe', '2023-01-15', 21000, 2100),
@@ -89,6 +109,9 @@ export const SAMPLE_SALES = `
     (20, 5, 'Robert Brown', '2024-07-12', 32000, 3200);
 `;
 
+/**
+ * Sample service records data
+ */
 export const SAMPLE_SERVICE_RECORDS = `
   INSERT INTO service_records (car_id, service_date, service_type, cost, description) VALUES
     (1, '2023-06-15', 'Oil Change', 45, 'Standard oil change and filter replacement'),
@@ -113,7 +136,10 @@ export const SAMPLE_SERVICE_RECORDS = `
     (20, '2025-01-12', 'Tire Replacement', 520, 'Two new tires installed');
 `;
 
-// Function to initialize the database with all data
+/**
+ * Initialize the database with all schema and sample data
+ * @param db - The SQL.js database instance to initialize
+ */
 export function initializeDatabase(db: any) {
   // Create tables
   db.run(DATABASE_SCHEMA);
