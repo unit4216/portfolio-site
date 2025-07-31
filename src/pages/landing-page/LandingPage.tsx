@@ -143,17 +143,25 @@ const ResumeAccordion = () => {
   const EXPERIENCES = [
     { 
       title: "Westland", 
-      jobTitle: "Software Development Lead (2024-Present), Software Developer (2023-2024), Junior Software Developer (2022-2023)",
+      jobTitle: [
+        "Software Development Lead (2024-Present)",
+        "Software Developer (2023-2024)", 
+        "Junior Software Developer (2022-2023)"
+      ],
       description: "Worked at Westland." 
     },
     { 
       title: "Paliza Consulting", 
-      jobTitle: "Software Development Consultant",
+      jobTitle: [
+        "Software Development Consultant"
+      ],
       description: "Worked at Paliza Consulting." 
     },
     { 
       title: "Synergy", 
-      jobTitle: "IT Engineer",
+      jobTitle: [
+        "IT Engineer"
+      ],
       description: "Worked at Synergy IT." 
     },
   ];
@@ -182,7 +190,11 @@ const ResumeAccordion = () => {
               <div className="text-[30px]">{experience.title}</div>
             </AccordionSummary>
             <AccordionDetails>
-              <div className="text-[16px] text-[#666] mb-2" style={{ fontStyle: 'italic', fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>{experience.jobTitle}</div>
+              <div className="text-[16px] text-[#666] mb-2" style={{ fontStyle: 'italic', fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
+                {experience.jobTitle.map((title, index) => (
+                  <div key={index} className="mb-1 last:mb-0">{title}</div>
+                ))}
+              </div>
               <div className="text-[20px]">{experience.description}</div>
             </AccordionDetails>
           </Accordion>
