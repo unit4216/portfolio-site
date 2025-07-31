@@ -4,7 +4,7 @@
   "framework": "vite",
   "functions": {
     "api/gemini.js": {
-      "runtime": "@vercel/node@3.0.0"
+      "runtime": "@vercel/node@4.0.0"
     }
   },
   "rewrites": [
@@ -16,8 +16,5 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "env": {
-    "NODE_VERSION": "20"
-  }
+  ]
 } 
