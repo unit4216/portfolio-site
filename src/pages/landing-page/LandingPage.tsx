@@ -406,7 +406,7 @@ function ContactSection() {
 
 export const LandingPage = () => {
   const sections = ["projects", "about", "contact"];
-  const SKILLS = ["TypeScript", "React", "Node", "Tailwind", "Google Cloud"];
+  const SKILLS = ["TypeScript", "React", "Node", "Google Cloud"];
   
   const [isScrolled, setIsScrolled] = useState(false);
 
