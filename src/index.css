@@ -48,6 +48,20 @@ body {
   font-style: italic;
 }
 
+@font-face {
+  font-family: 'Neue Haas Grotesk';
+  src: url('./assets/nhg/NeueHaasDisplayThin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Neue Haas Grotesk';
+  src: url('./assets/nhg/NeueHaasDisplayThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+
 /* Custom Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;

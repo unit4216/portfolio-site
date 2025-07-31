@@ -190,7 +190,7 @@ const ResumeAccordion = () => {
               <div className="text-[30px]">{experience.title}</div>
             </AccordionSummary>
             <AccordionDetails>
-              <div className="text-[16px] text-[#666] mb-2" style={{ fontStyle: 'italic', fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif" }}>
+              <div className="text-[18px] text-[#666] mb-2" style={{ fontStyle: 'italic', fontFamily: "'Neue Haas Grotesk', Inter, -apple-system, BlinkMacSystemFont, sans-serif", fontWeight: 100 }}>
                 {experience.jobTitle.map((title, index) => (
                   <div key={index} className="mb-1 last:mb-0">{title}</div>
                 ))}
