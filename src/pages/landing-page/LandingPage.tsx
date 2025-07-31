@@ -155,7 +155,7 @@ const ResumeAccordion = () => {
       jobTitle: [
         "Software Development Consultant"
       ],
-      description: "Built and maintained Python ETL tools for parsing and visualizing energy industry data, providing consulting services for data processing and visualization projects."
+      description: "Built and maintained Python ETL tools for parsing and visualizing energy industry data."
     },
     { 
       title: "Synergy", 
