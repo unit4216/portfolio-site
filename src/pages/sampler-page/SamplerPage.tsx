@@ -1,14 +1,14 @@
-import cowbell from "../../assets/808-samples/Roland TR-808/CB/CB.wav";
-import bass from "../../assets/808-samples/Roland TR-808/BD/BD0000.wav";
-import snare from "../../assets/808-samples/Roland TR-808/SD/SD0010.wav";
-import closedHat from "../../assets/808-samples/Roland TR-808/CH/CH.wav";
-import hiTom from "../../assets/808-samples/Roland TR-808/HT/HT00.wav";
-import cymbal from "../../assets/808-samples/Roland TR-808/CY/CY0000.wav";
-import clap from "../../assets/808-samples/Roland TR-808/CP/CP.wav";
-import openHat from "../../assets/808-samples/Roland TR-808/OH/OH00.wav";
+const cowbell = "/808-samples/Roland TR-808/CB/CB.WAV";
+const bass = "/808-samples/Roland TR-808/BD/BD0000.WAV";
+const snare = "/808-samples/Roland TR-808/SD/SD0010.WAV";
+const closedHat = "/808-samples/Roland TR-808/CH/CH.WAV";
+const hiTom = "/808-samples/Roland TR-808/HT/HT00.WAV";
+const cymbal = "/808-samples/Roland TR-808/CY/CY0000.WAV";
+const clap = "/808-samples/Roland TR-808/CP/CP.WAV";
+const openHat = "/808-samples/Roland TR-808/OH/OH00.WAV";
 
 import { useEffect, useRef, useState } from "react";
-import metronomeClick from "../../assets/808-samples/Roland TR-808/RS/RS.wav";
+const metronomeClick = "/808-samples/Roland TR-808/RS/RS.WAV";
 import { Circle, PlayArrow, Stop, Mic, PlayCircle } from "@mui/icons-material";
 import { motion } from "framer-motion";
 
