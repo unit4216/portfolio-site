@@ -573,7 +573,7 @@ export const LandingPage = () => {
                   link.click();
                   document.body.removeChild(link);
                 }}
-                className="flex items-center gap-2 px-6 py-3 border-2 border-[#282828] hover:bg-[#282828] hover:text-white transition-all duration-300 text-[16px] font-medium"
+                className="flex items-center gap-2 px-6 py-3 border-2 border-[#282828] hover:bg-[#282828] hover:text-white transition-all duration-300 text-[16px] font-medium cursor-pointer"
               >
                 <svg 
                   width="16" 
