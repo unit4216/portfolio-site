@@ -1,4 +1,3 @@
-import React from "react";
 import { Metronome } from "./Metronome";
 import { EffectsPanel } from "./EffectsPanel";
 import { RecordingPanel } from "./RecordingPanel";

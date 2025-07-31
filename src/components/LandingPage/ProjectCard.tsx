@@ -13,7 +13,7 @@ interface ProjectCardProps {
 /**
  * Individual project card component for the masonry grid
  */
-export const ProjectCard = ({ id, text, height, img, url }: ProjectCardProps) => {
+export const ProjectCard = ({ text, height, img, url }: ProjectCardProps) => {
   return (
     <motion.a 
       href={url} 

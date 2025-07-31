@@ -1,4 +1,3 @@
-import React from "react";
 import { PlayCircle } from "@mui/icons-material";
 import { VSTMeter } from "./VSTMeter";
 

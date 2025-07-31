@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CheckIcon from "@mui/icons-material/Check";
-import { CustomHR } from "./CustomHR";
-import { ContactForm } from "./ContactForm";
-import { fadeInUp } from "./AnimationVariants";
 
 /**
  * Contact section component with profile image and contact information
