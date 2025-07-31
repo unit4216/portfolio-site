@@ -315,7 +315,7 @@ function ContactSection() {
         <div className="flex items-center gap-8 w-1/2">
           {/* Profile Image */}
           <motion.img
-            src="./src/assets/linked-pic-pxl-20.png"
+            src="./linked-pic-pxl-20.png"
             alt="Profile"
             className="h-32 w-32 object-cover rounded-xl shadow-lg"
             style={{ imageRendering: "pixelated" }}
@@ -610,7 +610,7 @@ export const LandingPage = () => {
             whileTap={{ scale: 0.9 }}
             transition={{ duration: 0.2 }}
           >
-            <img src={"./src/assets/linkedin-icon.png"} className="h-6" />
+            <img src={"/linkedin-icon.png"} className="h-6" />
           </motion.a>
           <motion.a
             href="https://www.github.com/unit4216"
@@ -620,7 +620,7 @@ export const LandingPage = () => {
             whileTap={{ scale: 0.9 }}
             transition={{ duration: 0.2 }}
           >
-            <img src={"./src/assets/github-icon.png"} className="h-6" />
+            <img src={"/github-icon.png"} className="h-6" />
           </motion.a>
         </div>
       </motion.div>
