@@ -1,8 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CheckIcon from "@mui/icons-material/Check";
+import { CustomHR } from "./CustomHR";
+import { ContactForm } from "./ContactForm";
+import { fadeInUp } from "./AnimationVariants";
 
 /**
  * Contact section component with profile image and contact information
@@ -31,7 +34,7 @@ export const ContactSection = () => {
   return (
     <div className="flex flex-row items-stretch gap-12 mx-auto w-full mb-32">
       {/* Left Text */}
-      <motion.div
+      <motion.div 
         className="w-1/2 flex text-[30px]"
         variants={fadeSlide}
         initial="hidden"
