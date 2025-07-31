@@ -10,7 +10,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CheckIcon from "@mui/icons-material/Check";
 
-// Animation variants for staggered entrance animations
+// Animation variants for staggered entrance animations.
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
