@@ -148,7 +148,7 @@ const ResumeAccordion = () => {
         "Software Developer (2023-2024)", 
         "Junior Software Developer (2022-2023)"
       ],
-      description: "Lead a team of 2 developers while owning technical decisions across multiple systems. Cut cloud costs by 50% ($20K/year) through VM audits and serverless migration. Launched Westland AI chatbot and refactored key internal applications including Datalink, Investment Management, and BankRec."
+      description: "Progressive experience from Junior Developer to Lead, developing internal financial and investment management applications using React, Node.js, and GCP. Led team of 2 developers, cut cloud costs by 50% ($20K/year), and built data pipelines with BigQuery, Cloud Functions, and ETL scripts. Launched Westland AI chatbot and maintained key systems including Table Sync, Datalink, and BankRec."
     },
     { 
       title: "Paliza Consulting", 
