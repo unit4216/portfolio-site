@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import initSqlJs, { Database } from "sql.js";
-import { GoogleGenAI } from "@google/genai";
 import { initializeDatabase } from "./databaseData";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -13,25 +12,27 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { styled } from "@mui/material/styles";
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
-
-let gemini: GoogleGenAI | null = null;
-
-if (GEMINI_API_KEY) {
-  gemini = new GoogleGenAI({apiKey: GEMINI_API_KEY});
-}
-
 async function callGemini(prompt: string): Promise<string> {
-    if (!gemini) {
-        return "API key not configured. Please set VITE_GEMINI_API_KEY environment variable.";
-    }
-    
-    const response = await gemini.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-      });
+    try {
+        const response = await fetch('/api/gemini', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prompt }),
+        });
 
-  return response.text || "No response from Gemini.";
+        if (!response.ok) {
+            const errorData = await response.json();
+            return errorData.error || 'Failed to get response from API';
+        }
+
+        const data = await response.json();
+        return data.result || "No response from Gemini.";
+    } catch (error) {
+        console.error('API call error:', error);
+        return "Failed to connect to API. Please try again.";
+    }
 }
 
 // LLM: Generate SQL from question and schema
