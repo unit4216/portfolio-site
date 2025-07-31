@@ -72,25 +72,25 @@ const slideInRight = {
 
 export function MasonryGrid() {
   const items = [
-    { id: 1, text: "DataChat", height: "h-48", img: './src/assets/data-chat-gif.gif', url: '/data-chat' },
+    { id: 1, text: "DataChat", height: "h-48", img: '/data-chat-gif.gif', url: '/data-chat' },
     { 
       id: 2, 
       text: "Drum Machine", 
       height: "h-96", 
-      img: './src/assets/sampler-gif.gif',
+      img: '/sampler-gif.gif',
       url: '/sampler'
     },
     { id: 3, 
       text: "Tiny Survival",
       height: "h-80",
-      img: './src/assets/game-gif.gif',
+      img: '/game-gif.gif',
       url: 'https://pfpaliza.itch.io/tiny-survival' 
       },
     {
       id: 4,
       text: "Cancer Detection Using Neural Networks",
       height: "h-64",
-      img: './src/assets/cancer-gif.gif',
+      img: '/cancer-gif.gif',
       url: "https://github.com/unit4216/cancer-cnn/blob/main/cnn-cancer-detection.ipynb",
     },
   ];
